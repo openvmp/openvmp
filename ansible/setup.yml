@@ -1,0 +1,10 @@
+---
+- name: Setup new Raspberry PI for OpenVMP
+  hosts: pi
+
+  tasks:
+  - name: Setup RaspberryPI RS485 CAN HAT
+    ansible.builtin.lineinfile:
+      path: /boot/firmware/config.txt
+      line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
+      create: false
