@@ -25,6 +25,6 @@ Single OpenVMP units can perform many tasks by themselves over an extended perio
 See the following documents for more info:
 
 - [Deployment](docs/Deployment.md)
-- [Inventions](docs/Inventions.md)
+- [Building](docs/Building.md)
 - [Roadmap](docs/Roadmap.md)
 - [License](docs/License.md)
