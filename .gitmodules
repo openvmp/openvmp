@@ -1,0 +1,3 @@
+[submodule "platform/src/serial"]
+	path = platform/src/serial
+	url = git@github.com:openvmp/serial.git
