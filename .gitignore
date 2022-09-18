@@ -3,7 +3,6 @@ models
 
 # ROS2 generated files
 build/
-install/
 
 # Other auto-generated files
 **/.DS_Store
