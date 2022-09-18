@@ -7,3 +7,6 @@
 [submodule "platform/src/modbus_rtu"]
 	path = platform/src/modbus_rtu
 	url = git@github.com:openvmp/modbus_rtu.git
+[submodule "platform/src/modbus_tcp"]
+	path = platform/src/modbus_tcp
+	url = git@github.com:openvmp/modbus_tcp.git
