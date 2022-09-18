@@ -10,3 +10,12 @@
 [submodule "platform/src/modbus_tcp"]
 	path = platform/src/modbus_tcp
 	url = git@github.com:openvmp/modbus_tcp.git
+[submodule "platform/src/stepper_driver_rs485_so"]
+	path = platform/src/stepper_driver_rs485_so
+	url = git@github.com:openvmp/stepper_driver_rs485_so.git
+[submodule "platform/src/stepper_driver"]
+	path = platform/src/stepper_driver
+	url = git@github.com:openvmp/stepper_driver.git
+[submodule "platform/src/stepper_driver_terminal"]
+	path = platform/src/stepper_driver_terminal
+	url = git@github.com:openvmp/stepper_driver_terminal.git
