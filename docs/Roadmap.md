@@ -10,12 +10,12 @@ Send us a pull request with the suggested implementation.
   - Template module to bring connectivity up and down based on run-level
   - 4G/LTE module
   - GPRS module
-  - Satelite data module
+  - Satellite data module
   - 5G module
 - Audio module (optional)
 - NUC extension (optional)
 - Contactless charging from power lines (optional)
-  - City powerlines
+  - City power lines
   - Intra-city power lines
 - Solar charging
   - Statically mounted (optional, with a limited surface)
@@ -35,7 +35,7 @@ Send us a pull request with the suggested implementation.
   - Image for NUC to host computation hungry modules
     - Module for building point clouds using stereo cameras
     - Module for building a world model using point clouds
-  - Module on Raspberry PI to programm NUC
+  - Module on Raspberry PI to program NUC
     - on first boot / firmware upgrade
     - OTA update from Cloud
 
@@ -60,5 +60,3 @@ Send us a pull request with the suggested implementation.
   - Support for Oculus Quest 2
     - render from PC
     - render from cloud
-
-

@@ -1,3 +1,9 @@
 [submodule "platform/src/serial"]
 	path = platform/src/serial
 	url = git@github.com:openvmp/serial.git
+[submodule "platform/src/modbus"]
+	path = platform/src/modbus
+	url = git@github.com:openvmp/modbus.git
+[submodule "platform/src/modbus_rtu"]
+	path = platform/src/modbus_rtu
+	url = git@github.com:openvmp/modbus_rtu.git

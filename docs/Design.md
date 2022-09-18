@@ -33,7 +33,7 @@ TBD
 All stepper motors are in the holding position most of the time even when powered on.
 So they will come with electromagnetic brakes to conserve power.
 
-Electromagnetics brakes are also helpful to increase the torque when the robot is powered off.
+Electromagnetic brakes are also helpful to increase the torque when the robot is powered off.
 However that's not going to be sufficient to hold the robot in place when it's not able to actively respond to the changing environment.
 Therefore the stepper motors will always be connected through a gearbox.
 The gearboxes will be of the worm type where possible to multiply stall torque.
