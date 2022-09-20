@@ -22,3 +22,11 @@ cd platform
 colcon build
 ./install/local_setup.bash # or .zsh
 ```
+
+## Testing
+
+### Testing prerequisites
+
+The following tools need to be pre-installed on your OS:
+
+- socat

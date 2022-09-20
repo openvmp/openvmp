@@ -64,4 +64,5 @@
     "vector": "cpp",
     "__mutex_base": "cpp"
   },
+  "python.formatting.provider": "black",
 }
