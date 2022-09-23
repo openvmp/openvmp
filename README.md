@@ -1,5 +1,7 @@
 # OpenVMP
 
+[![License](docs/license.svg)](docs/License.md)
+
 Open Versatile Mobility Platform (OpenVMP) implements multi-modal mobility mechanisms that perform arbitrary tasks collectively or individually.
 
 The internal components of OpenVMP are designed to be usable in separate projects as well.

@@ -16,7 +16,8 @@
   "files.exclude": {
     "platform/build/**": true,
     "platform/install/**": true,
-    "platform/log/**": true
+    "platform/log/**": true,
+    "**/__pycache__": true
   },
   "yaml.format.enable": true,
   "git.autoRepositoryDetection": true,
@@ -27,6 +28,7 @@
   ],
   "C_Cpp.clang_format_path": "/usr/local/bin/clang-format",
   "files.associations": {
+    "*.launch": "python",
     "stdexcept": "cpp",
     "__bits": "cpp",
     "__config": "cpp",
@@ -62,7 +64,11 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "vector": "cpp",
-    "__mutex_base": "cpp"
+    "__mutex_base": "cpp",
+    "map": "cpp",
+    "optional": "cpp",
+    "__node_handle": "cpp",
+    "__tree": "cpp"
   },
   "python.formatting.provider": "black",
 }
