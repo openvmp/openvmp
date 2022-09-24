@@ -4,7 +4,9 @@
 
 Open Versatile Mobility Platform (OpenVMP) implements multi-modal mobility mechanisms that perform arbitrary tasks collectively or individually.
 
-The internal components of OpenVMP are designed to be usable in separate projects as well.
+This is a monorepo for the OpenVMP project.
+Most of the internal components are git submodules that are are designed to be usable as standalone ROS2 packages.
+The submodules that do not start with 'openvmp_' are supposed to be equally usable in separate projects not related to OpenVMP at all.
 
 ## Key features
 

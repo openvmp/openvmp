@@ -17,6 +17,9 @@
     "platform/build/**": true,
     "platform/install/**": true,
     "platform/log/**": true,
+    "platform/src/yaml-cpp": true,
+    "**/license.svg": true,
+    "**/LICENSE.txt": true,
     "**/__pycache__": true
   },
   "yaml.format.enable": true,
