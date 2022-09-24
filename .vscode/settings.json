@@ -68,7 +68,8 @@
     "map": "cpp",
     "optional": "cpp",
     "__node_handle": "cpp",
-    "__tree": "cpp"
+    "__tree": "cpp",
+    "__locale": "cpp"
   },
   "python.formatting.provider": "black",
 }
