@@ -25,3 +25,5 @@ Use the following command to start the deployment:
 ```
 ansible-playbook ansible/setup.yml
 ```
+
+![ROS/ROS2 index package for OpenVMP module: Deployment](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2Deployment.md&dt=OpenVMP%20Documentation)
