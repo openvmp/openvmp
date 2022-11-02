@@ -44,7 +44,7 @@ OpenVMP units leaving the collective temporarily to perform an ad-hoc task
 See the following documents for more info:
 
 - [ROS2 packages](docs/ROS2_packages.md)
-- [Deployment](docs/Deployment.md)
 - [Development](docs/Development.md)
+- [Deployment](docs/Deployment.md)
 - [Roadmap](docs/Roadmap.md)
 - [License](docs/License.md)
