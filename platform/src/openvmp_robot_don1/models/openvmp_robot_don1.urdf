@@ -1,0 +1,501 @@
+<?xml version="1.0"?>
+<robot
+  name="openvmp_robot_don1"
+  xmlns:xacro="http://www.ros.org/wiki/xacro"
+>
+  <!-- xmlns="http://www.ros.org/wiki/urdf"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xacro="http://www.ros.org/wiki/xacro" -->
+  <!-- xsi:schemaLocation="http://www.ros.org/wiki/urdf https://raw.github.com/laas/urdf_validator/master/urdf.xsd" -->
+
+
+  <!-- ****************** COMMAND LINE PARAMETERS *******************************  -->
+  <!-- Generate the model suitable for simulation in Gazebo -->
+  <xacro:arg name="simulate" default="false" />
+
+  <xacro:arg name="is_mac" default="false" />
+  <xacro:unless value="$(arg is_mac)">
+    <xacro:property name="plugin_extension" value="so" />
+  </xacro:unless>
+  <xacro:if value="$(arg is_mac)">
+    <xacro:property name="plugin_extension" value="dylib" />
+  </xacro:if>
+
+  <!-- ****************** ROBOT CONSTANTS *******************************  -->
+  <!-- <plugin>remote_motion_hardware/ActuatorInterface</plugin> -->
+  <!-- Define the size of the robot's main chassis in meters -->
+  <xacro:property name="board_length" value="0.6" />
+  <xacro:property name="board_width" value="0.2" />
+  <xacro:property name="board_height" value="0.003" />
+
+  <xacro:property name="base_length" value="${board_length}" />
+  <xacro:property name="base_width" value="${board_width}" />
+  <xacro:property name="base_height" value="0.2" />
+  <xacro:property name="base_height_gap" value="0.1" />
+
+  <!-- Wheels dimensions -->
+  <xacro:property name="wheel_radius" value="${0.136 / 2}" />
+  <xacro:property name="wheel_width" value="0.024" />
+
+  <!-- Position the front wheels -->
+  <xacro:property name="turn_table_radius" value="${board_width/2}" />
+  <xacro:property name="turn_table_height" value="0.05" />
+  <xacro:property name="turn_table_zoff" value="0.001" />
+  <xacro:property name="turn_table_xoff" value="${base_length/2 - 0.03}" />
+
+  <!-- Arm parameters-->
+  <xacro:property name="arm1_length" value="0.3" />
+  <xacro:property name="arm2_length" value="0.3045" />
+  <xacro:property name="arm_height_delta" value="0" />
+  <xacro:property name="arm_height_shortage" value="0.038" />
+
+  <!-- Physics parameters -->
+  <xacro:property name="joint_damping" value="50000.0" />
+  <xacro:property name="joint_friction" value="0.5" />
+  <xacro:macro name="solid_hard" params="name material">
+    <gazebo reference="${name}">
+      <kp>500000.0</kp>
+      <kd>100.0</kd>
+      <mu1>0.8</mu1>
+      <mu2>0.8</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.0001</minDepth>
+      <material>${material}</material>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="gazebo_joint" params="name">
+    <gazebo reference="${name}">
+      <dynamics damping="${joint_damping}" friction="${joint_friction}" />
+      <stopKd>1000000.0</stopKd>
+      <stopKp>1000000.0</stopKp>
+    </gazebo>
+  </xacro:macro>
+  <!-- TODO(clairbee) use 'xlink' instead of all 'link' below -->
+  <!-- <xacro:macro name="xlink" params="name material **visual **collision **inertial">
+    <link name="${name}">
+      <xacro:insert_block name="visual" />
+      <xacro:insert_block name="collision" />
+      <xacro:insert_block name="inertial" />
+    </link>
+    <xacro:solid_hard name="${name}" material="${material}" />
+  </xacro:macro> -->
+
+  <!-- Define intertial property macros  -->
+  <!-- <xacro:macro name="box_inertia" params="m w h d"> -->
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+      <mass value="${m}" />
+      <!-- <inertia ixx="${(m/12) * (h*h + d*d)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (w*w + d*d)}" iyz="0.0" izz="${(m/12) * (w*w + h*h)}" /> -->
+      <inertia ixx="${(m/12) * (y*y + z*z)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (x*x + z*z)}" iyz="0.0" izz="${(m/12) * (x*x + y*y)}" />
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      <mass value="${m}" />
+      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy="0" ixz="0" iyy="${(m/12) * (3*r*r + h*h)}" iyz="0" izz="${(m/2) * (r*r)}" />
+    </inertial>
+  </xacro:macro>
+
+  <!-- ****************** ROBOT BASE FOOTPRINT ***************************  -->
+  <!-- Define the center of the main robot chassis projected on the ground -->
+  <link name="base_footprint" />
+
+  <!-- The base footprint of the robot is located underneath the chassis -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint" />
+    <child link="base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+  </joint>
+
+
+  <!-- ********************** ROBOT BASE *********************************  -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.15" rpy="0 0 0" />
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}" />
+        <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
+      </geometry>
+      <material name="Red">
+        <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0.0 0.0 0.15" rpy="0 0 0" />
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}" />
+      </geometry>
+    </collision>
+
+    <xacro:box_inertia m="6.0" x="${base_length}" y="${base_width}" z="${base_height}" />
+
+  </link>
+  <xacro:solid_hard name="base_link" material="Gazebo/Red" />
+
+
+  <!-- *********************** DRIVE WHEELS ******************************  -->
+
+  <xacro:macro name="wheel" params="prefix parent limit radius width x_off y_off z_off x_angle collision:=true">
+    <link name="${prefix}_link">
+      <visual>
+        <!-- <origin xyz="${x_off} ${y_off} ${z_off}" rpy="${x_angle} 0 0"/> -->
+        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${width}" />
+          <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
+        </geometry>
+        <material name="White">
+          <color rgba="${255/255} ${255/255} ${255/255} 1.0" />
+        </material>
+      </visual>
+
+      <xacro:if value="${collision}">
+        <collision>
+          <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+          <geometry>
+            <cylinder radius="${radius}" length="${width}" />
+          </geometry>
+        </collision>
+      </xacro:if>
+
+      <xacro:cylinder_inertia m="50" r="${radius}" h="${width}" />
+    </link>
+    <xacro:solid_hard name="${prefix}_link" material="Gazebo/Green" />
+
+    <!-- Connect the wheels to the origin at the appropriate location, and
+         define a continuous joint to allow the wheels to freely rotate about
+         an axis -->
+    <joint name="${prefix}_joint" type="revolute">
+      <parent link="${parent}" />
+      <child link="${prefix}_link" />
+      <!-- <origin xyz="0 0 0" rpy="0 0 0"/> -->
+      <origin xyz="${x_off} ${y_off} ${z_off}" rpy="0 0 0" />
+      <limit upper="${limit}" lower="${-limit}" effort="30" velocity="5.0" />
+      <axis xyz="0 0 0.003" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_joint" />
+
+  </xacro:macro>
+
+  <xacro:macro name="robot_arm" params="prefix parent dir armdir">
+    <link name="${prefix}_lower_part">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.24 0.048" />
+          <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.24 0.048" />
+        </geometry>
+      </collision>
+
+      <xacro:box_inertia m="1.0" x="0.048" y="0.24" z="0.048" />
+    </link>
+    <xacro:solid_hard name="${prefix}_lower_part" material="Gazebo/Red" />
+
+    <joint name="${prefix}_joint" type="revolute">
+      <parent link="${parent}" />
+      <child link="${prefix}_lower_part" />
+      <origin xyz="0.0 ${armdir*(0.12 + 0.024 + 0.012)} 0.0" rpy="0 0 0" />
+      <limit upper="${pi}" lower="${-pi}" effort="30" velocity="5.0" />
+      <axis xyz="0 ${dir*armdir*0.001} 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_joint" />
+
+    <link name="${prefix}_upper_part">
+      <visual>
+        <origin xyz="0 ${armdir*(0.12 + 0.048)} -${wheel_radius-arm_height_delta}" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.24 0.048" />
+          <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 ${armdir*(0.12 + 0.048)} -${wheel_radius-arm_height_delta}" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.24 0.048" />
+        </geometry>
+      </collision>
+
+      <xacro:box_inertia m="1.0" x="0.048" y="0.24" z="0.048" />
+    </link>
+    <xacro:solid_hard name="${prefix}_upper_part" material="Gazebo/Red" />
+
+    <joint name="${prefix}_inner_joint" type="revolute">
+      <parent link="${prefix}_lower_part" />
+      <child link="${prefix}_upper_part" />
+      <origin xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048)} ${wheel_radius+arm_height_delta-arm_height_shortage}" rpy="0 0 0" />
+      <limit upper="${pi*0.906}" lower="${-pi*0.5}" effort="30" velocity="5.0" />
+      <axis xyz="${dir*armdir*0.001} 0 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_inner_joint" />
+
+    <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part" limit="0"
+      radius="${wheel_radius}" width="${wheel_width}"
+      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius-arm_height_delta}" x_angle="${pi/2}"
+    />
+    <!-- x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius-arm_height_delta}" x_angle="${pi/2}" -->
+  </xacro:macro>
+
+  <xacro:macro name="robot_half" params="prefix dir">
+    <xacro:wheel prefix="${prefix}_turn_table" parent="base_link" limit="${pi/2}"
+      radius="${turn_table_radius}" width="${turn_table_height}"
+      x_off="${dir*turn_table_xoff}" y_off="0.0" z_off="${base_height_gap + 3*base_height/4 - turn_table_height/2}" x_angle="0"
+      collision="False"
+    />
+
+    <link name="${prefix}_body_link">
+      <visual>
+        <origin xyz="0 0 0.024" rpy="0 0 0" />
+        <geometry>
+          <box size="0.240 0.048 0.048" />
+          <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+
+      <!-- <collision>
+        <origin xyz="0 0 0.024" rpy="0 0 0" />
+        <geometry>
+          <box size="0.240 0.048 0.048" />
+        </geometry>
+      </collision> -->
+
+      <xacro:box_inertia m="2.0" x="0.24" y="0.048" z="0.058" />
+    </link>
+    <xacro:solid_hard name="${prefix}_body_link" material="Gazebo/Red" />
+
+    <!-- central wide block -->
+    <link name="${prefix}_body_link2">
+      <visual>
+        <origin xyz="${dir*0.100} 0 0.048" rpy="0 0 0" />
+        <geometry>
+          <box size="0.040 0.240 0.048" />
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="${dir*0.100} 0 0.048" rpy="0 0 0" />
+        <geometry>
+          <box size="0.040 0.240 0.048" />
+        </geometry>
+      </collision>
+      <xacro:box_inertia m="1.0" x="0.040" y="0.240" z="0.048" />
+    </link>
+    <xacro:solid_hard name="${prefix}_body_link2" material="Gazebo/Red" />
+    <joint name="${prefix}_body_link2_joint" type="fixed">
+      <parent link="${prefix}_body_link" />
+      <child link="${prefix}_body_link2" />
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </joint>
+
+    <!-- central wheel -->
+    <link name="${prefix}_body_link3">
+      <visual>
+        <origin xyz="0 0 0.048" rpy="${pi/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+        </geometry>
+        <!-- <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0"/>
+        </material> -->
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.048" rpy="${pi/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertia m="50" r="${wheel_radius}" h="${wheel_width}" />
+    </link>
+    <xacro:solid_hard name="${prefix}_body_link3" material="Gazebo/Red" />
+    <joint name="${prefix}_body_link3_joint" type="fixed">
+      <parent link="${prefix}_body_link" />
+      <child link="${prefix}_body_link3" />
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="${prefix}_body_joint" type="revolute">
+      <parent link="${prefix}_turn_table_link" />
+      <child link="${prefix}_body_link" />
+      <origin xyz="${dir*(turn_table_radius + 0.240/2)} 0.0 0.0" rpy="0 0 0" />
+      <limit upper="${pi}" lower="${-pi}" effort="30" velocity="5.0" />
+      <axis xyz="${dir*0.001} 0 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_body_joint" />
+
+    <xacro:robot_arm prefix="${prefix}_left_arm" parent="${prefix}_body_link" dir="${dir}" armdir="1" />
+    <xacro:robot_arm prefix="${prefix}_right_arm" parent="${prefix}_body_link" dir="${dir}" armdir="-1" />
+  </xacro:macro>
+
+  <xacro:robot_half prefix="front" dir="1" />
+  <xacro:robot_half prefix="rear" dir="-1" />
+
+  <xacro:macro name="r2c_joint_limit" params="name pmin pmax">
+    <joint name="${name}">
+      <state_interface name="position" />
+      <!-- <state_interface name="velocity" /> -->
+      <!-- <state_interface name="effort" /> -->
+      <!-- <command_interface name="position">
+        <param name="min">${pmin}</param>
+        <param name="max">${pmax}</param>
+      </command_interface> -->
+      <command_interface name="velocity" />
+      <!-- <command_interface name="effort" /> -->
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="r2c_quarter" params="prefix side">
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_joint" pmin="${-pi}" pmax="${pi}" />
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_inner_joint" pmin="${-pi/2}" pmax="${4*pi/5}" />
+    <joint name="${prefix}_${side}_arm_wheel_joint">
+      <state_interface name="position" />
+      <!-- <state_interface name="velocity" /> -->
+      <!-- <state_interface name="effort" /> -->
+      <!-- <command_interface name="position" /> -->
+      <command_interface name="velocity" />
+      <!-- <command_interface name="effort" /> -->
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="r2c_half" params="prefix">
+    <xacro:r2c_joint_limit name="${prefix}_turn_table_joint" pmin="${-pi/2}" pmax="${pi/2}" />
+    <xacro:r2c_joint_limit name="${prefix}_body_joint" pmin="${-pi}" pmax="${pi}" />
+    <xacro:r2c_quarter prefix="${prefix}" side="left" />
+    <xacro:r2c_quarter prefix="${prefix}" side="right" />
+  </xacro:macro>
+
+  <!-- <parameters>$(find openvmp_robot_don1)/config/ros2_controllers.yaml</parameters> -->
+  <!-- <ros2_control name="MotionControl" type="system"> -->
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <xacro:if value="$(arg simulate)">
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        <!-- <plugin>position_controller/JointTrajectoryController</plugin>
+        <plugin>remote_motion_hardware/RemoteActuatorInterface</plugin> -->
+      </xacro:if>
+      <xacro:unless value="$(arg simulate)">
+        <!-- <plugin>position_controller/JointTrajectoryController</plugin>
+        <plugin>position_controller/JointGroupPositionController</plugin> -->
+        <!-- <plugin>remote_motion_hardware/RemoteActuatorInterface</plugin> -->
+      </xacro:unless>
+      <!-- <param name="prefix">/</param> -->
+      <!-- <param name="prefix">/openvmp_robot_don1</param> -->
+    </hardware>
+    <xacro:r2c_half prefix="front" />
+    <xacro:r2c_half prefix="rear" />
+  </ros2_control>
+
+  <xacro:macro name="trans_reg" params="name red:=17">
+    <transmission name="${name}_transmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}">
+        <!-- <hardwareInterface>PositionJointInterface</hardwareInterface> -->
+        <!-- <hardwareInterface>VelocityJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <!-- <hardwareInterface>PositionJointInterface</hardwareInterface> -->
+        <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>${red}</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+  <xacro:macro name="trans_wheel" params="name red:=30">
+    <transmission name="${name}_transmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}">
+        <!-- <hardwareInterface>PositionJointInterface</hardwareInterface> -->
+        <!-- <hardwareInterface>VelocityJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <!-- <hardwareInterface>PositionJointInterface</hardwareInterface> -->
+        <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>${red}</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+  <xacro:trans_reg name="front_turn_table_joint" />
+  <xacro:trans_reg name="front_body_joint" />
+  <xacro:trans_reg name="front_left_arm_joint" />
+  <xacro:trans_reg name="front_left_arm_inner_joint" />
+  <xacro:trans_wheel name="front_left_arm_wheel_joint" />
+  <xacro:trans_reg name="front_right_arm_joint" />
+  <xacro:trans_reg name="front_left_arm_inner_joint" />
+  <xacro:trans_wheel name="front_right_arm_wheel_joint" />
+  <xacro:trans_reg name="rear_turn_table_joint" />
+  <xacro:trans_reg name="rear_body_joint" />
+  <xacro:trans_reg name="rear_left_arm_joint" />
+  <xacro:trans_reg name="rear_left_arm_inner_joint" />
+  <xacro:trans_wheel name="rear_left_arm_wheel_joint" />
+  <xacro:trans_reg name="rear_right_arm_joint" />
+  <xacro:trans_reg name="rear_right_arm_inner_joint" />
+  <xacro:trans_wheel name="rear_right_arm_wheel_joint" />
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.${plugin_extension}">
+      <!-- <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node> -->
+      <parameters>$(find openvmp_robot_don1)/config/ros2_controllers.yaml</parameters>
+    </plugin>
+    <!-- <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.${plugin_extension}">
+      <joint_name>front_turn_table_joint</joint_name>
+      <joint_name>front_body_joint</joint_name>
+      <joint_name>front_left_arm_joint</joint_name>
+      <joint_name>front_left_arm_inner_joint</joint_name>
+      <joint_name>front_left_arm_wheel_joint</joint_name>
+      <joint_name>front_right_arm_joint</joint_name>
+      <joint_name>front_right_arm_inner_joint</joint_name>
+      <joint_name>front_right_arm_wheel_joint</joint_name>
+      <joint_name>rear_turn_table_joint</joint_name>
+      <joint_name>rear_body_joint</joint_name>
+      <joint_name>rear_left_arm_joint</joint_name>
+      <joint_name>rear_left_arm_inner_joint</joint_name>
+      <joint_name>rear_left_arm_wheel_joint</joint_name>
+      <joint_name>rear_right_arm_joint</joint_name>
+      <joint_name>rear_right_arm_inner_joint</joint_name>
+      <joint_name>rear_right_arm_wheel_joint</joint_name>
+      <update_rate>30.0</update_rate>
+      <always_on>true</always_on>
+    </plugin> -->
+    <!-- <plugin name="openvmp_gazebo_hardware_simulation" filename="libopenvmp_gazebo_hardware_simulation.${plugin_extension}">
+      <joint name="front_turn_table_joint">
+        <gearbox ratio="10" />
+        <motor type="stepper" path="/stepper/motor1" torque="0.4" />
+        <brake type="switch" path="/switch/board1/channel0" torque="0.5" />
+        <encoder type="absolute" path="/encoder/sensor0" ppr="1000" />
+      </joint>
+      <joint name="rear_turn_table_joint">
+        <gearbox ratio="10" />
+        <motor type="stepper" path="/stepper/motor2" torque="0.4" />
+        <brake type="switch" path="/switch/board1/channel1" torque="0.5" />
+        <encoder type="absolute" path="/encoder/sensor1" ppr="1000" />
+      </joint>
+    </plugin> -->
+    <!-- <plugin name="gazebo_ros_force" filename="libgazebo_ros_force.${plugin_extension}" /> -->
+  </gazebo>
+
+</robot>

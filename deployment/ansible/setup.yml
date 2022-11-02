@@ -1,0 +1,14 @@
+---
+- name: Setup new Raspberry PI for OpenVMP
+  hosts: openvmp-pi-unconfigured
+  gather_facts: yes
+  vars_files:
+  - vars/networking.yml
+  - vars/vault.yml
+  roles:
+    - ansible-ubuntu-wifi
+
+  - name: Apply netplan
+    command: netplan apply
+    # async: 45
+    poll: 0

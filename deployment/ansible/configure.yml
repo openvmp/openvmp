@@ -1,8 +1,14 @@
 ---
 - name: Setup new Raspberry PI for OpenVMP
-  hosts: pi
+  hosts: openvmp-pi
 
   tasks:
+  tasks:
+  - name: 
+    ansible.builtin.lineinfile:
+      path: /root/.bashrc
+      line: "echo 'Welcome to OpenVMP. Use Ansible for any mutable changes.'"
+      create: true
   - name: Setup RaspberryPI RS485 CAN HAT
     ansible.builtin.lineinfile:
       path: /boot/firmware/config.txt

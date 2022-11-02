@@ -10,9 +10,9 @@
 [submodule "platform/src/modbus_tcp"]
 	path = platform/src/modbus_tcp
 	url = git@github.com:openvmp/modbus_tcp.git
-[submodule "platform/src/stepper_driver_rs485_so"]
-	path = platform/src/stepper_driver_rs485_so
-	url = git@github.com:openvmp/stepper_driver_rs485_so.git
+[submodule "platform/src/stepper_driver_em2rs"]
+	path = platform/src/stepper_driver_em2rs
+	url = git@github.com:openvmp/stepper_driver_em2rs.git
 [submodule "platform/src/stepper_driver"]
 	path = platform/src/stepper_driver
 	url = git@github.com:openvmp/stepper_driver.git
@@ -20,5 +20,17 @@
 	path = platform/src/stepper_driver_terminal
 	url = git@github.com:openvmp/stepper_driver_terminal.git
 [submodule "platform/src/yaml-cpp"]
-	path = platform/src/yaml-cpp
+	path = platform/src/third_party/yaml-cpp
 	url = git@github.com:jbeder/yaml-cpp.git
+[submodule "platform/src/switch"]
+	path = platform/src/switch
+	url = git@github.com:openvmp/switch.git
+[submodule "platform/src/switch_r413d08"]
+	path = platform/src/switch_r413d08
+	url = git@github.com:openvmp/switch_r413d08.git
+[submodule "deployment/ansible/roles/ansible-ubuntu-wifi"]
+	path = deployment/ansible/roles/ansible-ubuntu-wifi
+	url = git@github.com:fcastello/ansible-ubuntu-wifi.git
+[submodule "platform/src/remote_hardware_interface"]
+	path = platform/src/remote_hardware_interface
+	url = git@github.com:openvmp/remote_hardware_interface.git

@@ -1,0 +1,8 @@
+{
+    "paths": {
+        "src/third_party/yaml-cpp": {
+            "name": "YAML_CPP",
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wno-shadow"]
+        }
+    }
+}

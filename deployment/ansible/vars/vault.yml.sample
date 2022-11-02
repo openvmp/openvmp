@@ -1,0 +1,3 @@
+vault_rpi_bootstrap__rpi_network_wifi_APs:
+- essid: YourSensitiveESSID
+  passphrase: YourSecureWPA_Passphrase

@@ -1,5 +1,5 @@
 # TODO(openvmp): add support for proper storage of model files in git
-models
+/models
 
 # ROS2 generated files
 build/

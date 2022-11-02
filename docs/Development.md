@@ -8,7 +8,7 @@ Run the following commands to have the support files generated for VSCode:
 
 ```
 cd platform
-colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+COLCON_HOME=$(pwd) colcon build
 ```
 
 ## Building
