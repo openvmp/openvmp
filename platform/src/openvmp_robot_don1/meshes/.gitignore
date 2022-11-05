@@ -1,1 +1,2 @@
-*.stl
+# TODO(clairbee): add support for proper storage of model files in git
+[^p]*.stl
