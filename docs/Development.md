@@ -9,8 +9,10 @@ apt install git
 apt install python3-colcon-common-extensions
 
 apt install ros-humble-desktop-full
-apt install ros-humble-gazebo-ros-pkgs
 apt install ros-humble-ros2-control
+apt install ros-humble-ros2-controllers
+apt install ros-humble-gazebo-ros-pkgs
+apt install ros-humble-gazebo-ros2-control
 
 ```
 
