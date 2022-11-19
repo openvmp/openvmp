@@ -1,4 +1,4 @@
-controller_manager:
+/**/controller_manager:
   ros__parameters:
     update_rate: 100
     use_sim_time: true
@@ -20,7 +20,7 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-position_controller:
+/**/position_controller:
   ros__parameters:
     joints:
       - front_turn_table_joint
@@ -63,7 +63,7 @@ position_controller:
 #     pid: { p: 100.0, i: 10.0, d: 1.0 }
 #     interface_name: effort
 
-velocity_controller:
+/**/velocity_controller:
   ros__parameters:
     joints:
       - front_turn_table_joint
@@ -127,7 +127,7 @@ velocity_controller:
 #       - rear_right_arm_wheel_joint
 #     interface_name: position
 
-trajectory_controller:
+/**/trajectory_controller:
   ros__parameters:
     joints:
       - front_turn_table_joint

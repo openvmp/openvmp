@@ -88,7 +88,14 @@
     "system_error": "cpp",
     "future": "cpp",
     "thread": "cpp",
-    "__split_buffer": "cpp"
+    "__split_buffer": "cpp",
+    "__hash_table": "cpp",
+    "array": "cpp",
+    "cmath": "cpp",
+    "list": "cpp",
+    "set": "cpp",
+    "unordered_map": "cpp",
+    "valarray": "cpp"
   },
   "python.formatting.provider": "black",
   "cmake.configureOnOpen": true,

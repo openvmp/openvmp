@@ -34,3 +34,6 @@
 [submodule "platform/src/remote_hardware_interface"]
 	path = platform/src/remote_hardware_interface
 	url = git@github.com:openvmp/remote_hardware_interface.git
+[submodule "platform/src/brake"]
+	path = platform/src/brake
+	url = git@github.com:openvmp/brake.git

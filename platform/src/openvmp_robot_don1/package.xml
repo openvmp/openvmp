@@ -11,7 +11,6 @@
   <depend>rclcpp</depend>
   <depend>openvmp_robot</depend>
 
-
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>position_controllers</exec_depend>

@@ -45,6 +45,11 @@ and does not include third-party libraries that are present in the non-repo
   [stepper\_driver\_rs485\_so](https://github.com/openvmp/stepper_driver_rs485_so)
   as an example.
 
+- [brake](https://github.com/openvmp/brake)
+
+  Brake module for ROS2. It implements a generic interface for joint brakes.
+  It supports brakes that are engaged by default (such as integrated electromagnetic brakes for stepper motors) as well as brakes that are engaged on demand only.
+
 - [stepper\_driver](https://github.com/openvmp/stepper_driver)
 
   Stepper driver module for ROS2. It implements a generic interface that is

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>openvmp_hardware_manager</name>
+  <version>0.0.1</version>
+  <description>Hardware Manager for OpenvMP robots</description>
+  <maintainer email="openvmp@proton.me">Roman Kuzmenko</maintainer>
+  <license>Apache License 2.0</license>
+
+  <depend>openvmp_hardware_configuration_py</depend>
+  <depend>modbus_rtu</depend>
+  <depend>stepper_driver_em2rs</depend>
+  <depend>switch_r413d08</depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

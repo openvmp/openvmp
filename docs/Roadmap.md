@@ -1,6 +1,6 @@
 # OpenVMP
 
-Below you can see the ideas that you can work on as a contributor.
+Below you can see some draft ideas that you can work on as a contributor.
 
 Send us a pull request with the suggested implementation.
 
@@ -39,7 +39,7 @@ Send us a pull request with the suggested implementation.
     - on first boot / firmware upgrade
     - OTA update from Cloud
 
-## Ecosystem features
+## OpenVMP ecosystem features
 
 - Cloud microservices & API (Golang + gRPC + Protobuf)
   - Location reporting (sub, robot to report)
@@ -60,5 +60,10 @@ Send us a pull request with the suggested implementation.
   - Support for Oculus Quest 2
     - render from PC
     - render from cloud
+
+## ROS2 ecosystem features
+
+- Extensions for RViz interactive markers
+  - to display play/pause symbols for each joint (in the center of the same plane where the other markers are displayed now) to be used for pausing movement routines or for engaging/disengaging joint brakes
 
 ![ROS/ROS2 index package for OpenVMP module: Roadmap](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FRoadmap.md&dt=OpenVMP%20Documentation)

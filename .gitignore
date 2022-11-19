@@ -5,3 +5,5 @@ build/
 
 # Other auto-generated files
 **/.DS_Store
+__pycache__
+

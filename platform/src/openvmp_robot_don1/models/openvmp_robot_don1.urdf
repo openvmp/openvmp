@@ -12,6 +12,7 @@
   <!-- ****************** COMMAND LINE PARAMETERS *******************************  -->
   <!-- Generate the model suitable for simulation in Gazebo -->
   <xacro:arg name="simulate" default="false" />
+  <xacro:arg name="namespace" default="" />
 
   <xacro:arg name="is_mac" default="false" />
   <xacro:unless value="$(arg is_mac)">
@@ -51,7 +52,7 @@
 
   <!-- Physics parameters -->
   <xacro:property name="joint_damping" value="50000.0" />
-  <xacro:property name="joint_friction" value="0.5" />
+  <xacro:property name="joint_friction" value="100.0" />
   <xacro:macro name="solid_hard" params="name material">
     <gazebo reference="${name}">
       <kp>500000.0</kp>
@@ -386,21 +387,14 @@
   </xacro:macro>
 
   <!-- <parameters>$(find openvmp_robot_don1)/config/ros2_controllers.yaml</parameters> -->
-  <!-- <ros2_control name="MotionControl" type="system"> -->
-  <ros2_control name="GazeboSystem" type="system">
+  <ros2_control name="MotionControl" type="system">
     <hardware>
       <xacro:if value="$(arg simulate)">
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-        <!-- <plugin>position_controller/JointTrajectoryController</plugin>
-        <plugin>remote_motion_hardware/RemoteActuatorInterface</plugin> -->
       </xacro:if>
       <xacro:unless value="$(arg simulate)">
-        <!-- <plugin>position_controller/JointTrajectoryController</plugin>
-        <plugin>position_controller/JointGroupPositionController</plugin> -->
-        <!-- <plugin>remote_motion_hardware/RemoteActuatorInterface</plugin> -->
+        <plugin>remote_hardware_interface/RemoteActuatorInterface</plugin>
       </xacro:unless>
-      <!-- <param name="prefix">/</param> -->
-      <!-- <param name="prefix">/openvmp_robot_don1</param> -->
     </hardware>
     <xacro:r2c_half prefix="front" />
     <xacro:r2c_half prefix="rear" />
@@ -457,10 +451,18 @@
 
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.${plugin_extension}">
+      <ros>
+        <namespace>$(arg namespace)</namespace>
+      </ros>
       <!-- <robot_param>robot_description</robot_param>
       <robot_param_node>robot_state_publisher</robot_param_node> -->
       <parameters>$(find openvmp_robot_don1)/config/ros2_controllers.yaml</parameters>
     </plugin>
+    <!-- Do not use the below
+         as it publishes the actual joint state
+         instead of the one that came through ROS2 control update loop
+         so that the ROS2 control loop latencies (and value transformations)
+         are simulated too! -->
     <!-- <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.${plugin_extension}">
       <joint_name>front_turn_table_joint</joint_name>
       <joint_name>front_body_joint</joint_name>
@@ -481,20 +483,10 @@
       <update_rate>30.0</update_rate>
       <always_on>true</always_on>
     </plugin> -->
-    <!-- <plugin name="openvmp_gazebo_hardware_simulation" filename="libopenvmp_gazebo_hardware_simulation.${plugin_extension}">
-      <joint name="front_turn_table_joint">
-        <gearbox ratio="10" />
-        <motor type="stepper" path="/stepper/motor1" torque="0.4" />
-        <brake type="switch" path="/switch/board1/channel0" torque="0.5" />
-        <encoder type="absolute" path="/encoder/sensor0" ppr="1000" />
-      </joint>
-      <joint name="rear_turn_table_joint">
-        <gearbox ratio="10" />
-        <motor type="stepper" path="/stepper/motor2" torque="0.4" />
-        <brake type="switch" path="/switch/board1/channel1" torque="0.5" />
-        <encoder type="absolute" path="/encoder/sensor1" ppr="1000" />
-      </joint>
-    </plugin> -->
+    <plugin name="openvmp_hardware_simulation_gazebo" filename="libopenvmp_hardware_simulation_gazebo.${plugin_extension}">
+      <ns>$(arg namespace)</ns>
+      <hardware_configuration>$(find openvmp_robot_don1)/config/hardware.yaml</hardware_configuration>
+    </plugin>
     <!-- <plugin name="gazebo_ros_force" filename="libgazebo_ros_force.${plugin_extension}" /> -->
   </gazebo>
 

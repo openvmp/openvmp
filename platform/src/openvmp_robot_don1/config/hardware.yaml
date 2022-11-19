@@ -1,0 +1,347 @@
+weight:
+  baseBody: 5.0
+  frontBody: 5.0
+  rearBody: 5.0
+  leg: 2.0
+  arm: 3.0
+joints:
+  - name: front_turn_table_joint
+    gearbox:
+      ratio: 10
+      type: worm
+    actuator:
+      type: stepper # TODO(clairbee): should it be 'position'|'velocity'?
+      path: /stepper/actuator100
+      torque: 0.5 ## TODO(clairbee): replace this with torque curves
+      torqueDetent: 0.1
+      torqueStalling: 0.72
+      driver:
+        type: em2rs
+        path: /modbus/bus0
+    brake:
+      path: /brake100
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 0
+    encoder:
+      type: absolute
+      path: /encoder/sensor100
+      ppr: 1000
+  - name: front_body_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator101
+      torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.48
+    brake:
+      path: /brake101
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 1
+    encoder:
+      type: absolute
+      path: /encoder/sensor101
+      ppr: 1000
+  - name: front_left_arm_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator102
+      torque: 0.4
+    brake:
+      path: /brake102
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 2
+    encoder:
+      type: absolute
+      path: /encoder/sensor102
+      ppr: 1000
+  - name: front_left_arm_inner_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator103
+      torque: 0.4
+    brake:
+      path: /brake103
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 3
+    encoder:
+      type: absolute
+      path: /encoder/sensor103
+      ppr: 1000
+  - name: front_left_arm_wheel_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator104
+      torque: 0.4
+    brake:
+      path: /brake104
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 4
+    encoder:
+      type: absolute
+      path: /encoder/sensor104
+      ppr: 1000
+  - name: front_right_arm_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator105
+      torque: 0.4
+    brake:
+      path: /brake105
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 5
+    encoder:
+      type: absolute
+      path: /encoder/sensor105
+      ppr: 1000
+  - name: front_right_arm_inner_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator106
+      torque: 0.4
+    brake:
+      path: /brake106
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 6
+    encoder:
+      type: absolute
+      path: /encoder/sensor106
+      ppr: 1000
+  - name: front_right_arm_wheel_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator107
+      torque: 0.4
+    brake:
+      path: /brake107
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board1
+        channel: 7
+    encoder:
+      type: absolute
+      path: /encoder/sensor107
+      ppr: 1000
+  - name: rear_turn_table_joint
+    gearbox:
+      ratio: 10
+      type: worm
+    actuator:
+      type: stepper
+      path: /stepper/actuator200
+      torque: 0.4
+    brake:
+      path: /brake200
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 0
+    encoder:
+      type: absolute
+      path: /encoder/sensor200
+      ppr: 1000
+  - name: rear_body_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator201
+      torque: 0.4
+    brake:
+      path: /brake201
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 1
+    encoder:
+      type: absolute
+      path: /encoder/sensor201
+      ppr: 1000
+  - name: rear_left_arm_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator202
+      torque: 0.4
+    brake:
+      path: /brake202
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 2
+    encoder:
+      type: absolute
+      path: /encoder/sensor202
+      ppr: 1000
+  - name: rear_left_arm_inner_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator203
+      torque: 0.4
+    brake:
+      path: /brake203
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 3
+    encoder:
+      type: absolute
+      path: /encoder/sensor203
+      ppr: 1000
+  - name: rear_left_arm_wheel_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator204
+      torque: 0.4
+    brake:
+      path: /brake204
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 4
+    encoder:
+      type: absolute
+      path: /encoder/sensor204
+      ppr: 1000
+  - name: rear_right_arm_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator205
+      torque: 0.4
+    brake:
+      path: /brake205
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 5
+    encoder:
+      type: absolute
+      path: /encoder/sensor205
+      ppr: 1000
+  - name: rear_right_arm_inner_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator206
+      torque: 0.4
+    brake:
+      path: /brake206
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 6
+    encoder:
+      type: absolute
+      path: /encoder/sensor206
+      ppr: 1000
+  - name: rear_right_arm_wheel_joint
+    gearbox:
+      ratio: 10
+      type: planetary
+    actuator:
+      type: stepper
+      path: /stepper/actuator207
+      torque: 0.4
+    brake:
+      path: /brake207
+      torque: 0.5
+      engagedByDefault: true
+      driver:
+        type: switch
+        path: /switch/board2
+        channel: 7
+    encoder:
+      type: absolute
+      path: /encoder/sensor207
+      ppr: 1000
+
+interfaces:
+  modbus_rtu:
+    - path: /modbus/bus0
+      serial: /dev/ttyS0
+      data: 115200
+      parity: 0
+      stop: 1
+    - path: /modbus/bus1
+      serial: /dev/ttyS1
+      data: 115200
+      parity: 0
+      stop: 1

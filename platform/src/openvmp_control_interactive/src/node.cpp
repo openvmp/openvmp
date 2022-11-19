@@ -23,8 +23,11 @@ Node::Node()
           "twist_server", get_node_base_interface(), get_node_clock_interface(),
           get_node_logging_interface(), get_node_topics_interface(),
           get_node_services_interface())) {
+  RCLCPP_INFO(this->get_logger(), "Namespace: %s",
+              this->get_effective_namespace().c_str());
+
   velocity_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
-      "/velocity_controller/commands", 10);
+      this->get_effective_namespace() + "/velocity_controller/commands", 10);
 
   const auto &links = get_links();
   for (auto link_it = links.cbegin(); link_it != links.cend(); link_it++) {
