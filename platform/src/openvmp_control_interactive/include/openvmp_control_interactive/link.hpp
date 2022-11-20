@@ -22,7 +22,7 @@ struct Link {
   int index;
   enum axis { X, Y, Z };
 
-  const axis axis;
+  const axis axis_vis, axis_rot;
   const uint8_t mode;
 
   double marker_size_scale = 1;

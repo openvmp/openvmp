@@ -26,8 +26,10 @@ Node::Node()
   RCLCPP_INFO(this->get_logger(), "Namespace: %s",
               this->get_effective_namespace().c_str());
 
-  velocity_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
-      this->get_effective_namespace() + "/velocity_controller/commands", 10);
+  position_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
+      this->get_effective_namespace() + "/position_controller/commands", 10);
+  // velocity_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
+  //     this->get_effective_namespace() + "/velocity_controller/commands", 10);
 
   const auto &links = get_links();
   for (auto link_it = links.cbegin(); link_it != links.cend(); link_it++) {
@@ -68,7 +70,7 @@ Node::Node()
                    "invalid mode");
     }
 
-    switch (link.axis) {
+    switch (link.axis_vis) {
       case Link::X:
         control.orientation.x = 1;
         control.name += "x";
@@ -99,80 +101,97 @@ void Node::processFeedback_(
     const Link &link,
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
         &feedback) {
-  geometry_msgs::msg::Twist vel_msg;
-  double velocity = 0;
+  // geometry_msgs::msg::Twist vel_msg;
+  // double velocity = 0;
 
-  if (link.mode ==
-      visualization_msgs::msg::InteractiveMarkerControl::MOVE_AXIS) {
-    switch (link.axis) {
-      case Link::X:
-        vel_msg.linear.x = link.linear_drive_scale * feedback->pose.position.x;
-        vel_msg.linear.x = std::min(vel_msg.linear.x, link.max_linear_velocity);
-        vel_msg.linear.x =
-            std::max(vel_msg.linear.x, -link.max_linear_velocity);
-        velocity = vel_msg.linear.x;
-        break;
-      case Link::Y:
-        vel_msg.linear.y = link.linear_drive_scale * feedback->pose.position.y;
-        vel_msg.linear.y = std::min(vel_msg.linear.y, link.max_linear_velocity);
-        vel_msg.linear.y =
-            std::max(vel_msg.linear.y, -link.max_linear_velocity);
+  // if (link.mode ==
+  //     visualization_msgs::msg::InteractiveMarkerControl::MOVE_AXIS) {
+  //   switch (link.axis) {
+  //     case Link::X:
+  //       vel_msg.linear.x = link.linear_drive_scale * feedback->pose.position.x;
+  //       vel_msg.linear.x = std::min(vel_msg.linear.x, link.max_linear_velocity);
+  //       vel_msg.linear.x =
+  //           std::max(vel_msg.linear.x, -link.max_linear_velocity);
+  //       velocity = vel_msg.linear.x;
+  //       break;
+  //     case Link::Y:
+  //       vel_msg.linear.y = link.linear_drive_scale * feedback->pose.position.y;
+  //       vel_msg.linear.y = std::min(vel_msg.linear.y, link.max_linear_velocity);
+  //       vel_msg.linear.y =
+  //           std::max(vel_msg.linear.y, -link.max_linear_velocity);
 
-        velocity = vel_msg.linear.y;
-        break;
-      case Link::Z:
-        vel_msg.linear.z = link.linear_drive_scale * feedback->pose.position.z;
-        vel_msg.linear.z = std::min(vel_msg.linear.z, link.max_linear_velocity);
-        vel_msg.linear.z =
-            std::max(vel_msg.linear.z, -link.max_linear_velocity);
-        velocity = vel_msg.linear.z;
-        break;
-    }
-  } else if (link.mode ==
-             visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS) {
-    double roll, pitch, yaw;
-    tf2::Quaternion quat_tf;
-    tf2::fromMsg(feedback->pose.orientation, quat_tf);
-    tf2::Matrix3x3(quat_tf).getRPY(roll, pitch, yaw);
+  //       velocity = vel_msg.linear.y;
+  //       break;
+  //     case Link::Z:
+  //       vel_msg.linear.z = link.linear_drive_scale * feedback->pose.position.z;
+  //       vel_msg.linear.z = std::min(vel_msg.linear.z, link.max_linear_velocity);
+  //       vel_msg.linear.z =
+  //           std::max(vel_msg.linear.z, -link.max_linear_velocity);
+  //       velocity = vel_msg.linear.z;
+  //       break;
+  //   }
+  // } else if (link.mode ==
+  //            visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS) {
+  //   double roll, pitch, yaw;
+  //   tf2::Quaternion quat_tf;
+  //   tf2::fromMsg(feedback->pose.orientation, quat_tf);
+  //   tf2::Matrix3x3(quat_tf).getRPY(roll, pitch, yaw);
 
-    switch (link.axis) {
-      case Link::X:
-        vel_msg.angular.x = link.angular_drive_scale * roll;
-        vel_msg.angular.x =
-            std::min(vel_msg.angular.x, link.max_angular_velocity);
-        vel_msg.angular.x =
-            std::max(vel_msg.angular.x, -link.max_angular_velocity);
-        velocity = vel_msg.angular.x;
-        break;
-      case Link::Y:
-        vel_msg.angular.y = link.angular_drive_scale * pitch;
-        vel_msg.angular.y =
-            std::min(vel_msg.angular.y, link.max_angular_velocity);
-        vel_msg.angular.y =
-            std::max(vel_msg.angular.y, -link.max_angular_velocity);
-        velocity = vel_msg.angular.y;
-        break;
-      case Link::Z:
-        vel_msg.angular.z = link.angular_drive_scale * yaw;
-        vel_msg.angular.z =
-            std::min(vel_msg.angular.z, link.max_angular_velocity);
-        vel_msg.angular.z =
-            std::max(vel_msg.angular.z, -link.max_angular_velocity);
-        velocity = vel_msg.angular.z;
-        break;
-    }
-  } else {
-    RCLCPP_ERROR(get_logger(), "%s(%d): %s", __FILE__, __LINE__,
-                 "invalid mode");
-  }
+  //   switch (link.axis) {
+  //     case Link::X:
+  //       vel_msg.angular.x = link.angular_drive_scale * roll;
+  //       vel_msg.angular.x =
+  //           std::min(vel_msg.angular.x, link.max_angular_velocity);
+  //       vel_msg.angular.x =
+  //           std::max(vel_msg.angular.x, -link.max_angular_velocity);
+  //       velocity = vel_msg.angular.x;
+  //       break;
+  //     case Link::Y:
+  //       vel_msg.angular.y = link.angular_drive_scale * pitch;
+  //       vel_msg.angular.y =
+  //           std::min(vel_msg.angular.y, link.max_angular_velocity);
+  //       vel_msg.angular.y =
+  //           std::max(vel_msg.angular.y, -link.max_angular_velocity);
+  //       velocity = vel_msg.angular.y;
+  //       break;
+  //     case Link::Z:
+  //       vel_msg.angular.z = link.angular_drive_scale * yaw;
+  //       vel_msg.angular.z =
+  //           std::min(vel_msg.angular.z, link.max_angular_velocity);
+  //       vel_msg.angular.z =
+  //           std::max(vel_msg.angular.z, -link.max_angular_velocity);
+  //       velocity = vel_msg.angular.z;
+  //       break;
+  //   }
+  // } else {
+  //   RCLCPP_ERROR(get_logger(), "%s(%d): %s", __FILE__, __LINE__,
+  //                "invalid mode");
+  // }
+
 
   (void)link_name;
   // FIXME(clairbee): NOT YET
   // vel_pubs_[link_name]->publish(vel_msg);
   std_msgs::msg::Float64MultiArray msg;
   msg.data.resize(LINKS_TOTAL);
-  msg.data[link.index] = velocity;
-  velocity_commands_->publish(msg);
+
+  // position controller
+  switch (link.axis_rot) {
+    case Link::X:
+      msg.data[link.index] = feedback->pose.orientation.x;
+      break;
+    case Link::Y:
+      msg.data[link.index] = feedback->pose.orientation.y;
+      break;
+    case Link::Z:
+      msg.data[link.index] = feedback->pose.orientation.z;
+      break;
+  }
+  position_commands_->publish(msg);
+
+  // velocity controller
+  // msg.data[link.index] = velocity;
+  // velocity_commands_->publish(msg);
 
   // Make the marker snap back to robot
   server_->setPose(marker_name, geometry_msgs::msg::Pose());

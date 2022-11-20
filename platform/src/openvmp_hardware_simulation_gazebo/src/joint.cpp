@@ -56,6 +56,7 @@ void Joint::update() {
     }
   }
 
+  joint_->SetDamping(0, 0.05);
   joint_->SetParam("friction", 0, friction);
 }
 

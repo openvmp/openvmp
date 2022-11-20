@@ -1,3 +1,5 @@
+---
+
 weight:
   baseBody: 5.0
   frontBody: 5.0
@@ -10,9 +12,9 @@ joints:
       ratio: 10
       type: worm
     actuator:
-      type: stepper # TODO(clairbee): should it be 'position'|'velocity'?
+      type: stepper  # TODO(clairbee): should it be 'position'|'velocity'?
       path: /stepper/actuator100
-      torque: 0.5 ## TODO(clairbee): replace this with torque curves
+      torque: 0.5  # TODO(clairbee): replace this with torque curves
       torqueDetent: 0.1
       torqueStalling: 0.72
       driver:
@@ -60,6 +62,8 @@ joints:
       type: stepper
       path: /stepper/actuator102
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake102
       torque: 0.5
@@ -80,6 +84,8 @@ joints:
       type: stepper
       path: /stepper/actuator103
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake103
       torque: 0.5
@@ -100,6 +106,8 @@ joints:
       type: stepper
       path: /stepper/actuator104
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake104
       torque: 0.5
@@ -120,6 +128,8 @@ joints:
       type: stepper
       path: /stepper/actuator105
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake105
       torque: 0.5
@@ -140,6 +150,8 @@ joints:
       type: stepper
       path: /stepper/actuator106
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake106
       torque: 0.5
@@ -160,6 +172,8 @@ joints:
       type: stepper
       path: /stepper/actuator107
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake107
       torque: 0.5
@@ -180,6 +194,8 @@ joints:
       type: stepper
       path: /stepper/actuator200
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake200
       torque: 0.5
@@ -200,6 +216,8 @@ joints:
       type: stepper
       path: /stepper/actuator201
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake201
       torque: 0.5
@@ -220,6 +238,8 @@ joints:
       type: stepper
       path: /stepper/actuator202
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake202
       torque: 0.5
@@ -240,6 +260,8 @@ joints:
       type: stepper
       path: /stepper/actuator203
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake203
       torque: 0.5
@@ -260,6 +282,8 @@ joints:
       type: stepper
       path: /stepper/actuator204
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake204
       torque: 0.5
@@ -280,6 +304,8 @@ joints:
       type: stepper
       path: /stepper/actuator205
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake205
       torque: 0.5
@@ -300,6 +326,8 @@ joints:
       type: stepper
       path: /stepper/actuator206
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake206
       torque: 0.5
@@ -320,6 +348,8 @@ joints:
       type: stepper
       path: /stepper/actuator207
       torque: 0.4
+      torqueDetent: 0.1
+      torqueStalling: 0.72
     brake:
       path: /brake207
       torque: 0.5

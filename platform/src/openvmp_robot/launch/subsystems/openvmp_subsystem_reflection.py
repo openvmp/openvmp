@@ -16,7 +16,7 @@ def launch_desc(context):
     joint_state_broadcaster_spawner_cmd = Node(
         package="controller_manager",
         executable="spawner",
-        # name="controller_spawner",
+        # name="controller_spawner_joint_state",
         output="screen",
         namespace=namespace,
         arguments=[

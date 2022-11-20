@@ -29,6 +29,7 @@ In order to simulate the chosen robots in the chosen world,
 use the following command:
 
 ```
+cd platform
 ros2 launch openvmp_robot simulation_world.launch.py \
   world:=<world-name> \
   kind:=<robot-kind> \
@@ -39,8 +40,14 @@ or, to simulate a single robot `don1`
 in the default world `horizontal`, run:
 
 ```
+cd platform
 ros2 launch openvmp_robot simulation_world.launch.py
 ```
+
+Please, note, the first simulation run will take a long time to download all
+the necessary assets.
+To preload the assets, use `cd platform && gazebo src/openvmp_robot/worlds/horizontal.world`. Then exit and proceed with the commands shown above.
+
 <!-- 
 
 ## Spawn the robots manually

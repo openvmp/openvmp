@@ -71,7 +71,7 @@ void OpenVMPSimulationPlugin::Load(gazebo::physics::ModelPtr model,
     configuration_ =
         std::make_shared<openvmp_hardware_configuration::Configuration>(
             config_filename);
-  } catch (std::exception e) {
+  } catch (const std::exception &e) {
     RCLCPP_ERROR(node_->get_logger(),
                  "Exception while parsing 'hardware_configuration': %s",
                  e.what());

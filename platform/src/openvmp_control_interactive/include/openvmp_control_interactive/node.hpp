@@ -32,9 +32,9 @@ class Node : public rclcpp::Node {
 
  private:
   rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
-      velocity_commands_;
-  std::map<std::string, rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr>
-      vel_pubs_;
+      position_commands_;
+  // rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
+  //     velocity_commands_;
   std::unique_ptr<interactive_markers::InteractiveMarkerServer> server_;
 
   void processFeedback_(

@@ -5,18 +5,18 @@
 ### Prerequisites
 
 ```
-apt install git
-apt install python3-colcon-common-extensions
+sudo apt install git
+sudo apt install python3-colcon-common-extensions
 
-apt install ros-humble-desktop-full
-apt install ros-humble-ros2-control
-apt install ros-humble-ros2-controllers
-apt install ros-humble-gazebo-ros-pkgs
-apt install ros-humble-gazebo-ros2-control
+sudo apt install ros-humble-desktop-full
+sudo apt install ros-humble-ros2-control
+sudo apt install ros-humble-ros2-controllers
+sudo apt install ros-humble-gazebo-ros-pkgs
+sudo apt install ros-humble-gazebo-ros2-control
 
 # The following packages are required for testing purposes only
 # (during the regular build process though)
-sudo apt install socat
+sudo sudo apt install socat
 ```
 
 ### Visual Studio Code

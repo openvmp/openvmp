@@ -46,3 +46,4 @@ if __name__ == "__main__":
         # print("copy to: ")
         # print(model_dst)
         shutil.copyfile(model_tmp_filename, model_dst)
+        print("Completed exporting: " + robot_name)

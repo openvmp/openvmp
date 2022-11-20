@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from launch.substitutions import Command
 from launch_ros.actions import Node
@@ -25,19 +26,30 @@ def launch_desc_spawn(context, robot_id, pos):
     # TODO(clairbee): refactor the model filename
     model_path = os.path.join(pkg_share, "models/" + package_name + ".urdf")
 
+    controllers_config_path = os.path.join(pkg_share, "config/ros2_controllers.yaml")
+    controllers_config_patched = tempfile.NamedTemporaryFile(delete=False)
+    data = ""
+    with open(controllers_config_path, "r") as file:
+        data = file.read()
+
+    data = data.replace("%NAMESPACE%", namespace)
+    controllers_config_patched.write(data.encode())
+    controllers_config_patched_path = controllers_config_patched.name
+    controllers_config_patched.close()
+
+    xacro_params = openvmp_config.get_xacro_params(context, robot_id, True)
+    xacro_params += [" controllers_yaml_path:=" + controllers_config_patched_path + " "]
+
     # Launch robot_state_published
     start_robot_state_publisher_cmd = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        # name="robot_state_publisher",
+        # name="robot_state_publisher_" + robot_id,
         output="screen",
         namespace=namespace,
         parameters=[
             {
-                "robot_description": Command(
-                    ["xacro ", model_path]
-                    + openvmp_config.get_xacro_params(context, robot_id, True)
-                ),
+                "robot_description": Command(["xacro ", model_path] + xacro_params),
                 "use_sim_time": True,
             }
         ],
@@ -53,13 +65,13 @@ def launch_desc_spawn(context, robot_id, pos):
         ],
     )
 
-    x = 2.0 * (pos % 5)
+    x = 2.0 + 2.0 * (pos % 5)
     y = 2.0 * int(pos / 5)
 
     start_gazebo_spawner_cmd = Node(
         package="gazebo_ros",
         executable="spawn_entity.py",
-        # name="gazebo_spawn_entity",
+        # name="gazebo_spawn_entity_" + robot_id,
         output="screen",
         namespace=namespace,
         arguments=[

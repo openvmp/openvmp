@@ -23,6 +23,8 @@ Node::Node(const std::string &ns)
           //                          //  "__ns",
           //                          //  ns,
           //                      })
-      ) {}
+      ) {
+        (void)ns;
+      }
 
 }  // namespace openvmp_hardware_simulation_gazebo

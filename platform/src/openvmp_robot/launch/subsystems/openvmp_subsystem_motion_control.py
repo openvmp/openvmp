@@ -16,7 +16,7 @@ def launch_desc(context):
     velocity_controller_spawner_cmd = Node(
         package="controller_manager",
         executable="spawner",
-        # name="controller_spawner",
+        # name="controller_spawner_velocity",
         output="screen",
         namespace=namespace,
         arguments=[
@@ -35,6 +35,29 @@ def launch_desc(context):
         ],
     )
 
+    trajectory_controller_spawner_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        # name="controller_spawner_trajectory",
+        output="screen",
+        namespace=namespace,
+        arguments=[
+            "-c",
+            namespace + "/controller_manager",
+            "trajectory_controller",
+            # "--ros-args",
+            # "--log-level",
+            # "debug",
+        ],
+        parameters=[
+            {
+                "use_sim_time": context.launch_configurations["is_simulation"]
+                == "true",
+            }
+        ],
+    )
+
     return [
         # velocity_controller_spawner_cmd,
+        trajectory_controller_spawner_cmd,
     ]

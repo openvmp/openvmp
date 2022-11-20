@@ -10,10 +10,15 @@ def get_xacro_params(context, robot_id, simulate=False):
     simulate_str = "false"
     if simulate:
         simulate_str = "true"
+
+    is_mac_str = "false"
+    if get_is_mac(context):
+        is_mac_str = "true"
+
     xacro_params = []
     xacro_params.append(" simulate:=" + simulate_str + " ")
     xacro_params.append(" namespace:=" + openvmp_utils.generate_prefix(robot_id) + " ")
-    xacro_params.append(" is_mac:=true ")
+    xacro_params.append(" is_mac:=" + is_mac_str + " ")
     xacro_params.append(" package:=" + get_package(context) + " ")
     xacro_params.append(" robot_id:=" + robot_id + " ")
     return xacro_params

@@ -3,23 +3,18 @@
 # import time
 import math
 import rclpy
-from rclpy.action import ActionClient
-from rclpy.node import Node
 
 
 from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 
+from openvmp_motion_control_py.action import ActionClientNode
 
-class ActionClientNode(Node):
+
+class WalkActionClientNode(ActionClientNode):
     def __init__(self):
-        super().__init__("action_client")
-        self._action_client = ActionClient(
-            self,
-            FollowJointTrajectory,
-            "/trajectory_controller/follow_joint_trajectory",
-        )
+        super().__init__("walk")
 
     def send_goal(self):
         goal = FollowJointTrajectory.Goal()
@@ -171,13 +166,14 @@ class ActionClientNode(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    action_client = ActionClientNode()
+    action_client = WalkActionClientNode()
     future = action_client.send_goal()
     # time.sleep(5)
     # print(asyncio.run(future))
     # print(future.result())
-
     rclpy.spin_until_future_complete(action_client, future)
+    action_client.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == "__main__":

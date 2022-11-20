@@ -18,7 +18,8 @@ const auto robot_half = [](const std::string &side, int offset) {
       {{side + "_turn_table_link",
         Link{
             .index = offset,
-            .axis = Link::Y,
+            .axis_vis = Link::Y,
+            .axis_rot = Link::Z,
             .mode =
                 visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS,
             .marker_size_scale = 0.25,
@@ -26,7 +27,8 @@ const auto robot_half = [](const std::string &side, int offset) {
        {side + "_body_link",
         Link{
             .index = offset + 1,
-            .axis = Link::X,
+            .axis_vis = Link::X,
+            .axis_rot = Link::X,
             .mode =
                 visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS,
             .marker_size_scale = 0.3,

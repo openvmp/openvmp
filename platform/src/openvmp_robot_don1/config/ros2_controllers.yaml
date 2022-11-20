@@ -1,166 +1,295 @@
-/**/controller_manager:
-  ros__parameters:
-    update_rate: 100
-    use_sim_time: true
+---
 
-    position_controller:
-      # ros2 topic pub /position_controller/commands std_msgs/msg/Float64MultiArray '{data: [-0, 0]}'
-      type: position_controllers/JointGroupPositionController
+%NAMESPACE%:
+  controller_manager:
+    ros__parameters:
+      update_rate: 100
+      # use_sim_time: true
 
-    effort_controller:
-      # ros2 topic pub /effort_controller/commands std_msgs/msg/Float64MultiArray '{data: [16000.0, 16000.0]}'
-      type: effort_controllers/JointGroupEffortController
+      position_controller:
+        # ros2 topic pub /position_controller/commands
+        #              std_msgs/msg/Float64MultiArray '{data: [-0, 0]}'
+        type: position_controllers/JointGroupPositionController
 
-    velocity_controller:
-      type: velocity_controllers/JointGroupVelocityController
+      effort_controller:
+        # ros2 topic pub /effort_controller/commands
+        #              std_msgs/msg/Float64MultiArray '{data: [16000.0, 16000.0]}'
+        type: effort_controllers/JointGroupEffortController
 
-    trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
+      velocity_controller:
+        type: velocity_controllers/JointGroupVelocityController
 
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
+      trajectory_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
 
-/**/position_controller:
-  ros__parameters:
-    joints:
-      - front_turn_table_joint
-      - front_body_joint
-      - front_left_arm_joint
-      - front_left_arm_inner_joint
-      # - front_left_arm_wheel_joint
-      - front_right_arm_joint
-      - front_right_arm_inner_joint
-      # - front_right_arm_wheel_joint
-      - rear_turn_table_joint
-      - rear_body_joint
-      - rear_left_arm_joint
-      - rear_left_arm_inner_joint
-      # - rear_left_arm_wheel_joint
-      - rear_right_arm_joint
-      - rear_right_arm_inner_joint
-      # - rear_right_arm_wheel_joint
-    interface_name: position
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
 
-# effort_controller:
-#   ros__parameters:
-#     joints:
-#       - front_turn_table_joint
-#       - front_body_joint
-#       - front_left_arm_joint
-#       - front_left_arm_inner_joint
-#       - front_left_arm_wheel_joint
-#       - front_right_arm_joint
-#       - front_right_arm_inner_joint
-#       - front_right_arm_wheel_joint
-#       - rear_turn_table_joint
-#       - rear_body_joint
-#       - rear_left_arm_joint
-#       - rear_left_arm_inner_joint
-#       - rear_left_arm_wheel_joint
-#       - rear_right_arm_joint
-#       - rear_right_arm_inner_joint
-#       - rear_right_arm_wheel_joint
-#     pid: { p: 100.0, i: 10.0, d: 1.0 }
-#     interface_name: effort
+  position_controller:
+    ros__parameters:
+      # use_sim_time: true
+      joints:
+        - front_turn_table_joint
+        - front_body_joint
+        - front_left_arm_joint
+        - front_left_arm_inner_joint
+        # - front_left_arm_wheel_joint
+        - front_right_arm_joint
+        - front_right_arm_inner_joint
+        # - front_right_arm_wheel_joint
+        - rear_turn_table_joint
+        - rear_body_joint
+        - rear_left_arm_joint
+        - rear_left_arm_inner_joint
+        # - rear_left_arm_wheel_joint
+        - rear_right_arm_joint
+        - rear_right_arm_inner_joint
+        # - rear_right_arm_wheel_joint
+      interface_name: position
 
-/**/velocity_controller:
-  ros__parameters:
-    joints:
-      - front_turn_table_joint
-      - front_body_joint
-      # - front_left_arm_joint
-      # - front_left_arm_inner_joint
-      # - front_left_arm_wheel_joint
-      # - front_right_arm_joint
-      # - front_right_arm_inner_joint
-      # - front_right_arm_wheel_joint
-      - rear_turn_table_joint
-      - rear_body_joint
-      # - rear_left_arm_joint
-      # - rear_left_arm_inner_joint
-      # - rear_left_arm_wheel_joint
-      # - rear_right_arm_joint
-      # - rear_right_arm_inner_joint
-      # - rear_right_arm_wheel_joint
-    # interface_name: velocity
+  # effort_controller:
+  #   ros__parameters:
+  #     joints:
+  #       - front_turn_table_joint
+  #       - front_body_joint
+  #       - front_left_arm_joint
+  #       - front_left_arm_inner_joint
+  #       - front_left_arm_wheel_joint
+  #       - front_right_arm_joint
+  #       - front_right_arm_inner_joint
+  #       - front_right_arm_wheel_joint
+  #       - rear_turn_table_joint
+  #       - rear_body_joint
+  #       - rear_left_arm_joint
+  #       - rear_left_arm_inner_joint
+  #       - rear_left_arm_wheel_joint
+  #       - rear_right_arm_joint
+  #       - rear_right_arm_inner_joint
+  #       - rear_right_arm_wheel_joint
+  #     pid: { p: 0.8.0, i: 10.0, d: 1.0 }
+  #     interface_name: effort
 
-# joint_state_broadcaster:
-#   ros__parameters:
-#     joints:
-#       - front_turn_table_joint
-#       - front_body_joint
-#       - front_left_arm_joint
-#       - front_left_arm_inner_joint
-#       - front_left_arm_wheel_joint
-#       - front_right_arm_joint
-#       - front_right_arm_inner_joint
-#       - front_right_arm_wheel_joint
-#       - rear_turn_table_joint
-#       - rear_body_joint
-#       - rear_left_arm_joint
-#       - rear_left_arm_inner_joint
-#       - rear_left_arm_wheel_joint
-#       - rear_right_arm_joint
-#       - rear_right_arm_inner_joint
-#       - rear_right_arm_wheel_joint
-#     # interface_name: position
-#     # interfaces:
-#     #   - position
-# trajectory_controller:
-#   ros__parameters:
-#     joints:
-#       - front_turn_table_joint
-#       - front_body_joint
-#       - front_left_arm_joint
-#       - front_left_arm_inner_joint
-#       - front_left_arm_wheel_joint
-#       - front_right_arm_joint
-#       - front_right_arm_inner_joint
-#       - front_right_arm_wheel_joint
-#       - rear_turn_table_joint
-#       - rear_body_joint
-#       - rear_left_arm_joint
-#       - rear_left_arm_inner_joint
-#       - rear_left_arm_wheel_joint
-#       - rear_right_arm_joint
-#       - rear_right_arm_inner_joint
-#       - rear_right_arm_wheel_joint
-#     interface_name: position
+  velocity_controller:
+    ros__parameters:
+      # use_sim_time: true
+      # interface_name: velocity
+      joints:
+        - front_turn_table_joint
+        - front_body_joint
+        - front_left_arm_joint
+        - front_left_arm_inner_joint
+        # - front_left_arm_wheel_joint
+        - front_right_arm_joint
+        - front_right_arm_inner_joint
+        # - front_right_arm_wheel_joint
+        - rear_turn_table_joint
+        - rear_body_joint
+        - rear_left_arm_joint
+        - rear_left_arm_inner_joint
+        # - rear_left_arm_wheel_joint
+        - rear_right_arm_joint
+        - rear_right_arm_inner_joint
+        # - rear_right_arm_wheel_joint
 
-/**/trajectory_controller:
-  ros__parameters:
-    joints:
-      - front_turn_table_joint
-      - front_body_joint
-      - front_left_arm_joint
-      - front_left_arm_inner_joint
-      # - front_left_arm_wheel_joint
-      - front_right_arm_joint
-      - front_right_arm_inner_joint
-      # - front_right_arm_wheel_joint
-      - rear_turn_table_joint
-      - rear_body_joint
-      - rear_left_arm_joint
-      - rear_left_arm_inner_joint
-      # - rear_left_arm_wheel_joint
-      - rear_right_arm_joint
-      - rear_right_arm_inner_joint
-      # - rear_right_arm_wheel_joint
+  # joint_state_broadcaster:
+  #   ros__parameters:
+  #     joints:
+  #       - front_turn_table_joint
+  #       - front_body_joint
+  #       - front_left_arm_joint
+  #       - front_left_arm_inner_joint
+  #       - front_left_arm_wheel_joint
+  #       - front_right_arm_joint
+  #       - front_right_arm_inner_joint
+  #       - front_right_arm_wheel_joint
+  #       - rear_turn_table_joint
+  #       - rear_body_joint
+  #       - rear_left_arm_joint
+  #       - rear_left_arm_inner_joint
+  #       - rear_left_arm_wheel_joint
+  #       - rear_right_arm_joint
+  #       - rear_right_arm_inner_joint
+  #       - rear_right_arm_wheel_joint
+  #     # interface_name: position
+  #     # interfaces:
+  #     #   - position
+  # trajectory_controller:
+  #   ros__parameters:
+  #     joints:
+  #       - front_turn_table_joint
+  #       - front_body_joint
+  #       - front_left_arm_joint
+  #       - front_left_arm_inner_joint
+  #       - front_left_arm_wheel_joint
+  #       - front_right_arm_joint
+  #       - front_right_arm_inner_joint
+  #       - front_right_arm_wheel_joint
+  #       - rear_turn_table_joint
+  #       - rear_body_joint
+  #       - rear_left_arm_joint
+  #       - rear_left_arm_inner_joint
+  #       - rear_left_arm_wheel_joint
+  #       - rear_right_arm_joint
+  #       - rear_right_arm_inner_joint
+  #       - rear_right_arm_wheel_joint
+  #     interface_name: position
 
-    command_interfaces:
-      # - position
-      - velocity
+  trajectory_controller:
+    ros__parameters:
+      use_sim_time: true
+      joints:
+        - front_turn_table_joint
+        - front_body_joint
+        - front_left_arm_joint
+        - front_left_arm_inner_joint
+        # - front_left_arm_wheel_joint
+        - front_right_arm_joint
+        - front_right_arm_inner_joint
+        # - front_right_arm_wheel_joint
+        - rear_turn_table_joint
+        - rear_body_joint
+        - rear_left_arm_joint
+        - rear_left_arm_inner_joint
+        # - rear_left_arm_wheel_joint
+        - rear_right_arm_joint
+        - rear_right_arm_inner_joint
+        # - rear_right_arm_wheel_joint
 
-    state_interfaces:
-      - position
-      # - velocity
+      # velocity_ff:
+      #   front_turn_table_joint: 0.5
+      #   front_body_joint: 0.5
+      #   front_left_arm_joint: 0.5
+      #   front_left_arm_inner_joint: 0.5
+      #   # front_left_arm_wheel_joint: 0.5
+      #   front_right_arm_joint: 0.5
+      #   front_right_arm_inner_joint: 0.5
+      #   # front_right_arm_wheel_joint: 0.5
+      #   rear_turn_table_joint: 0.5
+      #   rear_body_joint: 0.5
+      #   rear_left_arm_joint: 0.5
+      #   rear_left_arm_inner_joint: 0.5
+      #   # rear_left_arm_wheel_joint: 0.5
+      #   rear_right_arm_joint: 0.5
+      #   rear_right_arm_inner_joint: 0.5
+      #   # rear_right_arm_wheel_joint: 0.5
+      # constraints:
+      #   goal_time: 0.05
+      #   stopped_velocity_tolerance: 0.01
+      #   front_turn_table_joint: { trajectory: 0.01, goal: 0.01 }
+      #   front_body_joint: { trajectory: 0.01, goal: 0.01 }
+      #   front_left_arm_joint: { trajectory: 0.01, goal: 0.01 }
+      #   front_left_arm_inner_joint: { trajectory: 0.01, goal: 0.01 }
+      #   # front_left_arm_wheel_joint: { trajectory: 0.01, goal: 0.01 }
+      #   front_right_arm_joint: { trajectory: 0.01, goal: 0.01 }
+      #   front_right_arm_inner_joint: { trajectory: 0.01, goal: 0.01 }
+      #   # front_right_arm_wheel_joint: { trajectory: 0.01, goal: 0.01 }
+      #   rear_turn_table_joint: { trajectory: 0.01, goal: 0.01 }
+      #   rear_body_joint: { trajectory: 0.01, goal: 0.01 }
+      #   rear_left_arm_joint: { trajectory: 0.01, goal: 0.01 }
+      #   rear_left_arm_inner_joint: { trajectory: 0.01, goal: 0.01 }
+      #   # rear_left_arm_wheel_joint: { trajectory: 0.01, goal: 0.01 }
+      #   rear_right_arm_joint: { trajectory: 0.01, goal: 0.01 }
+      #   rear_right_arm_inner_joint: { trajectory: 0.01, goal: 0.01 }
+      #   # rear_right_arm_wheel_joint: { trajectory: 0.01, goal: 0.01 }
 
-    # state_publish_rate: 200.0 # Defaults to 50
-    action_monitor_rate: 20.0 # Defaults to 20
+      gains:
+        front_turn_table_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        front_body_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        front_left_arm_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        front_left_arm_inner_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        # front_left_arm_wheel_joint:
+        #   p: 1.8
+        #   i: 1.0
+        #   d: 1.0
+        #   i_clamp: 1.0
+        front_right_arm_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        front_right_arm_inner_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        # front_right_arm_wheel_joint:
+        #   p: 1.8
+        #   i: 1.0
+        #   d: 1.0
+        #   i_clamp: 1.0
+        rear_turn_table_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        rear_body_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        rear_left_arm_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        rear_left_arm_inner_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        # rear_left_arm_wheel_joint:
+        #   p: 1.8
+        #   i: 1.0
+        #   d: 1.0
+        #   i_clamp: 1.0
+        rear_right_arm_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        rear_right_arm_inner_joint:
+          p: 1.8
+          i: 1.0
+          d: 1.0
+          i_clamp: 1.0
+        # rear_right_arm_wheel_joint:
+        #   p: 1.8
+        #   i: 1.0
+        #   d: 1.0
+        #   i_clamp: 1.0
 
-    allow_partial_joints_goal: false # Defaults to false
-    open_loop_control: true
-    allow_integration_in_goal_trajectories: true
-    constraints:
-      stopped_velocity_tolerance: 0.01 # Defaults to 0.01
-      goal_time: 0.0 # Defaults to 0.0 (start immediately)
+      command_interfaces:
+        # - position
+        - velocity
+
+      state_interfaces:
+        - position
+        - velocity
+
+      # state_publish_rate: 200.0  # Defaults to 50
+      state_publish_rate: 50.0  # Defaults to 50
+      action_monitor_rate: 20.0  # Defaults to 20
+
+      allow_partial_joints_goal: false  # Defaults to false
+      open_loop_control: false
+      # open_loop_control: true
+      allow_integration_in_goal_trajectories: true
+      constraints:
+        stopped_velocity_tolerance: 0.01  # Defaults to 0.01
+        goal_time: 0.0  # Defaults to 0.0 (start immediately)

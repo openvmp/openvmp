@@ -9,7 +9,9 @@
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.autoIndent": "full",
-  "editor.rulers": [80],
+  "editor.rulers": [
+    80
+  ],
   // "editor.renderWhitespace": "all",
   "clang-format.executable": "/usr/local/bin/clang-format",
   "clang-format.style": "Google",
@@ -99,4 +101,5 @@
   },
   "python.formatting.provider": "black",
   "cmake.configureOnOpen": true,
+  "ros.distro": "humble",
 }

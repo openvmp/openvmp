@@ -5,12 +5,14 @@ from launch.actions import (
     IncludeLaunchDescription,
     RegisterEventHandler,
     TimerAction,
+    ExecuteProcess,
 )
-from launch.event_handlers import OnProcessStart
+from launch.event_handlers import OnProcessStart, OnProcessExit
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
+from launch_ros.substitutions import FindPackageShare, FindPackage
+from launch.substitutions import FindExecutable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
@@ -88,6 +90,22 @@ def generate_launch_description():
 
     # Specify the actions
 
+    # Package and deploy models
+    package_sdf = ExecuteProcess(
+        name="package_sdf",
+        cmd=[
+            [
+                FindExecutable(name="python3"),
+                " ",
+                "src/openvmp_robot/scripts/package_sdf.py",
+                # FindPackage(package="openvmp_robot")..find(
+                #     "/lib/openvmp_robot/package_sdf.py"
+                # ),
+            ]
+        ],
+        shell=True,
+    )
+
     # Launch cartographer
     start_cartographer_occupancy_grid_cmd = Node(
         # condition=UnlessCondition(cartographer),
@@ -130,7 +148,10 @@ def generate_launch_description():
         package="controller_manager",
         executable="ros2_control_node",
         parameters=[
-            {"robot_description": Command(["xacro ", model] + xacro_params)},
+            {
+                "use_sim_time": use_gazebo,
+                "robot_description": Command(["xacro ", model] + xacro_params),
+            },
             controllers_file,
         ],
         # arguments=[
@@ -155,6 +176,11 @@ def generate_launch_description():
             # "--log-level",
             # "debug",
         ],
+        parameters=[
+            {
+                "use_sim_time": use_gazebo,
+            }
+        ],
         output="screen",
     )
     effort_controller_spawner_cmd = Node(
@@ -168,6 +194,11 @@ def generate_launch_description():
             # "--ros-args",
             # "--log-level",
             # "debug",
+        ],
+        parameters=[
+            {
+                "use_sim_time": use_gazebo,
+            }
         ],
         output="screen",
     )
@@ -183,6 +214,11 @@ def generate_launch_description():
             # "--log-level",
             # "debug",
         ],
+        parameters=[
+            {
+                "use_sim_time": use_gazebo,
+            }
+        ],
         output="screen",
     )
     trajectory_controller_spawner_cmd = Node(
@@ -193,9 +229,14 @@ def generate_launch_description():
         name="trajectory_controller",
         arguments=[
             "trajectory_controller",
-            # "--ros-args",
-            # "--log-level",
-            # "debug",
+            "--ros-args",
+            "--log-level",
+            "debug",
+        ],
+        parameters=[
+            {
+                # "use_sim_time": use_gazebo,
+            }
         ],
         output="screen",
     )
@@ -210,6 +251,11 @@ def generate_launch_description():
             # "--ros-args",
             # "--log-level",
             # "debug",
+        ],
+        parameters=[
+            {
+                "use_sim_time": use_gazebo,
+            }
         ],
         output="screen",
     )
@@ -239,6 +285,7 @@ def generate_launch_description():
             executable="robot_state_publisher",
             parameters=[
                 {
+                    "use_sim_time": use_gazebo,
                     "robot_description": Command(["xacro ", model] + xacro_params),
                 }
             ],
@@ -254,11 +301,11 @@ def generate_launch_description():
         # name="rviz2",
         output="screen",
         arguments=["-d", rviz_config_file],
-        # parameters=[
-        #     {
-        #         "use_sim_time": use_gazebo,
-        #     }
-        # ],
+        parameters=[
+            {
+                "use_sim_time": use_gazebo,
+            }
+        ],
     )
 
     # Interactive markers for Rviz
@@ -266,12 +313,12 @@ def generate_launch_description():
         condition=IfCondition(use_rviz),
         package="openvmp_control_interactive",
         executable="openvmp_control_interactive",
-        # parameters=[
-        #     {
-        #         "use_sim_time": use_gazebo,
-        #     }
-        # ],
-        # output="screen",
+        parameters=[
+            {
+                "use_sim_time": use_gazebo,
+            }
+        ],
+        output="screen",
     )
 
     # Launch Gazebo
@@ -295,6 +342,8 @@ def generate_launch_description():
             "openvmp_robot_don1",
             "-topic",
             "robot_description",
+            # "-database",
+            # "openvmp_don1",
         ],
     )
 
@@ -310,6 +359,7 @@ def generate_launch_description():
             declare_rviz_config_file_cmd,
             declare_use_gazebo_cmd,
             # Actions
+            package_sdf,
             # start_joint_state_publisher_cmd,
             start_joint_state_publisher_gui_node,
             controller_manager_cmd,
@@ -319,7 +369,7 @@ def generate_launch_description():
             start_gazebo_cmd,
             # start_gazebo_spawner_cmd,
             TimerAction(
-                period=15.0,
+                period=20.0,
                 actions=[
                     start_gazebo_spawner_cmd,
                 ],
@@ -333,23 +383,55 @@ def generate_launch_description():
             #     )
             # ),
             RegisterEventHandler(
-                OnProcessStart(
+                OnProcessExit(
                     target_action=start_gazebo_spawner_cmd,
-                    on_start=[
-                        TimerAction(
-                            period=5.0,
-                            actions=[
-                                start_control_interactive_cmd,
-                                start_rviz_cmd,
-                                # # position_controller_spawner_cmd,
-                                # # effort_controller_spawner_cmd,
-                                # velocity_controller_spawner_cmd,
-                                # trajectory_controller_spawner_cmd,
-                                joint_state_broadcaster_spawner_cmd,
-                            ],
-                        )
+                    on_exit=[
+                        joint_state_broadcaster_spawner_cmd,
+                        trajectory_controller_spawner_cmd,
+                        # TimerAction(
+                        #     period=7.0,
+                        #     actions=[
+                        #     ],
+                        # )
                     ],
                 )
             ),
+            RegisterEventHandler(
+                OnProcessStart(
+                    target_action=joint_state_broadcaster_spawner_cmd,
+                    on_start=[
+                        start_control_interactive_cmd,
+                        TimerAction(
+                            period=1.0,
+                            actions=[
+                                start_rviz_cmd,
+                            ],
+                        ),
+                    ],
+                )
+            ),
+            # RegisterEventHandler(
+            #     OnProcessStart(
+            #         target_action=start_rviz_cmd,
+            #         on_start=[
+            #         ],
+            #     )
+            # ),
+            # RegisterEventHandler(
+            #     OnProcessStart(
+            #         target_action=start_rviz_cmd,
+            #         on_start=[
+            #             TimerAction(
+            #                 period=7.0,
+            #                 actions=[
+            #                     # position_controller_spawner_cmd,
+            #                     # effort_controller_spawner_cmd,
+            #                     # velocity_controller_spawner_cmd,
+            #                     trajectory_controller_spawner_cmd,
+            #                 ],
+            #             )
+            #         ],
+            #     )
+            # ),
         ]
     )

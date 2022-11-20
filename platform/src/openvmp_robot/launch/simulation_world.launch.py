@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 sys.path.append("src")
 
@@ -33,14 +34,25 @@ def include_unit_launch_descriptions(context):
     pkg_share = FindPackageShare(package="openvmp_robot").find("openvmp_robot")
     robot_launch_py_path = os.path.join(pkg_share, "launch/robot.launch.py")
 
-    for pos in range(int(context.launch_configurations["num"])):
+    pos_limit = int(context.launch_configurations["num"])
+    for pos in range(pos_limit):
         robot_id = openvmp_utils.generate_id()
+
+        if pos == 0 and pos_limit == 1:
+            pos_to_pass = -1
+        else:
+            pos_to_pass = pos
 
         launch_desc.extend(
             [
-                OpaqueFunction(function=spawn_func, args=[robot_id, pos]),
                 TimerAction(
-                    period=5.0,
+                    period=0.0 + 30.0 * pos,
+                    actions=[
+                        OpaqueFunction(function=spawn_func, args=[str(robot_id), pos]),
+                    ],
+                ),
+                TimerAction(
+                    period=15.0 + 30.0 * pos,
                     actions=[
                         IncludeLaunchDescription(
                             PythonLaunchDescriptionSource(robot_launch_py_path),
@@ -48,7 +60,7 @@ def include_unit_launch_descriptions(context):
                                 "kind": context.launch_configurations["kind"],
                                 "id": robot_id,
                                 "is_simulation": "true",
-                                "pos": str(pos),
+                                "pos": str(pos_to_pass),
                             }.items(),
                         ),
                     ],
@@ -77,7 +89,7 @@ def generate_launch_description():
         OpaqueFunction(function=openvmp_worlds.launch_desc),
         OpaqueFunction(function=openvmp_models.launch_desc_deploy),
         TimerAction(
-            period=20.0,
+            period=45.0,
             actions=[
                 OpaqueFunction(function=include_unit_launch_descriptions),
             ],

@@ -1,6 +1,25 @@
 <?xml version="1.0"?>
 <sdf version="1.7">
   <world name="horizontal">
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>1000</iters>
+          <sor>1.4</sor>
+        </solver>
+        <constraints>
+          <cfm>0.00001</cfm>
+          <erp>0.8</erp>
+          <contact_max_correcting_vel>0.000001</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+
+    </physics>
     <include>
       <uri>model://sun</uri>
     </include>
@@ -8,7 +27,7 @@
       <uri>model://baylands</uri>
       <pose>72 142 -1 0 0 0</pose>
     </include>
-    <include>
+    <!-- <include>
       <uri>model://telephone_pole</uri>
       <pose>-18 25 -1 0 0 0</pose>
     </include>
@@ -35,6 +54,6 @@
     <include>
       <uri>model://pickup</uri>
       <pose>23 -2 -0.55 0 0 0</pose>
-    </include>
+    </include> -->
   </world>
 </sdf>
