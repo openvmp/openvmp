@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import subprocess
 import rclpy
@@ -28,6 +29,8 @@ drivers_map = {
 
 
 class HardwareManagerNode(Node):
+    processes = {}
+
     def __init__(self, cfg: config.Config, name="hardware_manager"):
         super().__init__(name)
         self.declare_parameter("use_fake_hardware", False)
@@ -35,28 +38,41 @@ class HardwareManagerNode(Node):
 
         # Buses
         buses = cfg.get_buses()
+        index = 0
         for bus in buses:
-            self.driver_instantiate("bus", bus)
+            self.driver_instantiate("bus" + str(index), "bus", bus)
+            index = index + 1
 
         # Joints
         joints = cfg.get_joints()
         for joint in joints:
             if "brake" in joint:
-                self.driver_instantiate("brake", joint["brake"])
+                self.driver_instantiate(
+                    joint["name"] + "-brake", "brake", joint["brake"]
+                )
             if "encoder" in joint:
-                self.driver_instantiate("encoder", joint["encoder"])
+                self.driver_instantiate(
+                    joint["name"] + "-encoder", "encoder", joint["encoder"]
+                )
             if "actuator" in joint:
-                self.driver_instantiate("actuator", joint["actuator"])
+                self.driver_instantiate(
+                    joint["name"] + "-actuator", "actuator", joint["actuator"]
+                )
 
-        # while True:
-        #     # TODO(clairbee): see if all processes are alive
-        #     #                 and restart if needed
-        #     time.sleep(1)
+        # try:
+        #     while len(self.processes) > 0:
+        #         # TODO(clairbee): see if all processes are alive
+        #         #                 and restart if needed
+        #         time.sleep(1)
+        # except KeyboardInterrupt:
+        #     for process in self.processes:
+        #         process["proc"].terminate()
 
-    def driver_instantiate(self, driver_class, obj):
+    def driver_instantiate(self, id, driver_class, obj):
         print("Launching a driver for")
         print(obj)
 
+        # Determine ROS2 node launch parameters
         params = []
         if self.use_fake_hardware or not "driver" in obj:
             driver = "fake"
@@ -72,9 +88,12 @@ class HardwareManagerNode(Node):
         driver_pkg = drivers_map[driver_class][driver][0]
         driver_exe = drivers_map[driver_class][driver][1]
 
-        # TODO(clairbee): refactor the below to wrap each subprocess with a thread
-        #                 to restart them in case of a crash
-        subprocess.run(
+        # Determine
+        path = obj["path"]
+        node_name = os.path.basename(path)
+        namespace = self.get_namespace() + path
+
+        proc = subprocess.Popen(
             [
                 "ros2",
                 "run",
@@ -84,10 +103,17 @@ class HardwareManagerNode(Node):
             + params
             + [
                 "--ros-args",
-                "-p",
-                "__ns:=" + obj["path"],
+                "-r",
+                "__node:=" + node_name,
+                "-r",
+                "__ns:=" + namespace,
             ]
         )
+        self.processes[id] = {}
+        self.processes[id]["id"] = id
+        self.processes[id]["driver_class"] = driver_class
+        self.processes[id]["obj"] = obj
+        self.processes[id]["process"] = proc
 
 
 def main(args=None):
