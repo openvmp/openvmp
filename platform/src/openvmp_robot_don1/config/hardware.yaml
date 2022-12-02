@@ -1,5 +1,4 @@
 ---
-
 weight:
   baseBody: 5.0
   frontBody: 5.0
@@ -12,9 +11,9 @@ joints:
       ratio: 10
       type: worm
     actuator:
-      type: stepper  # TODO(clairbee): should it be 'position'|'velocity'?
+      type: stepper # TODO(clairbee): should it be 'position'|'velocity'?
       path: /stepper/actuator100
-      torque: 0.5  # TODO(clairbee): replace this with torque curves
+      torque: 0.5 # TODO(clairbee): replace this with torque curves
       torqueDetent: 0.1
       torqueStalling: 0.72
       driver:
@@ -31,7 +30,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor100
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_body_joint
     gearbox:
       ratio: 10
@@ -53,7 +54,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor101
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_left_arm_joint
     gearbox:
       ratio: 10
@@ -75,7 +78,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor102
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_left_arm_inner_joint
     gearbox:
       ratio: 10
@@ -97,7 +102,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor103
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_left_arm_wheel_joint
     gearbox:
       ratio: 10
@@ -119,7 +126,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor104
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_right_arm_joint
     gearbox:
       ratio: 10
@@ -141,7 +150,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor105
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_right_arm_inner_joint
     gearbox:
       ratio: 10
@@ -163,7 +174,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor106
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: front_right_arm_wheel_joint
     gearbox:
       ratio: 10
@@ -185,7 +198,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor107
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_turn_table_joint
     gearbox:
       ratio: 10
@@ -207,7 +222,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor200
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_body_joint
     gearbox:
       ratio: 10
@@ -229,7 +246,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor201
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_left_arm_joint
     gearbox:
       ratio: 10
@@ -251,7 +270,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor202
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_left_arm_inner_joint
     gearbox:
       ratio: 10
@@ -273,7 +294,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor203
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_left_arm_wheel_joint
     gearbox:
       ratio: 10
@@ -295,7 +318,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor204
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_right_arm_joint
     gearbox:
       ratio: 10
@@ -317,7 +342,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor205
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_right_arm_inner_joint
     gearbox:
       ratio: 10
@@ -339,7 +366,9 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor206
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
   - name: rear_right_arm_wheel_joint
     gearbox:
       ratio: 10
@@ -361,16 +390,21 @@ joints:
     encoder:
       type: absolute
       path: /encoder/sensor207
-      ppr: 1000
+      driver:
+        type: amt21
+        ppr: 1000
 
-interfaces:
-  modbus_rtu:
-    - path: /modbus/bus0
+buses:
+  - path: /modbus/bus0
+    driver:
+      type: modbus_rtu
       serial: /dev/ttyS0
       data: 115200
       parity: 0
       stop: 1
-    - path: /modbus/bus1
+  - path: /modbus/bus1
+    driver:
+      type: modbus_rtu
       serial: /dev/ttyS1
       data: 115200
       parity: 0

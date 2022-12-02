@@ -4,5 +4,8 @@ class Config:
     def __init__(self, obj):
         self.obj = obj
 
-    def get_modbus_rtu(self):
-        return self.obj["interfaces"]["modbus_rtu"]
+    def get_joints(self):
+        return self.obj["joints"]
+
+    def get_buses(self):
+        return self.obj["buses"]

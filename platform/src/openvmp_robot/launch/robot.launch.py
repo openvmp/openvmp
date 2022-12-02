@@ -43,6 +43,13 @@ def generate_launch_description_real():
         description="Apply tweaks required to operate in a simulated environment",
     )
 
+    # use_fake_hardware = LaunchConfiguration("use_fake_hardware")
+    declare_use_fake_hardware_cmd = DeclareLaunchArgument(
+        name="use_fake_hardware",
+        default_value="false",
+        description="Launch driver stubs that are not connected to real hardware",
+    )
+
     # pos = LaunchConfiguration("pos")
     declare_pos_cmd = DeclareLaunchArgument(
         name="pos",

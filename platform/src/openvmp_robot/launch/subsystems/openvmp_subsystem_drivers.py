@@ -34,6 +34,11 @@ def launch_desc(context):
         arguments=[
             hardware_config_path,
         ],
+        parameters=[
+            {
+                "use_fake_hardware": context.launch_configurations["use_fake_hardware"],
+            },
+        ],
     )
 
     return [

@@ -15,7 +15,7 @@ setup(
     maintainer="Roman Kuzmenko",
     maintainer_email="openvmp@proton.me",
     description="Hardware Manager for OpenvMP robots",
-    license="Apache 2.0",
+    license="Apache License 2.0",
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
