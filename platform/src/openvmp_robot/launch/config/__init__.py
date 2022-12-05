@@ -1,1 +1,1 @@
-__all__ = ["openvmp_config"]
+__all__ = ["openvmp_config", "files"]

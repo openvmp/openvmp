@@ -43,6 +43,9 @@ def generate_launch_description_real():
         description="Apply tweaks required to operate in a simulated environment",
     )
 
+    # TODO(clairbee): add support for simulated hardware
+    # use_hardware: "real", "fake", "simulated"
+
     # use_fake_hardware = LaunchConfiguration("use_fake_hardware")
     declare_use_fake_hardware_cmd = DeclareLaunchArgument(
         name="use_fake_hardware",
@@ -62,6 +65,7 @@ def generate_launch_description_real():
         declare_id_cmd,
         declare_subsystem_cmd,
         declare_is_simulation_cmd,
+        declare_use_fake_hardware_cmd,
         declare_pos_cmd,
         OpaqueFunction(function=openvmp_subsystem_reflection.launch_desc),
         OpaqueFunction(function=openvmp_subsystem_drivers.launch_desc),

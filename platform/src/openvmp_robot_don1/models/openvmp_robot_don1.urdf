@@ -12,6 +12,7 @@
   <!-- ****************** COMMAND LINE PARAMETERS *******************************  -->
   <!-- Generate the model suitable for simulation in Gazebo -->
   <xacro:arg name="simulate" default="false" />
+  <xacro:arg name="fake_hardware" default="false" />
   <xacro:arg name="namespace" default="" />
   <xacro:arg name="controllers_yaml_path" default="$(find openvmp_robot_don1)/config/ros2_controllers.yaml" />
 
@@ -464,8 +465,12 @@
 
   <xacro:macro name="r2c_joint_limit" params="name pmin pmax">
     <joint name="${name}">
-      <state_interface name="position" />
-      <state_interface name="velocity" />
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <!-- <state_interface name="effort" /> -->
       <command_interface name="position">
         <param name="min">${pmin}</param>
@@ -474,6 +479,7 @@
       <command_interface name="velocity">
         <param name="min">0.25</param>
         <param name="max">0.25</param>
+        <param name="initial_value">0.0</param>
       </command_interface>
       <!-- <command_interface name="effort" /> -->
     </joint>
@@ -483,8 +489,12 @@
     <xacro:r2c_joint_limit name="${prefix}_${side}_arm_joint" pmin="${-pi}" pmax="${pi}" />
     <xacro:r2c_joint_limit name="${prefix}_${side}_arm_inner_joint" pmin="${-pi*0.9}" pmax="${pi*0.7}" />
     <joint name="${prefix}_${side}_arm_wheel_joint">
-      <state_interface name="position" />
-      <state_interface name="velocity" />
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
       <!-- <state_interface name="effort" /> -->
       <command_interface name="position" />
       <command_interface name="velocity" />
@@ -500,13 +510,18 @@
   </xacro:macro>
 
   <!-- <parameters>$(find openvmp_robot_don1)/config/ros2_controllers.yaml</parameters> -->
-  <ros2_control name="GazeboSystem" type="system">
+  <ros2_control name="MotionHardwareSystem" type="system">
     <hardware>
       <xacro:if value="$(arg simulate)">
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
       </xacro:if>
+      <xacro:if value="$(arg fake_hardware)">
+        <plugin>fake_components/GenericSystem</plugin>
+      </xacro:if>
       <xacro:unless value="$(arg simulate)">
-        <plugin>remote_hardware_interface/RemoteActuatorInterface</plugin>
+        <xacro:unless value="$(arg fake_hardware)">
+          <plugin>remote_hardware_interface/RemoteActuatorInterface</plugin>
+        </xacro:unless>
       </xacro:unless>
     </hardware>
     <xacro:r2c_half prefix="front" />

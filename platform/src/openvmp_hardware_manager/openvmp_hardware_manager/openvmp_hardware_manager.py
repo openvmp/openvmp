@@ -69,22 +69,25 @@ class HardwareManagerNode(Node):
         #         process["proc"].terminate()
 
     def driver_instantiate(self, id, driver_class, obj):
-        print("Launching a driver for")
-        print(obj)
+        self.get_logger().info("Launching a driver for {}".format(obj))
 
         # Determine ROS2 node launch parameters
         params = []
         if self.use_fake_hardware or not "driver" in obj:
             driver = "fake"
             if not "fake" in drivers_map[driver_class]:
-                print("No need to instantiate a fake driver of this class")
+                self.get_logger().error(
+                    "No need to instantiate a fake driver of {} class".format(
+                        driver_class
+                    )
+                )
                 return
         else:
             driver_config = obj["driver"]
             driver = driver_config["type"]
             for param in driver_config:
                 if param != "type" and param != "namespace":
-                    params.append(param + ":=" + driver_config[param])
+                    params.append(param + ":=" + str(driver_config[param]))
         driver_pkg = drivers_map[driver_class][driver][0]
         driver_exe = drivers_map[driver_class][driver][1]
 

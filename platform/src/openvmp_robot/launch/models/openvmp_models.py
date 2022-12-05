@@ -7,6 +7,7 @@ from launch_ros.substitutions import FindPackageShare
 
 from openvmp_robot.launch.utils import openvmp_utils
 from openvmp_robot.launch.config import openvmp_config
+from openvmp_robot.launch.config import files as openvmp_config_files
 
 
 def launch_desc_deploy(context):
@@ -19,51 +20,6 @@ def launch_desc_spawn(context, robot_id, pos):
 
     namespace = openvmp_utils.generate_prefix(robot_id)
     robot_kind = openvmp_config.get_kind(context)
-    package_name = openvmp_config.get_package(context)
-
-    pkg_share = FindPackageShare(package=package_name).find(package_name)
-
-    # TODO(clairbee): refactor the model filename
-    model_path = os.path.join(pkg_share, "models/" + package_name + ".urdf")
-
-    controllers_config_path = os.path.join(pkg_share, "config/ros2_controllers.yaml")
-    controllers_config_patched = tempfile.NamedTemporaryFile(delete=False)
-    data = ""
-    with open(controllers_config_path, "r") as file:
-        data = file.read()
-
-    data = data.replace("%NAMESPACE%", namespace)
-    controllers_config_patched.write(data.encode())
-    controllers_config_patched_path = controllers_config_patched.name
-    controllers_config_patched.close()
-
-    xacro_params = openvmp_config.get_xacro_params(context, robot_id, True)
-    xacro_params += [" controllers_yaml_path:=" + controllers_config_patched_path + " "]
-
-    # Launch robot_state_published
-    start_robot_state_publisher_cmd = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        # name="robot_state_publisher_" + robot_id,
-        output="screen",
-        namespace=namespace,
-        parameters=[
-            {
-                "robot_description": Command(["xacro ", model_path] + xacro_params),
-                "use_sim_time": True,
-            }
-        ],
-        arguments=[
-            model_path,
-            "--ros-args",
-            "-r",
-            "/tf:=" + namespace + "/tf",
-            "-r",
-            "/tf_static:=" + namespace + "/tf_static",
-            # "--log-level",
-            # "debug",
-        ],
-    )
 
     x = 2.0 + 2.0 * (pos % 5)
     y = 2.0 * int(pos / 5)
@@ -77,8 +33,8 @@ def launch_desc_spawn(context, robot_id, pos):
         arguments=[
             "-entity",
             "openvmp_robot_" + robot_kind + "_" + robot_id,
-            "-topic",
-            "robot_description",
+            "-file",
+            openvmp_config_files.get_robot_description_file(context, robot_id),
             "-robot_namespace",
             namespace,
             "-x",
@@ -97,6 +53,5 @@ def launch_desc_spawn(context, robot_id, pos):
     )
 
     return [
-        start_robot_state_publisher_cmd,
         start_gazebo_spawner_cmd,
     ]
