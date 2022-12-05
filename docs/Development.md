@@ -42,4 +42,22 @@ COLCON_HOME=$(pwd) colcon build
 source ./install/local_setup.bash  # or .zsh instead of .bash
 ```
 
+## Testing
+
+In order to see how most of the software modules play together,
+use the following command:
+
+```
+ros2 launch openvmp_robot robot.launch.py use_fake_hardware:=true
+```
+
+It will start an RViz window with a single robot using dumb hardware stubs.
+
+See the robot id in the output of `ros2 node list` (4 alhanumeric characters). Using the robot id, send the following commands to control the robot:
+
+```
+ros2 run openvmp_motion_control_py stand --ros-args -p unit:=<robot id>
+ros2 run openvmp_motion_control_py walk --ros-args -p unit:=<robot id>
+```
+
 ![ROS/ROS2 index package for OpenVMP module: Development](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FDevelopment.md&dt=OpenVMP%20Documentation)
