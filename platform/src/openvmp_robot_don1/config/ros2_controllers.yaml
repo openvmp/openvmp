@@ -3,8 +3,8 @@
 %NAMESPACE%:
   controller_manager:
     ros__parameters:
-      update_rate: 100
-      # use_sim_time: true
+      update_rate: 1000
+      use_sim_time: %USE_SIM_TIME%
 
       position_controller:
         # ros2 topic pub /position_controller/commands
@@ -27,7 +27,7 @@
 
   position_controller:
     ros__parameters:
-      # use_sim_time: true
+      use_sim_time: %USE_SIM_TIME%
       joints:
         - front_turn_table_joint
         - front_body_joint
@@ -66,30 +66,30 @@
   #       - rear_right_arm_joint
   #       - rear_right_arm_inner_joint
   #       - rear_right_arm_wheel_joint
-  #     pid: { p: 0.8.0, i: 10.0, d: 1.0 }
+  #     pid: { p: 1.0.0, i: 10.0, d: 0.1 }
   #     interface_name: effort
 
   velocity_controller:
     ros__parameters:
-      # use_sim_time: true
+      use_sim_time: %USE_SIM_TIME%
       # interface_name: velocity
       joints:
-        - front_turn_table_joint
-        - front_body_joint
-        - front_left_arm_joint
-        - front_left_arm_inner_joint
-        # - front_left_arm_wheel_joint
-        - front_right_arm_joint
-        - front_right_arm_inner_joint
-        # - front_right_arm_wheel_joint
-        - rear_turn_table_joint
-        - rear_body_joint
-        - rear_left_arm_joint
-        - rear_left_arm_inner_joint
-        # - rear_left_arm_wheel_joint
-        - rear_right_arm_joint
-        - rear_right_arm_inner_joint
-        # - rear_right_arm_wheel_joint
+        # - front_turn_table_joint
+        # - front_body_joint
+        # - front_left_arm_joint
+        # - front_left_arm_inner_joint
+        - front_left_arm_wheel_joint
+        # - front_right_arm_joint
+        # - front_right_arm_inner_joint
+        - front_right_arm_wheel_joint
+        # - rear_turn_table_joint
+        # - rear_body_joint
+        # - rear_left_arm_joint
+        # - rear_left_arm_inner_joint
+        - rear_left_arm_wheel_joint
+        # - rear_right_arm_joint
+        # - rear_right_arm_inner_joint
+        - rear_right_arm_wheel_joint
 
   # joint_state_broadcaster:
   #   ros__parameters:
@@ -136,7 +136,7 @@
 
   trajectory_controller:
     ros__parameters:
-      use_sim_time: true
+      use_sim_time: %USE_SIM_TIME%
       joints:
         - front_turn_table_joint
         - front_body_joint
@@ -194,97 +194,97 @@
 
       gains:
         front_turn_table_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         front_body_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         front_left_arm_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         front_left_arm_inner_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         # front_left_arm_wheel_joint:
-        #   p: 1.8
-        #   i: 1.0
-        #   d: 1.0
+        #   p: 1.0
+        #   i: 0.1
+        #   d: 0.1
         #   i_clamp: 1.0
         front_right_arm_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         front_right_arm_inner_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         # front_right_arm_wheel_joint:
-        #   p: 1.8
-        #   i: 1.0
-        #   d: 1.0
+        #   p: 1.0
+        #   i: 0.1
+        #   d: 0.1
         #   i_clamp: 1.0
         rear_turn_table_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         rear_body_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         rear_left_arm_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         rear_left_arm_inner_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         # rear_left_arm_wheel_joint:
-        #   p: 1.8
-        #   i: 1.0
-        #   d: 1.0
+        #   p: 1.0
+        #   i: 0.1
+        #   d: 0.1
         #   i_clamp: 1.0
         rear_right_arm_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         rear_right_arm_inner_joint:
-          p: 1.8
-          i: 1.0
-          d: 1.0
+          p: 1.0
+          i: 0.1
+          d: 0.1
           i_clamp: 1.0
         # rear_right_arm_wheel_joint:
-        #   p: 1.8
-        #   i: 1.0
-        #   d: 1.0
+        #   p: 1.0
+        #   i: 0.1
+        #   d: 0.1
         #   i_clamp: 1.0
 
       command_interfaces:
-        # - position
-        - velocity
+        - position
+        # - velocity
 
       state_interfaces:
         - position
         - velocity
 
       # state_publish_rate: 200.0  # Defaults to 50
-      state_publish_rate: 50.0  # Defaults to 50
-      action_monitor_rate: 20.0  # Defaults to 20
+      state_publish_rate: 1000.0  # Defaults to 50
+      action_monitor_rate: 50.0  # Defaults to 20
 
       allow_partial_joints_goal: false  # Defaults to false
       open_loop_control: false

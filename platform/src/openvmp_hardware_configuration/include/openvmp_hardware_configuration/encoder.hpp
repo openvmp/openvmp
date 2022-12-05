@@ -31,7 +31,7 @@ class Encoder {
 
   // Type type_;
   std::string path_;
-  int ppr_;
+  // int ppr_;
 };
 
 }  // namespace openvmp_hardware_configuration

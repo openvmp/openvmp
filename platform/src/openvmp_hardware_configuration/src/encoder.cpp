@@ -30,7 +30,7 @@ Encoder::Encoder(const std::string &joint, const YAML::Node &node)
   // }
 
   path_ = node["path"].as<std::string>();
-  ppr_ = node["ppr"].as<int>();
+  // ppr_ = node["ppr"].as<int>();
 }
 
 }  // namespace openvmp_hardware_configuration

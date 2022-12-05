@@ -27,7 +27,8 @@ def launch_desc(context):
                 "robot_description": openvmp_config_files.get_robot_description(
                     context, robot_id
                 ),
-                "use_sim_time": True,
+                "use_sim_time": context.launch_configurations["is_simulation"]
+                == "true",
             }
         ],
         arguments=[

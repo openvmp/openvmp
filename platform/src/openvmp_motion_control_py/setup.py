@@ -21,6 +21,7 @@ setup(
         "console_scripts": [
             "stand = openvmp_motion_control_py.stand:main",
             "walk = openvmp_motion_control_py.walk:main",
+            "step = openvmp_motion_control_py.step:main",
         ],
     },
 )

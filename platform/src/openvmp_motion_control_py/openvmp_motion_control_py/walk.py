@@ -22,7 +22,7 @@ class WalkActionClientNode(ActionClientNode):
         upside_down = 0  # use '1' for upside down
         upside_down_coeff = 1 - 2 * upside_down
         shoulder_lift = 0.2
-        shoulder_turn = 0.4
+        shoulder_turn = 0.3 + 0.1 * upside_down  # wider legs allow for bigger turn
         arm_reach = 0.4
 
         half_body_base = upside_down * 3.141592653589979
@@ -44,13 +44,13 @@ class WalkActionClientNode(ActionClientNode):
         ]
         position2 = [
             0,
-            half_body_base,
+            half_body_base - shoulder_lift,
             0,
             arm_inner_angle + shoulder_lift,
             0,
             arm_inner_angle - shoulder_lift,
             0,
-            half_body_base,
+            half_body_base - shoulder_lift,
             0,
             -arm_inner_angle + shoulder_lift,
             0,
@@ -63,7 +63,7 @@ class WalkActionClientNode(ActionClientNode):
             arm_inner_angle + shoulder_turn * math.sin(arm_reach),
             arm_reach,
             arm_inner_angle + shoulder_turn * math.sin(arm_reach),
-            -shoulder_turn,
+            shoulder_turn,
             half_body_base,
             arm_reach,
             -arm_inner_angle - shoulder_turn * math.sin(arm_reach),
@@ -72,13 +72,13 @@ class WalkActionClientNode(ActionClientNode):
         ]
         position4 = [
             0,
-            half_body_base,
+            half_body_base + shoulder_lift,
             0,
             arm_inner_angle - shoulder_lift,
             0,
             arm_inner_angle + shoulder_lift,
             0,
-            half_body_base,
+            half_body_base + shoulder_lift,
             0,
             -arm_inner_angle - shoulder_lift,
             0,
@@ -91,7 +91,7 @@ class WalkActionClientNode(ActionClientNode):
             arm_inner_angle + shoulder_turn * math.sin(arm_reach),
             -arm_reach,
             arm_inner_angle + shoulder_turn * math.sin(arm_reach),
-            shoulder_turn,
+            -shoulder_turn,
             half_body_base,
             -arm_reach,
             -arm_inner_angle - shoulder_turn * math.sin(arm_reach),
@@ -167,11 +167,13 @@ def main(args=None):
     rclpy.init(args=args)
 
     action_client = WalkActionClientNode()
+    # action_client.brakes_disengage_all()
     future = action_client.send_goal()
     # time.sleep(5)
     # print(asyncio.run(future))
     # print(future.result())
     rclpy.spin_until_future_complete(action_client, future)
+    # action_client.brakes_engage_all()
     action_client.destroy_node()
     rclpy.shutdown()
 

@@ -46,14 +46,14 @@ def include_unit_launch_descriptions(context):
         launch_desc.extend(
             [
                 TimerAction(
-                    period=0.0 + 30.0 * pos,
+                    period=0.0 + 10.0 * pos,
                     actions=[
                         OpaqueFunction(function=spawn_func, args=[str(robot_id), pos]),
-                    ],
-                ),
-                TimerAction(
-                    period=15.0 + 30.0 * pos,
-                    actions=[
+                        #     ],
+                        # ),
+                        # TimerAction(
+                        #     period=5.0 + 10.0 * pos,
+                        #     actions=[
                         IncludeLaunchDescription(
                             PythonLaunchDescriptionSource(robot_launch_py_path),
                             launch_arguments={
@@ -89,7 +89,7 @@ def generate_launch_description():
         OpaqueFunction(function=openvmp_worlds.launch_desc),
         OpaqueFunction(function=openvmp_models.launch_desc_deploy),
         TimerAction(
-            period=45.0,
+            period=15.0,
             actions=[
                 OpaqueFunction(function=include_unit_launch_descriptions),
             ],

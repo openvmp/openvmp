@@ -23,25 +23,29 @@ def launch_desc(context):
     pkg_share = FindPackageShare(package=package_name).find(package_name)
     hardware_config_path = os.path.join(pkg_share, "config/hardware.yaml")
 
-    # Interactive markers for Rviz
-    start_hardware_manager_cmd = Node(
-        condition=UnlessCondition(is_simulation),
-        package="openvmp_hardware_manager",
-        executable="openvmp_hardware_manager",
-        # name="hardware_manager",
-        output="screen",
-        namespace=namespace,
-        arguments=[
-            hardware_config_path,
-        ],
-        parameters=[
-            {
-                "use_fake_hardware": context.launch_configurations["use_fake_hardware"]
-                == "true",
-            },
-        ],
-    )
+    desc = []
+    if context.launch_configurations["is_simulation"]:
+        # Interactive markers for Rviz
+        desc.append(
+            Node(
+                condition=UnlessCondition(is_simulation),
+                package="openvmp_hardware_manager",
+                executable="openvmp_hardware_manager",
+                # name="hardware_manager",
+                output="screen",
+                namespace=namespace,
+                arguments=[
+                    hardware_config_path,
+                ],
+                parameters=[
+                    {
+                        "use_fake_hardware": context.launch_configurations[
+                            "use_fake_hardware"
+                        ]
+                        == "true",
+                    },
+                ],
+            )
+        )
 
-    return [
-        start_hardware_manager_cmd,
-    ]
+    return desc

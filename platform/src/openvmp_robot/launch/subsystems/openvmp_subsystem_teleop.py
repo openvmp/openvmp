@@ -1,7 +1,9 @@
 import os
+import tempfile
+
+from launch.actions import TimerAction
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-import tempfile
 
 from openvmp_robot.launch.config import openvmp_config
 
@@ -79,7 +81,7 @@ def launch_desc(context):
         package="rviz2",
         executable="rviz2",
         # name="rviz2",
-        output="screen",
+        # output="screen",  # too noisy if something goes wrong
         namespace=namespace,
         arguments=[
             "-d",
@@ -100,5 +102,10 @@ def launch_desc(context):
 
     return [
         start_control_interactive_cmd,
-        start_rviz_cmd,
+        TimerAction(
+            period=7.0,
+            actions=[
+                start_rviz_cmd,
+            ],
+        ),
     ]

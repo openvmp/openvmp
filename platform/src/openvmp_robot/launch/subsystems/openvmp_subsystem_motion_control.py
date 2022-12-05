@@ -23,6 +23,8 @@ def launch_desc(context):
         condition=UnlessCondition(is_simulation),
         package="controller_manager",
         executable="ros2_control_node",
+        output="screen",
+        namespace=namespace,
         parameters=[
             {
                 "use_sim_time": context.launch_configurations["is_simulation"]
@@ -38,7 +40,6 @@ def launch_desc(context):
         #     "--log-level",
         #     "debug",
         # ],
-        output="screen",
         # prefix=["xterm -e gdb -ex run --args"],
     )
 
@@ -88,6 +89,6 @@ def launch_desc(context):
 
     return [
         controller_manager_cmd,
-        # velocity_controller_spawner_cmd,
+        velocity_controller_spawner_cmd,
         trajectory_controller_spawner_cmd,
     ]

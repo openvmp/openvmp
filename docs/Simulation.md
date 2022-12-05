@@ -9,12 +9,12 @@ cd platform/src
 ls openvmp_robot_*`
 ```
 
-There recommended robot kind to start with is `don1`. 
+There recommended robot kind to start with is `don1`.
 Disclaimer: it's the only robot published at the moment.
 
 ## Select the world to simulate
 
-The list of worlds available can be found using the following commands: 
+The list of worlds available can be found using the following commands:
 
 ```
 cd platform/src/openvmp_robot/worlds
@@ -47,6 +47,8 @@ ros2 launch openvmp_robot simulation_world.launch.py
 Please, note, the first simulation run will take a long time to download all
 the necessary assets.
 To preload the assets, use `cd platform && gazebo src/openvmp_robot/worlds/horizontal.world`. Then exit and proceed with the commands shown above.
+
+In case you are using a VM, make sure that graphics hardware acceleration is ON and working optimally (no `llvmpipe` and stuff).
 
 <!-- 
 

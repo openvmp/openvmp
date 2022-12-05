@@ -1,32 +1,8 @@
 import os
+
+from launch_ros.substitutions import FindPackageShare
+
 from openvmp_robot.launch.utils import openvmp_utils
-
-
-def get_is_mac(context):
-    return os.name == "Darwin"
-
-
-def get_xacro_params(context, robot_id):
-    simulate_str = "false"
-    if context.launch_configurations["is_simulation"] == "true":
-        simulate_str = "true"
-
-    fake_hardware_str = "false"
-    if context.launch_configurations["use_fake_hardware"] == "true":
-        fake_hardware_str = "true"
-
-    is_mac_str = "false"
-    if get_is_mac(context):
-        is_mac_str = "true"
-
-    xacro_params = []
-    xacro_params.append(" simulate:=" + simulate_str + " ")
-    xacro_params.append(" fake_hardware:=" + fake_hardware_str + " ")
-    xacro_params.append(" namespace:=" + openvmp_utils.generate_prefix(robot_id) + " ")
-    xacro_params.append(" is_mac:=" + is_mac_str + " ")
-    xacro_params.append(" package:=" + get_package(context) + " ")
-    xacro_params.append(" robot_id:=" + robot_id + " ")
-    return xacro_params
 
 
 def get_kind(context):
@@ -53,3 +29,41 @@ def get_name(context):
     robot_kind = context.launch_configurations["kind"]
     robot_id = context.launch_configurations["id"]
     return "openvmp_robot_" + robot_kind + "_" + robot_id
+
+
+def get_xacro_params(context, robot_id):
+    package_name = get_package(context)
+    pkg_share = FindPackageShare(package=package_name).find(package_name)
+
+    xacro_params = []
+    xacro_params.append(" package:=" + get_package(context) + " ")
+    xacro_params.append(" robot_id:=" + robot_id + " ")
+    xacro_params.append(" namespace:=" + openvmp_utils.generate_prefix(robot_id) + " ")
+
+    # Simulation params
+    if (
+        # simulation.world.launch.py does NO have is_simulation set
+        not "is_simulation" in context.launch_configurations
+        or context.launch_configurations["is_simulation"] == "true"
+    ):
+        xacro_params.append(" simulate:=true ")
+        xacro_params.append(" has_extra_parameters_file:=true ")
+        xacro_params.append(
+            " extra_parameters_file:='$(find openvmp_robot)/config/simulation.yaml' "
+        )
+
+    # Fake hardware params
+    if (
+        # simulation.world.launch.py does NO have is_simulation set
+        "use_fake_hardware" in context.launch_configurations
+        and context.launch_configurations["use_fake_hardware"] == "true"
+    ):
+        xacro_params.append(" fake_hardware:=true ")
+
+    # OS params
+    if os.name == "Darwin":
+        xacro_params.append(" is_mac:=true ")
+    else:
+        xacro_params.append(" is_mac:=false ")
+
+    return xacro_params

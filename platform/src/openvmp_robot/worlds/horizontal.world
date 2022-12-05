@@ -10,24 +10,32 @@
           <type>quick</type>
           <iters>1000</iters>
           <sor>1.4</sor>
+          <!-- <iters>250</iters>
+          <sor>1.4</sor> -->
         </solver>
         <constraints>
-          <cfm>0.00001</cfm>
-          <erp>0.8</erp>
-          <contact_max_correcting_vel>0.000001</contact_max_correcting_vel>
-          <contact_surface_layer>0.001</contact_surface_layer>
+          <!-- <cfm>0.0</cfm>
+          <erp>0.2</erp> -->
+          <!-- <cfm>0.00001</cfm> -->
+          <!-- <erp>0.8</erp> -->
+          <!-- <contact_max_correcting_vel>0.000001</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer> -->
         </constraints>
       </ode>
-
     </physics>
+
     <include>
       <uri>model://sun</uri>
     </include>
     <include>
+      <uri>model://ground_plane</uri>
+      <pose>0 0 -1 0 0 0</pose>
+    </include>
+    <!-- <include>
       <uri>model://baylands</uri>
       <pose>72 142 -1 0 0 0</pose>
     </include>
-    <!-- <include>
+    <include>
       <uri>model://telephone_pole</uri>
       <pose>-18 25 -1 0 0 0</pose>
     </include>

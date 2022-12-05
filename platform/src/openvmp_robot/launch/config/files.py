@@ -24,6 +24,14 @@ def get_ros2_controllers_path(context, robot_id=None):
         data = file.read()
 
     data = data.replace("%NAMESPACE%", namespace)
+    if (
+        "is_simulation" in context.launch_configurations
+        and context.launch_configurations["is_simulation"] == "true"
+    ):
+        data = data.replace("%USE_SIM_TIME%", "true")
+    else:
+        data = data.replace("%USE_SIM_TIME%", "false")
+
     controllers_config_patched.write(data.encode())
     controllers_config_patched_path = controllers_config_patched.name
     controllers_config_patched.close()
@@ -50,9 +58,10 @@ def get_robot_description(context, robot_id=None):
 
 
 def get_robot_description_file(context, robot_id=None):
-    content = get_robot_description(context, robot_id)
+    subs = get_robot_description(context, robot_id)
+    content = subs.perform(context)
     robot_description_file = tempfile.NamedTemporaryFile(delete=False)
-    robot_description_file.write(content.encode())
+    robot_description_file.write(str(content).encode())
     robot_description_file_path = robot_description_file.name
     robot_description_file.close()
     return robot_description_file_path
