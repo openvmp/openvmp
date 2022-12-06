@@ -20,6 +20,7 @@ namespace openvmp_control_interactive {
 
 struct Link {
   int index;
+  std::string joint;
   enum axis { X, Y, Z };
 
   const axis axis_vis, axis_rot;
@@ -29,10 +30,12 @@ struct Link {
 
   double linear_drive_scale = 1, angular_drive_scale = 1,
          max_linear_velocity = 1, max_angular_velocity = 1;
+
+  double last_angle;
 };
 
 extern const int LINKS_TOTAL;
-extern const std::map<const std::string, Link> &get_links();
+extern std::map<const std::string, Link> &get_links();
 
 }  // namespace openvmp_control_interactive
 

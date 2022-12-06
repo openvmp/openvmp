@@ -19,6 +19,8 @@ find_package(visualization_msgs REQUIRED)
 find_package(interactive_markers REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(trajectory_msgs REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 
 # Logic shared by all targets
 include_directories(
@@ -39,6 +41,8 @@ set(project_DEPENDENCIES
   interactive_markers
   tf2
   tf2_geometry_msgs
+  trajectory_msgs
+  builtin_interfaces
 )
 
 # Executable target

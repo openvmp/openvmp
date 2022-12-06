@@ -91,6 +91,8 @@ def launch_desc(context):
             "/tf:=" + namespace + "/tf",
             "-r",
             "/tf_static:=" + namespace + "/tf_static",
+            # "--log-level",
+            # "debug",
         ],
         parameters=[
             {

@@ -31,7 +31,7 @@ Visualization Manager:
       Name: RobotModel
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Name: TF
       Marker Scale: 0.3
       Show Arrows: true
