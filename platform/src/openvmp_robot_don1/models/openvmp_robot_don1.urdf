@@ -175,7 +175,6 @@
   <!-- <xacro:gazebo_fixed_joint name="base_joint2" /> -->
 
 
-
   <!-- *********************** DRIVE WHEELS ******************************  -->
 
   <xacro:macro name="wheel" params="prefix parent limit radius width x_off y_off z_off x_angle collision:=true dir:=1">
@@ -295,6 +294,58 @@
       radius="${wheel_radius}" width="${wheel_width}"
       x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius-arm_height_delta}" x_angle="${pi/2}"
     />
+
+    <link name="${prefix}_outer_link">
+      <visual>
+        <origin xyz="0.0 ${armdir*0.246} -0.212" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.048 0.240" />
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 ${armdir*0.246} -0.212" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.048 0.240" />
+        </geometry>
+      </collision>
+      <xacro:box_inertia m="0.5" x="0.048" y="0.240" z="0.048" />
+    </link>
+    <xacro:solid_hard name="${prefix}_outer_link" material="Gazebo/Red" />
+    <joint name="${prefix}_outer_joint" type="fixed">
+      <parent link="${prefix}_upper_part" />
+      <child link="${prefix}_outer_link" />
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_outer_joint" />
+
+    <link name="${prefix}_hook_link">
+      <visual>
+        <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.stl" scale="0.001 ${-armdir*0.001} 0.001" />
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.stl" scale="0.001 ${-armdir*0.001} 0.001" />
+        </geometry>
+      </collision>
+      <xacro:box_inertia m="0.5" x="0.048" y="0.240" z="0.048" /> <!-- TODO -->
+    </link>
+    <xacro:solid_hard name="${prefix}_hook_link" material="Gazebo/Green" />
+    <joint name="${prefix}_hook_joint" type="fixed">
+      <parent link="${prefix}_outer_link" />
+      <child link="${prefix}_hook_link" />
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_hook_joint" />
   </xacro:macro>
 
   <xacro:macro name="robot_half" params="prefix dir">
@@ -352,7 +403,7 @@
       <child link="${prefix}_body_link2" />
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </joint>
-    <xacro:gazebo_joint name="${prefix}_body_link2" />
+    <xacro:gazebo_joint name="${prefix}_body_link2_joint" />
 
     <!-- central wheel -->
     <link name="${prefix}_body_link3">

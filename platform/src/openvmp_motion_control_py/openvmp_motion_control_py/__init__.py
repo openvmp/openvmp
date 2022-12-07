@@ -1,1 +1,1 @@
-__all__ = ["action", "stand"]
+__all__ = ["action", "stand", "stand2", "walk", "step"]

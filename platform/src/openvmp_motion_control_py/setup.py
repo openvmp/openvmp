@@ -20,6 +20,8 @@ setup(
     entry_points={
         "console_scripts": [
             "stand = openvmp_motion_control_py.stand:main",
+            "stand2 = openvmp_motion_control_py.stand2:main",
+            "hug = openvmp_motion_control_py.hug:main",
             "walk = openvmp_motion_control_py.walk:main",
             "step = openvmp_motion_control_py.step:main",
         ],
