@@ -13,6 +13,9 @@
 
 #include "builtin_interfaces/msg/duration.hpp"
 #include "openvmp_control_interactive/link.hpp"
+#include "openvmp_control_interactive/mode_default.hpp"
+#include "openvmp_control_interactive/mode_turn.hpp"
+#include "openvmp_control_interactive/mode_walk.hpp"
 #include "tf2/utils.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
@@ -37,6 +40,7 @@ Node::Node()
   // velocity_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
   //     this->get_effective_namespace() + "/velocity_controller/commands", 10);
 
+  // Create joint controls
   const auto &links = get_links();
   for (auto link_it = links.cbegin(); link_it != links.cend(); link_it++) {
     const auto &link_name = link_it->first;
@@ -99,7 +103,17 @@ Node::Node()
         std::bind(&Node::processFeedback_, this, interactive_marker.name,
                   link_name, link, std::placeholders::_1));
   }
+
+  // Create menu
+  std::vector<std::shared_ptr<ModeImpl>> modes;
+  modes.push_back(std::shared_ptr<ModeImpl>(new DefaultMode));
+  modes.push_back(std::shared_ptr<ModeImpl>(new WalkMode));
+  modes.push_back(std::shared_ptr<ModeImpl>(new TurnMode));
+  initMenu_(modes);
+
   server_->applyChanges();
+
+  modes_[item_last_]->enter(DEFAULT);
 }
 
 void Node::processFeedback_(
@@ -209,6 +223,9 @@ void Node::processFeedback_(
         case Link::Z:
           angle = feedback->pose.orientation.z;
           break;
+      }
+      if (link.invert) {
+        angle = -angle;
       }
       that_link.last_angle = angle;
     }

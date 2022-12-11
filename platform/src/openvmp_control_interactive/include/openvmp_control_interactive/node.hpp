@@ -12,11 +12,15 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "interactive_markers/interactive_marker_server.hpp"
+#include "interactive_markers/menu_handler.hpp"
+#include "interactive_markers/tools.hpp"
 #include "openvmp_control_interactive/link.hpp"
+#include "openvmp_control_interactive/mode.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float64_multi_array.hpp"
 #include "trajectory_msgs/msg/joint_trajectory.hpp"
@@ -39,10 +43,21 @@ class Node : public rclcpp::Node {
   // rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
   //     velocity_commands_;
   std::unique_ptr<interactive_markers::InteractiveMarkerServer> server_;
+  std::unique_ptr<interactive_markers::MenuHandler> menu_handler_;
+  std::map<interactive_markers::MenuHandler::EntryHandle,
+           std::shared_ptr<ModeImpl>>
+      modes_;
 
+  interactive_markers::MenuHandler::EntryHandle item_last_;
+  Mode mode_last_;
+
+  void initMenu_(std::vector<std::shared_ptr<ModeImpl>>);
   void processFeedback_(
       const std::string &marker_name, const std::string &link_name,
       const Link &link,
+      const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
+          &feedback);
+  void modeCb_(
       const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
           &feedback);
 };

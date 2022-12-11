@@ -3,7 +3,7 @@
 %NAMESPACE%:
   controller_manager:
     ros__parameters:
-      update_rate: 1000
+      update_rate: 100
       use_sim_time: %USE_SIM_TIME%
 
       position_controller:
@@ -283,7 +283,7 @@
         - velocity
 
       # state_publish_rate: 200.0  # Defaults to 50
-      state_publish_rate: 1000.0  # Defaults to 50
+      state_publish_rate: 100.0  # Defaults to 50
       action_monitor_rate: 50.0  # Defaults to 20
 
       allow_partial_joints_goal: false  # Defaults to false

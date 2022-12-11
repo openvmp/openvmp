@@ -14,7 +14,7 @@
 namespace openvmp_control_interactive {
 
 const auto robot_arm = [](const std::string &side, const std::string &arm,
-                          int offset) {
+                          int offset, bool half_invert, bool side_invert) {
   return std::map<const std::string, Link>({
       {side + "_" + arm + "_arm_lower_part",
        Link{
@@ -25,6 +25,7 @@ const auto robot_arm = [](const std::string &side, const std::string &arm,
            .mode =
                visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS,
            .marker_size_scale = 0.2,
+           .invert = half_invert,
        }},
       {side + "_" + arm + "_arm_upper_part",
        Link{
@@ -35,6 +36,7 @@ const auto robot_arm = [](const std::string &side, const std::string &arm,
            .mode =
                visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS,
            .marker_size_scale = 0.2,
+           .invert = side_invert,
        }},
       // {side + "_" + arm + "_left_arm_wheel",
       //  Link{
@@ -48,7 +50,7 @@ const auto robot_arm = [](const std::string &side, const std::string &arm,
   });
 };
 
-const auto robot_half = [](const std::string &side, int offset) {
+const auto robot_half = [](const std::string &side, int offset, bool invert) {
   std::map<const std::string, Link> half({
       {side + "_turn_table_link",
        Link{
@@ -59,6 +61,7 @@ const auto robot_half = [](const std::string &side, int offset) {
            .mode =
                visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS,
            .marker_size_scale = 0.25,
+           .invert = true,
        }},
       {side + "_body_link",
        Link{
@@ -69,10 +72,11 @@ const auto robot_half = [](const std::string &side, int offset) {
            .mode =
                visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS,
            .marker_size_scale = 0.3,
+           .invert = !invert,
        }},
   });
-  const auto &left = robot_arm(side, "left", offset + 2);
-  const auto &right = robot_arm(side, "right", offset + 4);
+  const auto &left = robot_arm(side, "left", offset + 2, invert, true);
+  const auto &right = robot_arm(side, "right", offset + 4, invert, false);
   half.insert(left.begin(), left.end());
   half.insert(right.begin(), right.end());
   return half;
@@ -87,8 +91,8 @@ std::map<const std::string, Link> &get_links() {
   std::lock_guard<std::mutex> lockGuard(links_lock);
 
   if (!links_initialized) {
-    const auto &front = robot_half("front", 0);
-    const auto &rear = robot_half("rear", LINKS_TOTAL / 2);
+    const auto &front = robot_half("front", 0, true);
+    const auto &rear = robot_half("rear", LINKS_TOTAL / 2, false);
     links.insert(front.begin(), front.end());
     links.insert(rear.begin(), rear.end());
     links_initialized = true;

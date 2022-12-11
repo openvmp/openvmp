@@ -31,6 +31,10 @@ set(project_SOURCE_FILES
   src/main.cpp
   src/node.cpp
   src/link.cpp
+  src/menu.cpp
+  src/mode_default.cpp
+  src/mode_walk.cpp
+  src/mode_turn.cpp
 )
 
 set(project_DEPENDENCIES

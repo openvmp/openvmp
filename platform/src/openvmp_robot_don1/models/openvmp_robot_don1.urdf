@@ -255,7 +255,7 @@
       <child link="${prefix}_lower_part" />
       <origin xyz="0.0 ${armdir*(0.12 + 0.024 + 0.012)} 0.0" rpy="0 0 0" />
       <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
-      <axis xyz="0 ${dir*armdir*0.1} 0" />
+      <axis xyz="0 ${-dir*0.1} 0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_joint" />
 
@@ -286,7 +286,7 @@
       <child link="${prefix}_upper_part" />
       <origin xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048)} ${wheel_radius+arm_height_delta-arm_height_shortage}" rpy="0 0 0" />
       <limit upper="${pi*0.7}" lower="${-pi*0.9}" effort="10" velocity="1.0" />
-      <axis xyz="${dir*armdir*0.1} 0 0" />
+      <axis xyz="${-armdir*0.1} 0 0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_inner_joint" />
 
@@ -352,8 +352,9 @@
     <xacro:wheel prefix="${prefix}_turn_table" parent="base_link" limit="${pi/2}"
       radius="${turn_table_radius}" width="${turn_table_height}"
       x_off="${dir*turn_table_xoff}" y_off="0.0" z_off="${base_height_gap + base_height/8 - turn_table_height/2}" x_angle="0"
-      collision="false" dir="${dir}"
+      collision="false" dir="-1"
     />
+    <!-- dir="${dir}" -->
 
     <link name="${prefix}_body_link">
       <visual>
