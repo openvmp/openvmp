@@ -11,14 +11,28 @@
 
 namespace openvmp_control_interactive {
 
-void WalkMode::enter(Mode from) {
+void WalkMode::enter(std::shared_ptr<ControlImpl> from) {
   (void)from;
-  // transition from "from"
+
+  ControlImpl::enter(from);
+
+  RCLCPP_INFO(node_->get_logger(), "WalkMode::enter()");
 }
 
-void WalkMode::leave(Mode to) {
+void WalkMode::leave(std::shared_ptr<ControlImpl> to) {
   (void)to;
-  // transition to "to"
+
+  RCLCPP_INFO(node_->get_logger(), "WalkMode::leave()");
+
+  ControlImpl::leave(to);
+}
+
+void WalkMode::processFeedback_(
+    const std::string &marker_name,
+    const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
+        &feedback) {
+  (void)marker_name;
+  (void)feedback;
 }
 
 }  // namespace openvmp_control_interactive

@@ -31,6 +31,7 @@ def launch_desc(context):
                 == "true",
             }
         ],
+        # prefix=["xterm -e gdb -ex run --args"],
     )
 
     # Launch RViz

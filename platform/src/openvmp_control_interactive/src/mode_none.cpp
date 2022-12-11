@@ -7,22 +7,22 @@
  * Licensed under Apache License, Version 2.0.
  */
 
-#include "openvmp_control_interactive/mode_turn.hpp"
+#include "openvmp_control_interactive/mode_none.hpp"
 
 namespace openvmp_control_interactive {
 
-void TurnMode::enter(std::shared_ptr<ControlImpl> from) {
+void NoneMode::enter(std::shared_ptr<ControlImpl> from) {
   (void)from;
 
   ControlImpl::enter(from);
 
-  RCLCPP_INFO(node_->get_logger(), "TurnMode::enter()");
+  RCLCPP_INFO(node_->get_logger(), "NoneMode::enter()");
 }
 
-void TurnMode::leave(std::shared_ptr<ControlImpl> to) {
+void NoneMode::leave(std::shared_ptr<ControlImpl> to) {
   (void)to;
 
-  RCLCPP_INFO(node_->get_logger(), "TurnMode::leave()");
+  RCLCPP_INFO(node_->get_logger(), "NoneMode::leave()");
 
   ControlImpl::leave(to);
 }

@@ -17,21 +17,21 @@
 
 namespace openvmp_control_interactive {
 
-void Node::initMenu_(std::vector<std::shared_ptr<ModeImpl>> modes) {
+void Node::initMenu_() {
   std::string mode = "Mode";
 
   menu_handler_ = std::make_unique<interactive_markers::MenuHandler>();
   interactive_markers::MenuHandler::EntryHandle mode_menu_handle =
       menu_handler_->insert(mode);
 
-  mode_last_ = DEFAULT;
-  for (auto &mode : modes) {
+  mode_last_ = NONE;
+  for (auto &mode : modes_) {
     auto item = menu_handler_->insert(
-        mode_menu_handle, mode->get_name(),
+        mode_menu_handle, mode.second->get_name(),
         std::bind(&Node::modeCb_, this, std::placeholders::_1));
-    modes_.insert({item, mode});
+    menu_modes_.insert({item, mode.second});
 
-    if (mode->get_mode() == mode_last_) {
+    if (mode.first == mode_last_) {
       item_last_ = item;
       menu_handler_->setCheckState(item,
                                    interactive_markers::MenuHandler::CHECKED);
@@ -61,7 +61,7 @@ void Node::initMenu_(std::vector<std::shared_ptr<ModeImpl>> modes) {
 
   visualization_msgs::msg::InteractiveMarker int_marker;
   int_marker.header.frame_id = "base_footprint";
-  int_marker.pose.position.y = 0;
+  int_marker.pose.position.z = 0.8;
   int_marker.scale = scale;
   int_marker.name = mode;
   int_marker.controls.push_back(control);
@@ -74,12 +74,15 @@ void Node::modeCb_(
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
         &feedback) {
   auto item_new = feedback->menu_entry_id;
-  auto mode_new = modes_[item_new]->get_mode();
+  auto mode_new = menu_modes_[item_new]->get_mode();
 
   // Unheck the menu item of the old mode
   RCLCPP_INFO(get_logger(), "Old mode item: %d", item_last_);
-  menu_handler_->setCheckState(item_last_,
-                               interactive_markers::MenuHandler::UNCHECKED);
+  if (item_last_) {
+    // Assuming that it's never 0, except the very first transition from NONE
+    menu_handler_->setCheckState(item_last_,
+                                 interactive_markers::MenuHandler::UNCHECKED);
+  }
 
   // Check the menu item of the new mode
   RCLCPP_INFO(get_logger(), "New mode item: %d", item_new);
@@ -88,8 +91,8 @@ void Node::modeCb_(
                                interactive_markers::MenuHandler::CHECKED);
 
   // Perform the transition
-  modes_[item_last_]->leave(mode_new);
-  modes_[item_new]->enter(mode_last_);
+  modes_[mode_last_]->leave(modes_[mode_new]);
+  modes_[mode_new]->enter(modes_[mode_last_]);
   item_last_ = item_new;
   mode_last_ = mode_new;
 

@@ -10,20 +10,28 @@
 #ifndef OPENVMP_CONTROL_INTERACTIVE_MODE_WALK_H
 #define OPENVMP_CONTROL_INTERACTIVE_MODE_WALK_H
 
-#include <map>
 #include <memory>
 #include <string>
 
+#include "openvmp_control_interactive/control_traj_vel.hpp"
 #include "openvmp_control_interactive/mode.hpp"
-#include "rclcpp/rclcpp.hpp"
 
 namespace openvmp_control_interactive {
 
-class WalkMode : public ModeImpl {
+class WalkMode : public TrajVelControl {
  public:
-  WalkMode() : ModeImpl(WALK, "Walk") {}
-  virtual void enter(Mode from) override;
-  virtual void leave(Mode to) override;
+  WalkMode(rclcpp::Node *node,
+           std::shared_ptr<interactive_markers::InteractiveMarkerServer> server)
+      : TrajVelControl(node, server, WALK, "Walk") {}
+
+  virtual void enter(std::shared_ptr<ControlImpl> from) override;
+  virtual void leave(std::shared_ptr<ControlImpl> to) override;
+
+ private:
+  void processFeedback_(
+      const std::string &marker_name,
+      const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
+          &feedback);
 };
 
 }  // namespace openvmp_control_interactive
