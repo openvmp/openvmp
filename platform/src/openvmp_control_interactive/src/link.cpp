@@ -13,6 +13,9 @@
 
 namespace openvmp_control_interactive {
 
+// TODO(clairbee): move all of these link definitions into "move_full.cpp"
+// TODO(clairbee): consider implementing all modes via links thus reducing code
+
 const auto robot_arm = [](const std::string &side, const std::string &arm,
                           int offset, bool half_invert, bool side_invert) {
   return std::map<const std::string, Link>({

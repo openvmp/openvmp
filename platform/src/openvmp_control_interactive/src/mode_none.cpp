@@ -12,17 +12,13 @@
 namespace openvmp_control_interactive {
 
 void NoneMode::enter(std::shared_ptr<ControlImpl> from) {
-  (void)from;
-
   ControlImpl::enter(from);
 
-  RCLCPP_INFO(node_->get_logger(), "NoneMode::enter()");
+  RCLCPP_DEBUG(node_->get_logger(), "NoneMode::enter()");
 }
 
 void NoneMode::leave(std::shared_ptr<ControlImpl> to) {
-  (void)to;
-
-  RCLCPP_INFO(node_->get_logger(), "NoneMode::leave()");
+  RCLCPP_DEBUG(node_->get_logger(), "NoneMode::leave()");
 
   ControlImpl::leave(to);
 }

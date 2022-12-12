@@ -10,6 +10,7 @@
 #ifndef OPENVMP_CONTROL_INTERACTIVE_CONTROL_TRAJ_VEL_H
 #define OPENVMP_CONTROL_INTERACTIVE_CONTROL_TRAJ_VEL_H
 
+#include <mutex>
 #include <string>
 
 #include "geometry_msgs/msg/pose.hpp"
@@ -31,7 +32,9 @@ class TrajVelControl : public ControlImpl {
       : ControlImpl(node, server, mode, name) {}
 
  protected:
-  rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr
+  static std::mutex lock_;
+  static bool initialized_;
+  static rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr
       trajectory_commands_;
   // rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
   //     position_commands_;

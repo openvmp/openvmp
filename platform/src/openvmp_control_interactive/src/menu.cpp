@@ -45,13 +45,13 @@ void Node::initMenu_() {
 
   visualization_msgs::msg::Marker box_marker;
   box_marker.type = visualization_msgs::msg::Marker::CYLINDER;
-  box_marker.scale.x = scale * 0.50;
-  box_marker.scale.y = scale * 0.50;
+  box_marker.scale.x = scale * 0.60;
+  box_marker.scale.y = scale * 0.60;
   box_marker.scale.z = scale * 0.02;
-  box_marker.color.r = 0.7;
-  box_marker.color.g = 0.7;
+  box_marker.color.r = 1.0;
+  box_marker.color.g = 1.0;
   box_marker.color.b = 0.0;
-  box_marker.color.a = 1.0;
+  box_marker.color.a = 0.7;
 
   visualization_msgs::msg::InteractiveMarkerControl control;
   control.interaction_mode =
@@ -61,7 +61,7 @@ void Node::initMenu_() {
 
   visualization_msgs::msg::InteractiveMarker int_marker;
   int_marker.header.frame_id = "base_footprint";
-  int_marker.pose.position.z = 0.8;
+  int_marker.pose.position.z = 0.9;
   int_marker.scale = scale;
   int_marker.name = mode;
   int_marker.controls.push_back(control);
@@ -73,6 +73,10 @@ void Node::initMenu_() {
 void Node::modeCb_(
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
         &feedback) {
+  if (feedback->event_type !=
+      visualization_msgs::msg::InteractiveMarkerFeedback::MENU_SELECT) {
+    return;
+  }
   auto item_new = feedback->menu_entry_id;
   auto mode_new = menu_modes_[item_new]->get_mode();
 

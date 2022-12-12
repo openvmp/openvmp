@@ -12,17 +12,13 @@
 namespace openvmp_control_interactive {
 
 void TurnMode::enter(std::shared_ptr<ControlImpl> from) {
-  (void)from;
-
   ControlImpl::enter(from);
 
-  RCLCPP_INFO(node_->get_logger(), "TurnMode::enter()");
+  RCLCPP_DEBUG(node_->get_logger(), "TurnMode::enter()");
 }
 
 void TurnMode::leave(std::shared_ptr<ControlImpl> to) {
-  (void)to;
-
-  RCLCPP_INFO(node_->get_logger(), "TurnMode::leave()");
+  RCLCPP_DEBUG(node_->get_logger(), "TurnMode::leave()");
 
   ControlImpl::leave(to);
 }

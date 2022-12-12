@@ -13,18 +13,31 @@
 
 namespace openvmp_control_interactive {
 
-void FullMode::enter(std::shared_ptr<ControlImpl> from) {
-  (void)from;
+FullMode::FullMode(
+    rclcpp::Node *node,
+    std::shared_ptr<interactive_markers::InteractiveMarkerServer> server)
+    : TrajVelControl(node, server, FULL, "Full control") {
+  trajectory_state_subscription_ = node->create_subscription<
+      control_msgs::msg::JointTrajectoryControllerState>(
+      node_->get_effective_namespace() + "/trajectory_controller/state", 1,
+      std::bind(&FullMode::trajectoryStateHandler_, this,
+                std::placeholders::_1));
+}
 
+void FullMode::enter(std::shared_ptr<ControlImpl> from) {
   ControlImpl::enter(from);
 
-  RCLCPP_INFO(node_->get_logger(), "FullMode::enter()");
+  RCLCPP_DEBUG(node_->get_logger(), "FullMode::enter()");
 
+  state_lock_.lock();
   // Create joint controls
   const auto &links = get_links();
   for (auto link_it = links.cbegin(); link_it != links.cend(); link_it++) {
     const auto &link_name = link_it->first;
     const auto &link = link_it->second;
+
+    RCLCPP_DEBUG(node_->get_logger(), "Creating link controls for %s",
+                 link_name.c_str());
 
     visualization_msgs::msg::InteractiveMarker interactive_marker;
     interactive_marker.header.frame_id = link_name;
@@ -33,7 +46,6 @@ void FullMode::enter(std::shared_ptr<ControlImpl> from) {
     interactive_marker.scale = link.marker_size_scale;
 
     visualization_msgs::msg::InteractiveMarkerControl control;
-
     control.orientation_mode =
         visualization_msgs::msg::InteractiveMarkerControl::FIXED;
     control.orientation.w = 1;
@@ -79,19 +91,46 @@ void FullMode::enter(std::shared_ptr<ControlImpl> from) {
         std::bind(&FullMode::processFeedback_, this, interactive_marker.name,
                   link_name, link, std::placeholders::_1));
   }
+  state_lock_.unlock();
 }
 
 void FullMode::leave(std::shared_ptr<ControlImpl> to) {
-  (void)to;
-  RCLCPP_INFO(node_->get_logger(), "FullMode::leave()");
+  RCLCPP_DEBUG(node_->get_logger(), "FullMode::leave()");
 
+  state_lock_.lock();
   const auto &links = get_links();
   for (auto link_it = links.cbegin(); link_it != links.cend(); link_it++) {
     const auto &link_name = link_it->first;
-    server_->erase("openvmp_twist_marker_" + link_name);
+    if (!server_->setCallback("openvmp_twist_marker_" + link_name, nullptr)) {
+      RCLCPP_ERROR(node_->get_logger(), "setCallback(nullptr) failed for %s",
+                   link_name.c_str());
+    }
+    if (!server_->erase("openvmp_twist_marker_" + link_name)) {
+      RCLCPP_ERROR(node_->get_logger(), "erase() failed for %s",
+                   link_name.c_str());
+    }
   }
+  server_->applyChanges();
+  state_lock_.unlock();
 
   ControlImpl::leave(to);
+}
+
+void FullMode::trajectoryStateHandler_(
+    const control_msgs::msg::JointTrajectoryControllerState::SharedPtr msg) {
+  if (state_lock_.try_lock()) {
+    int size = msg->joint_names.size();
+    std::map<std::string, double> positions;
+    for (int i = 0; i < size; i++) {
+      positions.insert({msg->joint_names[i], msg->actual.positions[i]});
+    }
+
+    auto &links = get_links();
+    for (auto link_it = links.begin(); link_it != links.end(); link_it++) {
+      link_it->second.last_angle = positions[link_it->second.joint];
+    }
+    state_lock_.unlock();
+  }
 }
 
 void FullMode::processFeedback_(
@@ -170,7 +209,6 @@ void FullMode::processFeedback_(
   //                "invalid mode");
   // }
 
-  (void)link_name;
   // FIXME(clairbee): NOT YET
   // vel_pubs_[link_name]->publish(vel_msg);
 
@@ -178,6 +216,8 @@ void FullMode::processFeedback_(
       visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP) {
     return;
   }
+
+  state_lock_.lock();
 
   // trajectory controller
   trajectory_msgs::msg::JointTrajectory msg;
@@ -244,6 +284,8 @@ void FullMode::processFeedback_(
   // Make the marker snap back to robot
   server_->setPose(marker_name, geometry_msgs::msg::Pose());
   server_->applyChanges();
+
+  state_lock_.unlock();
 }
 
 }  // namespace openvmp_control_interactive

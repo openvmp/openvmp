@@ -28,8 +28,13 @@ class WalkMode : public TrajVelControl {
   virtual void leave(std::shared_ptr<ControlImpl> to) override;
 
  private:
+  trajectory_msgs::msg::JointTrajectory msg_template_;
+  trajectory_msgs::msg::JointTrajectoryPoint point_template_;
+  double lift_;
+  static constexpr double LIFT_LIMIT_BOTTOM = -1.0;
+  static constexpr double LIFT_LIMIT_TOP = 0.0;
+
   void processFeedback_(
-      const std::string &marker_name,
       const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
           &feedback);
 };

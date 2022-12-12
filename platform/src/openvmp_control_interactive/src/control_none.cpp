@@ -12,11 +12,11 @@
 namespace openvmp_control_interactive {
 
 void NoneControl::init() {
-  RCLCPP_INFO(node_->get_logger(), "NoneControl::init()");
+  RCLCPP_DEBUG(node_->get_logger(), "NoneControl::init()");
 }
 
 void NoneControl::fini() {
-  RCLCPP_INFO(node_->get_logger(), "NoneControl::fini()");
+  RCLCPP_DEBUG(node_->get_logger(), "NoneControl::fini()");
 }
 
 }  // namespace openvmp_control_interactive
