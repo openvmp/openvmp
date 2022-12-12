@@ -30,6 +30,7 @@ class TrajVelControl : public ControlImpl {
       std::shared_ptr<interactive_markers::InteractiveMarkerServer> server,
       Mode mode, const std::string &name)
       : ControlImpl(node, server, mode, name) {}
+  virtual ~TrajVelControl();
 
  protected:
   static std::mutex lock_;

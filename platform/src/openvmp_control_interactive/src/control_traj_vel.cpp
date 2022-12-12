@@ -14,9 +14,17 @@
 namespace openvmp_control_interactive {
 
 std::mutex TrajVelControl::lock_;
-bool TrajVelControl::initialized_;
+bool TrajVelControl::initialized_ = false;
 rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr
     TrajVelControl::trajectory_commands_;
+
+TrajVelControl::~TrajVelControl() {
+  lock_.lock();
+  if (initialized_) {
+    trajectory_commands_.reset();
+  }
+  lock_.unlock();
+}
 
 void TrajVelControl::init() {
   RCLCPP_DEBUG(node_->get_logger(), "TrajVelControl::init()");
@@ -46,8 +54,9 @@ void TrajVelControl::init() {
 void TrajVelControl::fini() {
   RCLCPP_DEBUG(node_->get_logger(), "TrajVelControl::fini()");
 
-  // TODO(clairbee): make sure this is a proper cleanup
+  lock_.lock();
   trajectory_commands_.reset();
+  lock_.unlock();
 }
 
 }  // namespace openvmp_control_interactive

@@ -17,11 +17,18 @@ FullMode::FullMode(
     rclcpp::Node *node,
     std::shared_ptr<interactive_markers::InteractiveMarkerServer> server)
     : TrajVelControl(node, server, FULL, "Full control") {
+  state_lock_.lock();
   trajectory_state_subscription_ = node->create_subscription<
       control_msgs::msg::JointTrajectoryControllerState>(
       node_->get_effective_namespace() + "/trajectory_controller/state", 1,
       std::bind(&FullMode::trajectoryStateHandler_, this,
                 std::placeholders::_1));
+  initialized_ = true;
+  state_lock_.unlock();
+}
+
+FullMode::~FullMode() {
+  // TODO(clairbee): decide what needs to be cleaned up properly
 }
 
 void FullMode::enter(std::shared_ptr<ControlImpl> from) {

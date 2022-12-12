@@ -22,17 +22,23 @@ class WalkMode : public TrajVelControl {
  public:
   WalkMode(rclcpp::Node *node,
            std::shared_ptr<interactive_markers::InteractiveMarkerServer> server)
-      : TrajVelControl(node, server, WALK, "Walk") {}
+      : TrajVelControl(node, server, WALK, "Walk"), phase_{0}, lift_{0.0} {}
 
   virtual void enter(std::shared_ptr<ControlImpl> from) override;
   virtual void leave(std::shared_ptr<ControlImpl> to) override;
 
  private:
+  int phase_;
   trajectory_msgs::msg::JointTrajectory msg_template_;
-  trajectory_msgs::msg::JointTrajectoryPoint point_template_;
   double lift_;
   static constexpr double LIFT_LIMIT_BOTTOM = -1.0;
   static constexpr double LIFT_LIMIT_TOP = 0.0;
+
+  void next_phase_(int dir, trajectory_msgs::msg::JointTrajectoryPoint &point,
+                   const builtin_interfaces::msg::Duration &time_from_start);
+  void next_phase_animation_(
+      int dir, trajectory_msgs::msg::JointTrajectory &msg,
+      const builtin_interfaces::msg::Duration &time_from_start);
 
   void processFeedback_(
       const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr

@@ -25,6 +25,7 @@ class FullMode : public TrajVelControl {
   FullMode(
       rclcpp::Node *node,
       std::shared_ptr<interactive_markers::InteractiveMarkerServer> server);
+  virtual ~FullMode();
 
   virtual void enter(std::shared_ptr<ControlImpl> from) override;
   virtual void leave(std::shared_ptr<ControlImpl> to) override;
