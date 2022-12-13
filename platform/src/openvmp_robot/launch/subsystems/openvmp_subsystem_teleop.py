@@ -31,6 +31,11 @@ def launch_desc(context):
                 == "true",
             }
         ],
+        # arguments=[
+        #     "--ros-args",
+        #     "--log-level",
+        #     "debug",
+        # ],
         # prefix=["xterm -e gdb -ex run --args"],
     )
 

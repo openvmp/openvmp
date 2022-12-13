@@ -33,18 +33,20 @@ class TrajVelControl : public ControlImpl {
   virtual ~TrajVelControl();
 
  protected:
-  static std::mutex lock_;
-  static bool initialized_;
   static rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr
       trajectory_commands_;
   // rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
   //     position_commands_;
-  // rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
-  //     velocity_commands_;
+  rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
+      velocity_commands_;
 
   virtual Control get_control() const override { return TRAJ_VEL; }
   virtual void init() override;
   virtual void fini() override;
+
+ private:
+  static std::mutex lock_;
+  static bool initialized_;
 };
 
 }  // namespace openvmp_control_interactive

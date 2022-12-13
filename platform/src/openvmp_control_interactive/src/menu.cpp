@@ -81,7 +81,7 @@ void Node::modeCb_(
   auto mode_new = menu_modes_[item_new]->get_mode();
 
   // Unheck the menu item of the old mode
-  RCLCPP_INFO(get_logger(), "Old mode item: %d", item_last_);
+  RCLCPP_DEBUG(get_logger(), "Old mode item: %d", item_last_);
   if (item_last_) {
     // Assuming that it's never 0, except the very first transition from NONE
     menu_handler_->setCheckState(item_last_,
@@ -89,8 +89,8 @@ void Node::modeCb_(
   }
 
   // Check the menu item of the new mode
-  RCLCPP_INFO(get_logger(), "New mode item: %d", item_new);
-  RCLCPP_INFO(get_logger(), "New mode: %d", mode_new);
+  RCLCPP_DEBUG(get_logger(), "New mode item: %d", item_new);
+  RCLCPP_DEBUG(get_logger(), "New mode: %d", mode_new);
   menu_handler_->setCheckState(item_new,
                                interactive_markers::MenuHandler::CHECKED);
 
@@ -102,6 +102,7 @@ void Node::modeCb_(
 
   menu_handler_->reApply(*server_);
   server_->applyChanges();
+  RCLCPP_DEBUG(get_logger(), "modeCb_() done");
 }
 
 }  // namespace openvmp_control_interactive

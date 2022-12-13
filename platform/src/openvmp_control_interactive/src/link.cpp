@@ -88,7 +88,7 @@ const auto robot_half = [](const std::string &side, int offset, bool invert) {
 const int LINKS_TOTAL = 12;  // This must agree with ros2_controllers.yaml
 static std::map<const std::string, Link> links;
 static std::mutex links_lock;
-static bool links_initialized;
+static bool links_initialized = false;
 
 std::map<const std::string, Link> &get_links() {
   std::lock_guard<std::mutex> lockGuard(links_lock);

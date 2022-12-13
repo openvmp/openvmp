@@ -23,7 +23,6 @@ FullMode::FullMode(
       node_->get_effective_namespace() + "/trajectory_controller/state", 1,
       std::bind(&FullMode::trajectoryStateHandler_, this,
                 std::placeholders::_1));
-  initialized_ = true;
   state_lock_.unlock();
 }
 
@@ -99,6 +98,7 @@ void FullMode::enter(std::shared_ptr<ControlImpl> from) {
                   link_name, link, std::placeholders::_1));
   }
   state_lock_.unlock();
+  RCLCPP_DEBUG(node_->get_logger(), "FullMode::enter(): done");
 }
 
 void FullMode::leave(std::shared_ptr<ControlImpl> to) {
@@ -219,20 +219,20 @@ void FullMode::processFeedback_(
   // FIXME(clairbee): NOT YET
   // vel_pubs_[link_name]->publish(vel_msg);
 
-  if (feedback->event_type !=
-      visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP) {
+  if (!feedback ||
+      feedback->event_type !=
+          visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP) {
     return;
   }
 
   state_lock_.lock();
+  RCLCPP_DEBUG(node_->get_logger(), "FullMode::processFeedback_()");
 
   // trajectory controller
   trajectory_msgs::msg::JointTrajectory msg;
-  builtin_interfaces::msg::Duration duration;
-  duration.sec = 0;
-  duration.nanosec = 500000000ULL;
   trajectory_msgs::msg::JointTrajectoryPoint point;
-  point.time_from_start = duration;
+  point.time_from_start.sec = 0;
+  point.time_from_start.nanosec = 500000000ULL;
 
   auto &links = get_links();
   for (auto link_it = links.begin(); link_it != links.end(); link_it++) {
@@ -262,7 +262,9 @@ void FullMode::processFeedback_(
     point.positions.push_back(that_link.last_angle);
   }
   msg.points.push_back(point);
-  trajectory_commands_->publish(msg);
+  if (trajectory_commands_) {
+    trajectory_commands_->publish(msg);
+  }
 
   // // position controller
   // std_msgs::msg::Float64MultiArray msg;

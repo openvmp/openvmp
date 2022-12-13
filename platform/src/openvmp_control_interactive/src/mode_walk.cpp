@@ -74,7 +74,9 @@ void WalkMode::enter(std::shared_ptr<ControlImpl> from) {
     builtin_interfaces::msg::Duration no_delay;
     next_phase_(0, point, no_delay);
     msg.points.push_back(point);
-    trajectory_commands_->publish(msg);
+    if (trajectory_commands_) {
+      trajectory_commands_->publish(msg);
+    }
   }
   RCLCPP_DEBUG(node_->get_logger(),
                "WalkMode::enter(): moved into the initial position");
@@ -96,8 +98,6 @@ void WalkMode::leave(std::shared_ptr<ControlImpl> to) {
 void WalkMode::processFeedback_(
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
         &feedback) {
-  (void)feedback;
-
   if (feedback->event_type !=
       visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP) {
     // Did not commit to the action yet.
@@ -112,7 +112,9 @@ void WalkMode::processFeedback_(
     builtin_interfaces::msg::Duration no_delay;
     next_phase_animation_(dist > 0 ? 1 : -1, msg, no_delay);
 
-    trajectory_commands_->publish(msg);
+    if (trajectory_commands_) {
+      trajectory_commands_->publish(msg);
+    }
   } else if (feedback->control_name == "move_z") {
     RCLCPP_INFO(node_->get_logger(), "Lift on %.02f",
                 feedback->pose.position.z);
@@ -128,7 +130,9 @@ void WalkMode::processFeedback_(
 
     msg.points.push_back(point);
 
-    trajectory_commands_->publish(msg);
+    if (trajectory_commands_) {
+      trajectory_commands_->publish(msg);
+    }
   }
 
   server_->setPose("openvmp_walk_x", geometry_msgs::msg::Pose());
@@ -144,16 +148,19 @@ void WalkMode::next_phase_(
   phase_ += dir;
   phase_ %= 4;
 
-  // // Phase 1:
+  // TODO(clairbee): merge the phases below to form 8 phases, animate to even
+  //                 phases only (when all 4 are on the ground)
+
+  // // Phase 1: (0.5)
   // //  XOOO OOOX
   // //  OOXO OXOO
-  // // Phase 2:
+  // // Phase 2: (1.5)
   // //  OXOO XOOO
   // //  OOOX OOXO
-  // // Phase 3:
+  // // Phase 3: (2.5)
   // //  OOXO OXOO
   // //  XOOO OOOX
-  // // Phase 4:
+  // // Phase 4: (3.5)
   // //  OOOX OOXO
   // //  OXOO XOOO
   // // where:

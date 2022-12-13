@@ -31,9 +31,9 @@ struct Link {
   double linear_drive_scale = 1, angular_drive_scale = 1,
          max_linear_velocity = 1, max_angular_velocity = 1;
 
-  double last_angle;
+  double last_angle = 0.0;
 
-  bool invert;
+  bool invert = false;
 };
 
 extern const int LINKS_TOTAL;

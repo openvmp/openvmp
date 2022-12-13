@@ -16,12 +16,13 @@ namespace openvmp_control_interactive {
 std::mutex TrajVelControl::lock_;
 bool TrajVelControl::initialized_ = false;
 rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr
-    TrajVelControl::trajectory_commands_;
+    TrajVelControl::trajectory_commands_ = nullptr;
 
 TrajVelControl::~TrajVelControl() {
   lock_.lock();
   if (initialized_) {
     trajectory_commands_.reset();
+    initialized_ = false;
   }
   lock_.unlock();
 }
@@ -31,6 +32,7 @@ void TrajVelControl::init() {
 
   lock_.lock();
   if (!initialized_) {
+    RCLCPP_DEBUG(node_->get_logger(), "TrajVelControl::init(): initializing");
     trajectory_commands_ =
         node_->create_publisher<trajectory_msgs::msg::JointTrajectory>(
             node_->get_effective_namespace() +
@@ -41,14 +43,20 @@ void TrajVelControl::init() {
           node_->get_logger(),
           "Failed to subscribe to /trajectory_controller/joint_trajectory");
     }
+
+    // position_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
+    //     this->get_effective_namespace() + "/position_controller/commands",
+    //     10);
+    velocity_commands_ =
+        node_->create_publisher<std_msgs::msg::Float64MultiArray>(
+            node_->get_effective_namespace() + "/velocity_controller/commands",
+            10);
+
     initialized_ = true;
   }
   lock_.unlock();
 
-  // position_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
-  //     this->get_effective_namespace() + "/position_controller/commands", 10);
-  // velocity_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
-  //     this->get_effective_namespace() + "/velocity_controller/commands", 10);
+  RCLCPP_DEBUG(node_->get_logger(), "TrajVelControl::init(): done");
 }
 
 void TrajVelControl::fini() {
@@ -56,6 +64,8 @@ void TrajVelControl::fini() {
 
   lock_.lock();
   trajectory_commands_.reset();
+  velocity_commands_.reset();
+  initialized_ = false;
   lock_.unlock();
 }
 
