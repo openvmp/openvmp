@@ -2,13 +2,13 @@
  * OpenVMP, 2022
  *
  * Author: Roman Kuzmenko
- * Created: 2022-12-13
+ * Created: 2022-12-10
  *
  * Licensed under Apache License, Version 2.0.
  */
 
-#ifndef OPENVMP_CONTROL_INTERACTIVE_MODE_HUG_H
-#define OPENVMP_CONTROL_INTERACTIVE_MODE_HUG_H
+#ifndef OPENVMP_CONTROL_INTERACTIVE_MODE_HANG_H
+#define OPENVMP_CONTROL_INTERACTIVE_MODE_HANG_H
 
 #include <memory>
 #include <string>
@@ -18,11 +18,11 @@
 
 namespace openvmp_control_interactive {
 
-class HugMode : public TrajVelControl {
+class HangMode : public TrajVelControl {
  public:
-  HugMode(rclcpp::Node *node,
-          std::shared_ptr<interactive_markers::InteractiveMarkerServer> server)
-      : TrajVelControl(node, server, HUG, "Hug"), lift_{0.0} {}
+  HangMode(rclcpp::Node *node,
+           std::shared_ptr<interactive_markers::InteractiveMarkerServer> server)
+      : TrajVelControl(node, server, HANG, "Hang"), lift_{0.0} {}
 
   virtual void enter(std::shared_ptr<ControlImpl> from) override;
   virtual void leave(std::shared_ptr<ControlImpl> to) override;
@@ -41,4 +41,4 @@ class HugMode : public TrajVelControl {
 
 }  // namespace openvmp_control_interactive
 
-#endif  // OPENVMP_CONTROL_INTERACTIVE_MODE_HUG_H
+#endif  // OPENVMP_CONTROL_INTERACTIVE_MODE_HANG_H

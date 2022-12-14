@@ -2,25 +2,25 @@
  * OpenVMP, 2022
  *
  * Author: Roman Kuzmenko
- * Created: 2022-12-13
+ * Created: 2022-12-10
  *
  * Licensed under Apache License, Version 2.0.
  */
 
-#include "openvmp_control_interactive/mode_hug.hpp"
+#include "openvmp_control_interactive/mode_hang.hpp"
 
 namespace openvmp_control_interactive {
 
-void HugMode::enter(std::shared_ptr<ControlImpl> from) {
+void HangMode::enter(std::shared_ptr<ControlImpl> from) {
   ControlImpl::enter(from);
 
-  RCLCPP_DEBUG(node_->get_logger(), "HugMode::enter()");
+  RCLCPP_DEBUG(node_->get_logger(), "HangMode::enter()");
 
   // Prepare markers
   {
     visualization_msgs::msg::InteractiveMarker interactive_marker;
     interactive_marker.header.frame_id = "base_link";
-    interactive_marker.name = "openvmp_hug_x";
+    interactive_marker.name = "openvmp_hang_x";
     interactive_marker.description = "move controller for base_link";
     interactive_marker.scale = 1.6;
 
@@ -51,9 +51,9 @@ void HugMode::enter(std::shared_ptr<ControlImpl> from) {
     server_->insert(interactive_marker);
     server_->setCallback(
         interactive_marker.name,
-        std::bind(&HugMode::processFeedback_, this, std::placeholders::_1));
+        std::bind(&HangMode::processFeedback_, this, std::placeholders::_1));
   }
-  RCLCPP_DEBUG(node_->get_logger(), "HugMode::enter(): markers are ready");
+  RCLCPP_DEBUG(node_->get_logger(), "HangMode::enter(): markers are ready");
 
   // Prepare the templates
   {
@@ -66,10 +66,10 @@ void HugMode::enter(std::shared_ptr<ControlImpl> from) {
         "rear_right_arm_joint",   "rear_right_arm_inner_joint"};
     point_template_.time_from_start.sec = 0;
     point_template_.time_from_start.nanosec = 500000000ULL;
-    point_template_.positions = {0, 0, 0, -2.85, 0, -2.85,
-                                 0, 0, 0, -2.85, 0, -2.85};
+    point_template_.positions = {0, 0, 3.44, 1.33, 2.84, 1.33,
+                                 0, 0, 3.44, 1.33, 2.84, 1.33};
   }
-  RCLCPP_DEBUG(node_->get_logger(), "HugMode::enter(): templates are ready");
+  RCLCPP_DEBUG(node_->get_logger(), "HangMode::enter(): templates are ready");
 
   // Move into the initial position
   {
@@ -81,15 +81,15 @@ void HugMode::enter(std::shared_ptr<ControlImpl> from) {
     }
   }
   RCLCPP_DEBUG(node_->get_logger(),
-               "HugMode::enter(): moved into the initial position");
+               "HangMode::enter(): moved into the initial position");
 }
 
-void HugMode::leave(std::shared_ptr<ControlImpl> to) {
-  RCLCPP_DEBUG(node_->get_logger(), "HugMode::leave()");
-  if (!server_->setCallback("openvmp_hug_x", nullptr)) {
+void HangMode::leave(std::shared_ptr<ControlImpl> to) {
+  RCLCPP_DEBUG(node_->get_logger(), "HangMode::leave()");
+  if (!server_->setCallback("openvmp_hang_x", nullptr)) {
     RCLCPP_ERROR(node_->get_logger(), "setCallback(nullptr) failed");
   }
-  if (!server_->erase("openvmp_hug_x")) {
+  if (!server_->erase("openvmp_hang_x")) {
     RCLCPP_ERROR(node_->get_logger(), "erase() failed");
   }
   server_->applyChanges();
@@ -97,7 +97,7 @@ void HugMode::leave(std::shared_ptr<ControlImpl> to) {
   ControlImpl::leave(to);
 }
 
-void HugMode::processFeedback_(
+void HangMode::processFeedback_(
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
         &feedback) {
   if (feedback->event_type !=
@@ -108,13 +108,8 @@ void HugMode::processFeedback_(
 
   if (feedback->control_name == "move_x") {
     double dist = feedback->pose.position.x;
-    RCLCPP_INFO(node_->get_logger(), "Drive %.02f", dist);
+    RCLCPP_INFO(node_->get_logger(), "Move %.02f", dist);
 
-    std_msgs::msg::Float64MultiArray msg;
-    msg.data = {dist, dist, dist, dist};
-    if (velocity_commands_) {
-      velocity_commands_->publish(msg);
-    }
   } else if (feedback->control_name == "move_z") {
     RCLCPP_INFO(node_->get_logger(), "Lift on %.02f",
                 feedback->pose.position.z);
@@ -127,7 +122,7 @@ void HugMode::processFeedback_(
     trajectory_msgs::msg::JointTrajectory msg = msg_template_;
     trajectory_msgs::msg::JointTrajectoryPoint point = point_template_;
     for (int i : {3, 5, 9, 11}) {
-      point.positions[i] -= lift_;
+      point.positions[i] += lift_;
     }
     msg.points.push_back(point);
     if (trajectory_commands_) {
@@ -135,7 +130,7 @@ void HugMode::processFeedback_(
     }
   }
 
-  server_->setPose("openvmp_hug_x", geometry_msgs::msg::Pose());
+  server_->setPose("openvmp_hang_x", geometry_msgs::msg::Pose());
   server_->applyChanges();
 }
 

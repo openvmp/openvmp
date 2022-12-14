@@ -38,6 +38,7 @@ set(project_SOURCE_FILES
   src/mode_walk.cpp
   src/mode_drive.cpp
   src/mode_hug.cpp
+  src/mode_hang.cpp
   src/control.cpp
   src/control_none.cpp
   src/control_traj_vel.cpp

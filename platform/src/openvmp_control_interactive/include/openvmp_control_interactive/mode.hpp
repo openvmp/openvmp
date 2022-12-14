@@ -18,7 +18,7 @@
 
 namespace openvmp_control_interactive {
 
-enum Mode { NONE = 0, FULL, WALK, DRIVE, HUG };
+enum Mode { NONE = 0, FULL, WALK, DRIVE, HUG, HANG };
 
 class ModeImpl {
  public:
