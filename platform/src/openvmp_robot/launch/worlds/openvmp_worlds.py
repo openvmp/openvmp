@@ -4,14 +4,22 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     GroupAction,
+    SetEnvironmentVariable,
 )
 from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import PushRosNamespace
+from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
+
+from openvmp_robot.launch.config import openvmp_config
 
 
 def launch_desc(context):
+    package_name = openvmp_config.get_package(context)
+
+    model_path = FindPackageShare(package=package_name).perform(context) + "/.."
+
     world = LaunchConfiguration("world")
 
     declare_world_cmd = DeclareLaunchArgument(
@@ -62,6 +70,7 @@ height=2160
     )
 
     return [
+        SetEnvironmentVariable(name="GAZEBO_MODEL_PATH", value=model_path),
         declare_world_cmd,
         start_gazebo_cmd,
     ]

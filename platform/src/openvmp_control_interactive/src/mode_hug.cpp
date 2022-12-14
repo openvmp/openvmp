@@ -127,7 +127,7 @@ void HugMode::processFeedback_(
     trajectory_msgs::msg::JointTrajectory msg = msg_template_;
     trajectory_msgs::msg::JointTrajectoryPoint point = point_template_;
     for (int i : {3, 5, 9, 11}) {
-      point.positions[i] -= lift_;
+      point.positions[i] += lift_;
     }
     msg.points.push_back(point);
     if (trajectory_commands_) {

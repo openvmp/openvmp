@@ -17,6 +17,7 @@
   <xacro:arg name="controllers_yaml_path" default="$(find openvmp_robot_don1)/config/ros2_controllers.yaml" />
   <xacro:arg name="has_extra_parameters_file" default="false" />
   <xacro:arg name="extra_parameters_file" default="" />
+  <xacro:arg name="mesh_extension" default="stl" />
 
   <xacro:arg name="is_mac" default="false" />
   <xacro:unless value="$(arg is_mac)">
@@ -325,7 +326,7 @@
       <visual>
         <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.stl" scale="0.001 ${-armdir*0.001} 0.001" />
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)" scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
         <material name="Red">
           <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
@@ -334,7 +335,7 @@
       <collision>
         <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.stl" scale="0.001 ${-armdir*0.001} 0.001" />
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)" scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
       </collision>
       <xacro:box_inertia m="0.5" x="0.048" y="0.240" z="0.048" /> <!-- TODO -->

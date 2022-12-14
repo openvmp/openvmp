@@ -39,7 +39,7 @@ def get_ros2_controllers_path(context, robot_id=None):
     return controllers_config_patched_path
 
 
-def get_robot_description(context, robot_id=None):
+def get_robot_description(context, robot_id=None, extra_xacro_params=[]):
     # robot_id can be passed as a parameter if it is used outside of the context
     # specific to a particular robot (e.g. when initializing ros2_control in Gazebo)
     if robot_id is None:
@@ -54,11 +54,12 @@ def get_robot_description(context, robot_id=None):
     xacro_params += [
         " controllers_yaml_path:=" + get_ros2_controllers_path(context, robot_id) + " "
     ]
+    xacro_params.extend(extra_xacro_params)
     return Command(["xacro ", model_path] + xacro_params)
 
 
-def get_robot_description_file(context, robot_id=None):
-    subs = get_robot_description(context, robot_id)
+def get_robot_description_file(context, robot_id=None, extra_xacro_params=[]):
+    subs = get_robot_description(context, robot_id, extra_xacro_params)
     content = subs.perform(context)
     robot_description_file = tempfile.NamedTemporaryFile(delete=False)
     robot_description_file.write(str(content).encode())
