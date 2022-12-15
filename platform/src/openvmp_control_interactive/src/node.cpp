@@ -17,6 +17,7 @@
 #include "openvmp_control_interactive/mode_grab.hpp"
 #include "openvmp_control_interactive/mode_hang.hpp"
 #include "openvmp_control_interactive/mode_hug.hpp"
+#include "openvmp_control_interactive/mode_lift.hpp"
 #include "openvmp_control_interactive/mode_none.hpp"
 #include "openvmp_control_interactive/mode_walk.hpp"
 #include "tf2/utils.h"
@@ -42,6 +43,7 @@ Node::Node()
   modes_.add(std::shared_ptr<ControlImpl>(new HugMode(this, server_)));
   modes_.add(std::shared_ptr<ControlImpl>(new HangMode(this, server_)));
   modes_.add(std::shared_ptr<ControlImpl>(new GrabMode(this, server_)));
+  modes_.add(std::shared_ptr<ControlImpl>(new LiftMode(this, server_)));
   initMenu_();
 
   // Create menu

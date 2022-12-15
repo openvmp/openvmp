@@ -7,20 +7,20 @@
  * Licensed under Apache License, Version 2.0.
  */
 
-#include "openvmp_control_interactive/mode_grab.hpp"
+#include "openvmp_control_interactive/mode_lift.hpp"
 
 namespace openvmp_control_interactive {
 
-void GrabMode::enter(std::shared_ptr<ControlImpl> from) {
+void LiftMode::enter(std::shared_ptr<ControlImpl> from) {
   ControlImpl::enter(from);
 
-  RCLCPP_DEBUG(node_->get_logger(), "GrabMode::enter()");
+  RCLCPP_DEBUG(node_->get_logger(), "LiftMode::enter()");
 
   // Prepare markers
   {
     visualization_msgs::msg::InteractiveMarker interactive_marker;
     interactive_marker.header.frame_id = "base_link";
-    interactive_marker.name = "openvmp_grab_x";
+    interactive_marker.name = "openvmp_lift_x";
     interactive_marker.description = "move controller for base_link";
     interactive_marker.scale = 1.6;
 
@@ -51,9 +51,9 @@ void GrabMode::enter(std::shared_ptr<ControlImpl> from) {
     server_->insert(interactive_marker);
     server_->setCallback(
         interactive_marker.name,
-        std::bind(&GrabMode::processFeedback_, this, std::placeholders::_1));
+        std::bind(&LiftMode::processFeedback_, this, std::placeholders::_1));
   }
-  RCLCPP_DEBUG(node_->get_logger(), "GrabMode::enter(): markers are ready");
+  RCLCPP_DEBUG(node_->get_logger(), "LiftMode::enter(): markers are ready");
 
   // Prepare the templates
   {
@@ -66,10 +66,10 @@ void GrabMode::enter(std::shared_ptr<ControlImpl> from) {
         "rear_right_arm_joint",   "rear_right_arm_inner_joint"};
     point_template_.time_from_start.sec = 0;
     point_template_.time_from_start.nanosec = 500000000ULL;
-    point_template_.positions = {1.57, -1.57, -0.24, -2.3, -2.0, 0.75,
-                                 0,    1.57,  3.5,   0.75, 3.5,  0.75};
+    point_template_.positions = {1.57, -1.57, -1.9, 0.75, -1.9, 0.75,
+                                 0,    1.57,  3.5,  0.75, 3.5,  0.75};
   }
-  RCLCPP_DEBUG(node_->get_logger(), "GrabMode::enter(): templates are ready");
+  RCLCPP_DEBUG(node_->get_logger(), "LiftMode::enter(): templates are ready");
 
   // Move into the initial position
   {
@@ -81,15 +81,15 @@ void GrabMode::enter(std::shared_ptr<ControlImpl> from) {
     }
   }
   RCLCPP_DEBUG(node_->get_logger(),
-               "GrabMode::enter(): moved into the initial position");
+               "LiftMode::enter(): moved into the initial position");
 }
 
-void GrabMode::leave(std::shared_ptr<ControlImpl> to) {
-  RCLCPP_DEBUG(node_->get_logger(), "GrabMode::leave()");
-  if (!server_->setCallback("openvmp_grab_x", nullptr)) {
+void LiftMode::leave(std::shared_ptr<ControlImpl> to) {
+  RCLCPP_DEBUG(node_->get_logger(), "LiftMode::leave()");
+  if (!server_->setCallback("openvmp_lift_x", nullptr)) {
     RCLCPP_ERROR(node_->get_logger(), "setCallback(nullptr) failed");
   }
-  if (!server_->erase("openvmp_grab_x")) {
+  if (!server_->erase("openvmp_lift_x")) {
     RCLCPP_ERROR(node_->get_logger(), "erase() failed");
   }
   server_->applyChanges();
@@ -97,7 +97,7 @@ void GrabMode::leave(std::shared_ptr<ControlImpl> to) {
   ControlImpl::leave(to);
 }
 
-void GrabMode::processFeedback_(
+void LiftMode::processFeedback_(
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr
         &feedback) {
   if (feedback->event_type !=
@@ -120,7 +120,7 @@ void GrabMode::processFeedback_(
     for (int i : {0}) {
       point.positions[i] -= turn_;
     }
-    for (int i : {4}) {
+    for (int i : {2, 4}) {
       point.positions[i] -= lean_;
     }
     for (int i : {8, 10}) {
@@ -143,7 +143,7 @@ void GrabMode::processFeedback_(
     for (int i : {0}) {
       point.positions[i] -= turn_;
     }
-    for (int i : {4}) {
+    for (int i : {2, 4}) {
       point.positions[i] -= lean_;
     }
     for (int i : {8, 10}) {
@@ -155,7 +155,7 @@ void GrabMode::processFeedback_(
     }
   }
 
-  server_->setPose("openvmp_grab_x", geometry_msgs::msg::Pose());
+  server_->setPose("openvmp_lift_x", geometry_msgs::msg::Pose());
   server_->applyChanges();
 }
 

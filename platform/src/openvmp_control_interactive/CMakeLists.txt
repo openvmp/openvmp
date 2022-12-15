@@ -40,6 +40,7 @@ set(project_SOURCE_FILES
   src/mode_hug.cpp
   src/mode_hang.cpp
   src/mode_grab.cpp
+  src/mode_lift.cpp
   src/control.cpp
   src/control_none.cpp
   src/control_traj_vel.cpp
