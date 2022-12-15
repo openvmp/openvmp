@@ -14,6 +14,7 @@
 #include "builtin_interfaces/msg/duration.hpp"
 #include "openvmp_control_interactive/mode_drive.hpp"
 #include "openvmp_control_interactive/mode_full.hpp"
+#include "openvmp_control_interactive/mode_grab.hpp"
 #include "openvmp_control_interactive/mode_hang.hpp"
 #include "openvmp_control_interactive/mode_hug.hpp"
 #include "openvmp_control_interactive/mode_none.hpp"
@@ -40,6 +41,7 @@ Node::Node()
   modes_.add(std::shared_ptr<ControlImpl>(new DriveMode(this, server_)));
   modes_.add(std::shared_ptr<ControlImpl>(new HugMode(this, server_)));
   modes_.add(std::shared_ptr<ControlImpl>(new HangMode(this, server_)));
+  modes_.add(std::shared_ptr<ControlImpl>(new GrabMode(this, server_)));
   initMenu_();
 
   // Create menu
