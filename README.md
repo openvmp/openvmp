@@ -4,6 +4,18 @@
 
 Version: Alpha 1
 
+![walking robot](./docs/images/walk.png)
+![driving robot](./docs/images/drive.png)
+![remotely controlled robot](./docs/images/control.png)
+
+![pole climbing robot](./docs/images/hug.png)
+![cable climbing robot](./docs/images/hang.png)
+![robot modes of operation](./docs/images/modes.png)
+
+![daisy chained robots](./docs/images/chain.png)
+![grab and attach to objects](./docs/images/grab.png)
+![robot swarm](./docs/images/swarm.png)
+
 **Open Versatile Mobility Platform** (**OpenVMP**) implements multi-modal mobility mechanisms that perform arbitrary tasks collectively or individually.
 
 This is a monorepo for the OpenVMP project.
@@ -20,7 +32,7 @@ OpenVMP provides support for robots that can use different modes of transportati
 - crawling on multiple points of contact
 - walking straight on two, three or four legs
 - climbing trees, poles, pipes, ropes, cables and other near-cylindrical objects
-- climbing and driving inside pipes and tunnels 
+- climbing and driving inside pipes and tunnels
 - climbing warehouse shelving units
 
 ### Individual performance
@@ -31,7 +43,7 @@ Besides performing various movement and transportation mentioned above, OpenVMP 
 - hauling & moving objects
 - opening & closing doors & windows
 
-Single OpenVMP units can perform these tasks by themselves over an extended 
+Single OpenVMP units can perform these tasks by themselves over an extended
 period of time.
 OpenVMP software provides support for keeping power usage at a minimum while idle.
 
