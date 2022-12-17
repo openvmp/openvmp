@@ -24,6 +24,9 @@ sudo apt install -y ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros2-control
 # The following packages are required for testing purposes only
 # (during the regular build process though)
 sudo apt install -y socat
+
+# The following packages are required for debugging purposes only
+sudo apt install -y xterm
 ```
 
 ### Visual Studio Code

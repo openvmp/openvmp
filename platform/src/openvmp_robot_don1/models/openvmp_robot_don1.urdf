@@ -235,15 +235,15 @@
 
   <!-- Camera -->
   <xacro:macro name="cam" params="prefix index dir armdir">
-    <gazebo reference="${prefix}_camera_optical_${index}">
+    <gazebo reference="${prefix}_camera_${index}">
       <sensor type="camera" name="camera_${prefix}_${index}">
         <always_on>true</always_on>
         <update_rate>30.0</update_rate>
         <camera name="camera_${prefix}_${index}">
-          <horizontal_fov>1.46608</horizontal_fov>
+          <horizontal_fov>1.2</horizontal_fov>
           <image>
-            <width>1900</width>
-            <height>1200</height>
+            <width>320</width>
+            <height>200</height>
             <format>R8G8B8</format>
           </image>
           <distortion>
@@ -429,7 +429,7 @@
     <joint name="${prefix}_camera_joint" type="fixed">
       <parent link="${parent}" />
       <child link="${prefix}_camera_servo_lower_link" />
-      <origin xyz="${dir*0.048} ${armdir*(0.12 + 0.0240 + 0.012)} 0.048" rpy="0 0 0" />
+      <origin xyz="${dir*0.048} ${armdir*(0.12 + 0.0288 + 0.012)} 0.048" rpy="0 0 0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_camera_joint" />
 
@@ -462,13 +462,13 @@
       <child link="${prefix}_camera_servo_upper_link" />
       <origin xyz="0.0 0.0 0.024" rpy="0 0 0" />
       <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
-      <axis xyz="0 0 ${-dir*0.1}" />
+      <axis xyz="0 0 ${dir*0.1}" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_camera_servo_lower_joint" />
 
     <link name="${prefix}_camera">
       <visual>
-        <origin xyz="0 0.096 0" rpy="0 0 0" />
+        <origin xyz="0 0.048 0" rpy="0 0 0" />
         <geometry>
           <box size="0.144 0.024 0.048" />
         </geometry>
@@ -478,7 +478,7 @@
       </visual>
 
       <collision>
-        <origin xyz="0 0.096 0" rpy="0 0 0" />
+        <origin xyz="0 0.048 0" rpy="0 0 0" />
         <geometry>
           <box size="0.144 0.024 0.048" />
         </geometry>
@@ -500,16 +500,28 @@
     <xacro:gazebo_joint name="${prefix}_camera_servo_upper_joint" />
 
     <!-- optical frame for the stereo camera, with z-forward notation, this is the frame stereo camera images users should refer to -->
+    <link name="${prefix}_camera_0"/>
+    <joint name="${prefix}_camera_0_joint" type="fixed">
+      <origin xyz="0.048 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
+      <parent link="${prefix}_camera" />
+      <child link="${prefix}_camera_0" />
+    </joint>
     <link name="${prefix}_camera_optical_0" type="camera" />
     <joint name="${prefix}_camera_optical_0_joint" type="fixed">
-      <origin xyz="0.048 0.110 0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to z-forward camera coords -->
-      <parent link="${prefix}_camera" />
+      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to z-forward camera coords -->
+      <parent link="${prefix}_camera_0" />
       <child link="${prefix}_camera_optical_0" />
+    </joint>
+    <link name="${prefix}_camera_1" />
+    <joint name="${prefix}_camera_1_joint" type="fixed">
+      <origin xyz="-0.048 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
+      <parent link="${prefix}_camera" />
+      <child link="${prefix}_camera_1" />
     </joint>
     <link name="${prefix}_camera_optical_1" type="camera" />
     <joint name="${prefix}_camera_optical_1_joint" type="fixed">
-      <origin xyz="-0.048 0.110 0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to z-forward camera coords -->
-      <parent link="${prefix}_camera" />
+      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> rotate frame from x-forward to z-forward camera coords
+      <parent link="${prefix}_camera_1" />
       <child link="${prefix}_camera_optical_1" />
     </joint>
 

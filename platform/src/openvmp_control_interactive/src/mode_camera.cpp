@@ -92,6 +92,21 @@ void CamerasMode::enter(std::shared_ptr<ControlImpl> from) {
 void CamerasMode::leave(std::shared_ptr<ControlImpl> to) {
   RCLCPP_DEBUG(node_->get_logger(), "CamerasMode::leave()");
 
+  const std::vector<std::string> marker_names = {
+      "openvmp_marker_" + prefix_ + "_arm_camera_servo_upper_link",
+      "openvmp_marker_" + prefix_ + "_arm_camera",
+  };
+
+  for (auto marker : marker_names) {
+    if (!server_->setCallback(marker, nullptr)) {
+      RCLCPP_ERROR(node_->get_logger(), "setCallback(nullptr) failed");
+    }
+    if (!server_->erase(marker)) {
+      RCLCPP_ERROR(node_->get_logger(), "erase() failed");
+    }
+  }
+  server_->applyChanges();
+
   ControlImpl::leave(to);
 }
 
@@ -105,7 +120,7 @@ void CamerasMode::processFeedback_(
     return;
   }
 
-  RCLCPP_INFO(node_->get_logger(), "CamerasMode::processFeedback_()");
+  RCLCPP_DEBUG(node_->get_logger(), "CamerasMode::processFeedback_()");
 
   // The lower servo produces the 'z' component.
   // The upper servo produces the 'x' component.
@@ -116,7 +131,7 @@ void CamerasMode::processFeedback_(
   msg.data.resize(joints_.size());
   for (size_t i = 0; i < joints_.size(); i++) {
     msg.data[i] = joints_state_[joints_[i]];
-    RCLCPP_INFO(node_->get_logger(), "CamerasMode::processFeedback_(): %.02f",
+    RCLCPP_DEBUG(node_->get_logger(), "CamerasMode::processFeedback_(): %.02f",
                 msg.data[i]);
   }
   position_commands_->publish(msg);

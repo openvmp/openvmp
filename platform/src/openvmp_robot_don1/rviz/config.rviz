@@ -46,6 +46,91 @@ Visualization Manager:
       Show Descriptions: false
       Show Visual Aids: false
       Value: true
+    - Class: rviz_default_plugins/Camera
+      Enabled: true
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
+      Name: Camera
+      Overlay Alpha: 0.5
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: %NAMESPACE%/camera_front_left_arm_0/image_raw
+      Value: true
+      Visibility:
+        Camera: true
+        Grid: true
+        InteractiveMarkers: false
+        RobotModel: false
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Class: rviz_default_plugins/Camera
+      Enabled: true
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
+      Name: Camera
+      Overlay Alpha: 0.5
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: %NAMESPACE%/camera_front_right_arm_0/image_raw
+      Value: true
+      Visibility:
+        Camera: true
+        Grid: true
+        InteractiveMarkers: false
+        RobotModel: false
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Class: rviz_default_plugins/Camera
+      Enabled: true
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
+      Name: Camera
+      Overlay Alpha: 0.5
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: %NAMESPACE%/camera_rear_left_arm_0/image_raw
+      Value: true
+      Visibility:
+        Camera: true
+        Grid: true
+        InteractiveMarkers: false
+        RobotModel: false
+        TF: true
+        Value: true
+      Zoom Factor: 1
+    - Class: rviz_default_plugins/Camera
+      Enabled: true
+      Far Plane Distance: 100
+      Image Rendering: background and overlay
+      Name: Camera
+      Overlay Alpha: 0.5
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: %NAMESPACE%/camera_rear_right_arm_0/image_raw
+      Value: true
+      Visibility:
+        Camera: true
+        Grid: true
+        InteractiveMarkers: false
+        RobotModel: false
+        TF: true
+        Value: true
+      Zoom Factor: 1
+
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
