@@ -2,9 +2,19 @@
 
 Below you can see some draft ideas that you can work on as a contributor.
 
-Send us a pull request with the suggested implementation.
+Reach out to opevmp@proton.me and/or submit your pull request.
 
-## Robot hardware features
+## Short term tactical needs
+
+- fix the URDF model to get rid of vibration during simulation
+- fix Gazebo world physics to prevent the model from "flying away"
+- specialized ros2_control controller for walking
+- add odometry components
+- add SLAM components
+
+## Long term strategic goals
+
+### Robot hardware features
 
 - Uplink modules
   - Template module to bring connectivity up and down based on run-level
@@ -21,7 +31,7 @@ Send us a pull request with the suggested implementation.
   - Statically mounted (optional, with a limited surface)
   - Deployable (optional, with a larger surface)
 
-## Robot software features
+### Robot software features
 
 - Communications module
   - subscribe to events on DDS and push them to gRPC
@@ -39,7 +49,7 @@ Send us a pull request with the suggested implementation.
     - on first boot / firmware upgrade
     - OTA update from Cloud
 
-## OpenVMP ecosystem features
+### OpenVMP ecosystem features
 
 - Cloud microservices & API (Golang + gRPC + Protobuf)
   - Location reporting (sub, robot to report)
@@ -61,7 +71,7 @@ Send us a pull request with the suggested implementation.
     - render from PC
     - render from cloud
 
-## ROS2 ecosystem features
+### ROS2 ecosystem features
 
 - Extensions for RViz interactive markers
   - to display play/pause symbols for each joint (in the center of the same plane where the other markers are displayed now) to be used for pausing movement routines or for engaging/disengaging joint brakes
