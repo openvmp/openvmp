@@ -47,7 +47,7 @@ install(TARGETS
 
 # Install all other files
 install(
-  DIRECTORY config launch maps meshes models params rviz worlds
+  DIRECTORY config launch maps meshes models params worlds
   DESTINATION share/${PROJECT_NAME}
 )
 

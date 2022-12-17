@@ -34,7 +34,7 @@ def generate_launch_description():
     robot_name = "openvmp_robot_don1"
     pkg_share = FindPackageShare(package=robot_name).find(robot_name)
     default_model_path = os.path.join(pkg_share, "models/openvmp_robot_don1.urdf")
-    default_rviz_config_path = os.path.join(pkg_share, "rviz/config.rviz")
+    default_rviz_config_path = os.path.join(pkg_share, "config/rviz.config")
     controllers_file = os.path.join(pkg_share, "config/ros2_controllers.yaml")
 
     # Launch configuration variables specific to simulation

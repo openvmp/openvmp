@@ -65,7 +65,7 @@ def launch_desc(context):
         window_height = 947
 
     pkg_share = FindPackageShare(package=package_name).find(package_name)
-    rviz_config_path = os.path.join(pkg_share, "rviz/config.rviz")
+    rviz_config_path = os.path.join(pkg_share, "config/rviz.config")
     rviz_config_patched = tempfile.NamedTemporaryFile(delete=False)
     data = ""
     with open(rviz_config_path, "r") as file:
