@@ -16,11 +16,15 @@ Version: Alpha 1
 ![grab and attach to objects](./docs/images/grab.png)
 ![robot swarm](./docs/images/swarm.png)
 
-**Open Versatile Mobility Platform** (**OpenVMP**) implements multi-modal mobility mechanisms that perform arbitrary tasks collectively or individually.
+**Open Versatile Mobility Platform** (**OpenVMP**)
+implements multi-modal mobility mechanisms
+that perform arbitrary tasks individually or collectively.
 
-This is a monorepo for the OpenVMP project.
-Most of the internal components are git submodules that are also designed to be usable as standalone ROS2 packages outside of OpenVMP (unless the name of the package starts with `openvmp_`).
-The submodules that do not start with 'openvmp_' are supposed to be equally usable in separate projects not related to OpenVMP at all.
+This is the monorepo of the OpenVMP project.
+Some of the internal components are git submodules
+that are also designed to be equally usable as standalone ROS2 packages
+outside of OpenVMP
+(unless the name of the package starts with `openvmp_`).
 
 ## Key features
 
@@ -60,13 +64,37 @@ with versatile mobility capabilities can be best seen in the following cases:
 
 - climbing artificial structures
   - buildings or industrial complexes
-  - pipe lines of complex geometries
+  - pipes and tubes of complex geometries
   - poles of all kinds
   - fences and barricades
 - passing natural barriers
   - trees
   - ravines
   - small cliffs
+
+### Modularity
+
+Each OpenVMP unit may have one or more payload modules.
+
+Most OpenVMP units are expected to carry 3 payloads:
+
+- front and rear (interchangeable) modules
+  - each robot is expected to carry them
+  - enables the robot to perform functional tasks
+    - multipurpose or specialized mechanical tools
+    - optical, electromagnetic (including wireless comms) and ultrasonic inspection tools
+    - liquid/paint dispensers
+    - defense mechanisms
+    - etc
+  - can be connected/disconnected by the robot itself (hot swappable)
+- one top module
+  - most likely, not more than one module of each kind per swarm
+  - preferably, enhances capabilities of the entire swarm
+    - advanced computing units
+    - large robotic arms
+    - extra power supplies
+    - etc
+  - hardwired permanently (not hot swappable)
 
 ## What's included
 
