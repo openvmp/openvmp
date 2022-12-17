@@ -44,9 +44,6 @@ void TrajVelControl::init() {
           "Failed to subscribe to /trajectory_controller/joint_trajectory");
     }
 
-    // position_commands_ = create_publisher<std_msgs::msg::Float64MultiArray>(
-    //     this->get_effective_namespace() + "/position_controller/commands",
-    //     10);
     velocity_commands_ =
         node_->create_publisher<std_msgs::msg::Float64MultiArray>(
             node_->get_effective_namespace() + "/velocity_controller/commands",

@@ -43,6 +43,28 @@ def launch_desc(context):
         # prefix=["xterm -e gdb -ex run --args"],
     )
 
+    position_controller_spawner_cmd = Node(
+        package="controller_manager",
+        executable="spawner",
+        # name="controller_spawner_position",
+        output="screen",
+        namespace=namespace,
+        arguments=[
+            "-c",
+            namespace + "/controller_manager",
+            "position_controller",
+            # "--ros-args",
+            # "--log-level",
+            # "debug",
+        ],
+        parameters=[
+            {
+                "use_sim_time": context.launch_configurations["is_simulation"]
+                == "true",
+            }
+        ],
+    )
+
     velocity_controller_spawner_cmd = Node(
         package="controller_manager",
         executable="spawner",
@@ -89,6 +111,7 @@ def launch_desc(context):
 
     return [
         controller_manager_cmd,
+        position_controller_spawner_cmd,
         velocity_controller_spawner_cmd,
         trajectory_controller_spawner_cmd,
     ]

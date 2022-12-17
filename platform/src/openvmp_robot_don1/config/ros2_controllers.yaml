@@ -1,5 +1,4 @@
 ---
-
 %NAMESPACE%:
   controller_manager:
     ros__parameters:
@@ -29,23 +28,31 @@
     ros__parameters:
       use_sim_time: %USE_SIM_TIME%
       joints:
-        - front_turn_table_joint
-        - front_body_joint
-        - front_left_arm_joint
-        - front_left_arm_inner_joint
-        # - front_left_arm_wheel_joint
-        - front_right_arm_joint
-        - front_right_arm_inner_joint
-        # - front_right_arm_wheel_joint
-        - rear_turn_table_joint
-        - rear_body_joint
-        - rear_left_arm_joint
-        - rear_left_arm_inner_joint
-        # - rear_left_arm_wheel_joint
-        - rear_right_arm_joint
-        - rear_right_arm_inner_joint
-        # - rear_right_arm_wheel_joint
-      interface_name: position
+        - front_left_arm_camera_servo_lower_joint
+        - front_left_arm_camera_servo_upper_joint
+        - front_right_arm_camera_servo_lower_joint
+        - front_right_arm_camera_servo_upper_joint
+        - rear_left_arm_camera_servo_lower_joint
+        - rear_left_arm_camera_servo_upper_joint
+        - rear_right_arm_camera_servo_lower_joint
+        - rear_right_arm_camera_servo_upper_joint
+        # - front_turn_table_joint
+        # - front_body_joint
+        # - front_left_arm_joint
+        # - front_left_arm_inner_joint
+        # # - front_left_arm_wheel_joint
+        # - front_right_arm_joint
+        # - front_right_arm_inner_joint
+        # # - front_right_arm_wheel_joint
+        # - rear_turn_table_joint
+        # - rear_body_joint
+        # - rear_left_arm_joint
+        # - rear_left_arm_inner_joint
+        # # - rear_left_arm_wheel_joint
+        # - rear_right_arm_joint
+        # - rear_right_arm_inner_joint
+        # # - rear_right_arm_wheel_joint
+      # interface_name: position
 
   # effort_controller:
   #   ros__parameters:

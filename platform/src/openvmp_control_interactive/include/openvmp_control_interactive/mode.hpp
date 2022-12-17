@@ -18,7 +18,20 @@
 
 namespace openvmp_control_interactive {
 
-enum Mode { NONE = 0, FULL, WALK, DRIVE, HUG, HANG, GRAB, LIFT };
+enum Mode {
+  NONE = 0,
+  FULL,
+  WALK,
+  DRIVE,
+  HUG,
+  HANG,
+  GRAB,
+  LIFT,
+  CAMERAS_FRONT_LEFT,
+  CAMERAS_FRONT_RIGHT,
+  CAMERAS_REAR_LEFT,
+  CAMERAS_REAR_RIGHT
+};
 
 class ModeImpl {
  public:
@@ -30,6 +43,8 @@ class ModeImpl {
 
   Mode get_mode() const { return mode_; }
   const std::string &get_name() const { return name_; }
+  virtual bool is_whole_body() const { return false; }
+  virtual bool is_cameras() const { return false; }
 
  protected:
   rclcpp::Node *const node_;

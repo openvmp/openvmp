@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "builtin_interfaces/msg/duration.hpp"
+#include "openvmp_control_interactive/mode_camera.hpp"
 #include "openvmp_control_interactive/mode_drive.hpp"
 #include "openvmp_control_interactive/mode_full.hpp"
 #include "openvmp_control_interactive/mode_grab.hpp"
@@ -44,6 +45,14 @@ Node::Node()
   modes_.add(std::shared_ptr<ControlImpl>(new HangMode(this, server_)));
   modes_.add(std::shared_ptr<ControlImpl>(new GrabMode(this, server_)));
   modes_.add(std::shared_ptr<ControlImpl>(new LiftMode(this, server_)));
+  modes_.add(std::shared_ptr<ControlImpl>(
+      new CamerasMode(this, server_, CAMERAS_FRONT_LEFT)));
+  modes_.add(std::shared_ptr<ControlImpl>(
+      new CamerasMode(this, server_, CAMERAS_FRONT_RIGHT)));
+  modes_.add(std::shared_ptr<ControlImpl>(
+      new CamerasMode(this, server_, CAMERAS_REAR_LEFT)));
+  modes_.add(std::shared_ptr<ControlImpl>(
+      new CamerasMode(this, server_, CAMERAS_REAR_RIGHT)));
   initMenu_();
 
   // Create menu

@@ -93,17 +93,17 @@
 
   <!-- Define intertial property macros  -->
   <!-- <xacro:macro name="box_inertia" params="m w h d"> -->
-  <xacro:macro name="box_inertia" params="m x y z">
+  <xacro:macro name="box_inertia" params="m x y z *origin">
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <xacro:insert_block name="origin" />
       <mass value="${m}" />
       <inertia ixx="${(m/12) * (y*y + z*z)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (x*x + z*z)}" iyz="0.0" izz="${(m/12) * (x*x + y*y)}" />
     </inertial>
   </xacro:macro>
 
-  <xacro:macro name="cylinder_inertia" params="m r h">
+  <xacro:macro name="cylinder_inertia" params="m r h *origin">
     <inertial>
-      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      <xacro:insert_block name="origin" />
       <mass value="${m}" />
       <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy="0" ixz="0" iyy="${(m/12) * (3*r*r + h*h)}" iyz="0" izz="${(m/2) * (r*r)}" />
     </inertial>
@@ -142,7 +142,9 @@
       </geometry>
     </collision>
 
-    <xacro:box_inertia m="4.0" x="${base_length}" y="${base_width}" z="${base_height/2}" />
+    <xacro:box_inertia m="4.0" x="${base_length}" y="${base_width}" z="${base_height/2}">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:box_inertia>
 
   </link>
   <xacro:solid_hard name="base_link" material="Gazebo/Red" />
@@ -165,7 +167,9 @@
       </geometry>
     </collision>
 
-    <xacro:box_inertia m="2.0" x="${base_length/2}" y="${base_width}" z="${base_height/2}" />
+    <xacro:box_inertia m="2.0" x="${base_length/2}" y="${base_width}" z="${base_height/2}">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:box_inertia>
   </link>
   <xacro:solid_hard name="base_link2" material="Gazebo/Red" />
   <joint name="base_joint2" type="fixed">
@@ -210,7 +214,9 @@
         </collision>
       </xacro:if>
 
-      <xacro:cylinder_inertia m="0.5" r="${radius}" h="${width}" />
+      <xacro:cylinder_inertia m="0.5" r="${radius}" h="${width}">
+        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+      </xacro:cylinder_inertia>
     </link>
     <xacro:solid_soft name="${prefix}_link" material="Gazebo/Green" />
 
@@ -225,9 +231,46 @@
       <axis xyz="0 0 ${dir}" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_joint" />
-
   </xacro:macro>
 
+  <!-- Camera -->
+  <xacro:macro name="cam" params="prefix index dir armdir">
+    <gazebo reference="${prefix}_camera_optical_${index}">
+      <sensor type="camera" name="camera_${prefix}_${index}">
+        <always_on>true</always_on>
+        <update_rate>30.0</update_rate>
+        <camera name="camera_${prefix}_${index}">
+          <horizontal_fov>1.46608</horizontal_fov>
+          <image>
+            <width>1900</width>
+            <height>1200</height>
+            <format>R8G8B8</format>
+          </image>
+          <distortion>
+            <k1>0.0</k1>
+            <k2>0.0</k2>
+            <k3>0.0</k3>
+            <p1>0.0</p1>
+            <p2>0.0</p2>
+            <center>0.5 0.5</center>
+          </distortion>
+        </camera>
+        <plugin name="plugin_name_${prefix}_${index}" filename="libgazebo_ros_camera.so">
+          <ros>
+            <!-- <namespace>stereo</namespace> -->
+            <remapping>~/image_raw:=image_raw</remapping>
+            <remapping>~/camera_info:=camera_info</remapping>
+          </ros>
+          <camera_name>camera_${prefix}_${index}</camera_name>
+          <frame_name>${prefix}_camera_optical_${index}</frame_name>
+          <hack_baseline>0.2</hack_baseline>
+        </plugin>
+      </sensor>
+      <material>Gazebo/Green</material>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- Robot leg (aka arm) -->
   <xacro:macro name="robot_arm" params="prefix parent dir armdir">
     <link name="${prefix}_lower_part">
       <visual>
@@ -247,7 +290,9 @@
         </geometry>
       </collision>
 
-      <xacro:box_inertia m="1.0" x="0.048" y="0.24" z="0.048" />
+      <xacro:box_inertia m="1.0" x="0.048" y="0.235" z="0.048">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:box_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_lower_part" material="Gazebo/Red" />
 
@@ -278,7 +323,9 @@
         </geometry>
       </collision>
 
-      <xacro:box_inertia m="1.0" x="0.048" y="0.24" z="0.048" />
+      <xacro:box_inertia m="1.0" x="0.048" y="0.195" z="0.048">
+        <origin xyz="0 ${armdir*(0.12 + 0.048)} -${wheel_radius-arm_height_delta}" rpy="0 0 0" />
+      </xacro:box_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_upper_part" material="Gazebo/Red" />
 
@@ -296,23 +343,27 @@
       x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius-arm_height_delta}" x_angle="${pi/2}"
     />
 
+
+    <!-- The hook and the arm extension it sits on -->
     <link name="${prefix}_outer_link">
       <visual>
-        <origin xyz="0.0 ${armdir*0.246} -0.212" rpy="0 0 0" />
+        <origin xyz="0.0 ${armdir*0.246} -0.192" rpy="0 0 0" />
         <geometry>
-          <box size="0.048 0.048 0.240" />
+          <box size="0.048 0.048 0.192" />
         </geometry>
         <material name="Red">
           <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
         </material>
       </visual>
       <collision>
-        <origin xyz="0.0 ${armdir*0.246} -0.212" rpy="0 0 0" />
+        <origin xyz="0.0 ${armdir*0.246} -0.192" rpy="0 0 0" />
         <geometry>
-          <box size="0.048 0.048 0.240" />
+          <box size="0.048 0.048 0.192" />
         </geometry>
       </collision>
-      <xacro:box_inertia m="0.5" x="0.048" y="0.240" z="0.048" />
+      <xacro:box_inertia m="0.5" x="0.048" y="0.048" z="0.192">
+        <origin xyz="0.0 ${armdir*0.246} -0.192" rpy="0 0 0" />
+      </xacro:box_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_outer_link" material="Gazebo/Red" />
     <joint name="${prefix}_outer_joint" type="fixed">
@@ -338,7 +389,9 @@
           <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)" scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
       </collision>
-      <xacro:box_inertia m="0.5" x="0.048" y="0.240" z="0.048" /> <!-- TODO -->
+      <xacro:box_inertia m="0.5" x="0.048" y="0.048" z="0.048">
+        <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
+      </xacro:box_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_hook_link" material="Gazebo/Green" />
     <joint name="${prefix}_hook_joint" type="fixed">
@@ -347,6 +400,121 @@
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_hook_joint" />
+
+    <!-- The cameras mount -->
+    <link name="${prefix}_camera_servo_lower_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.048 0.024" />
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+
+      <!-- <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.048 0.024" />
+        </geometry>
+      </collision> -->
+
+      <xacro:box_inertia m="1.0" x="0.048" y="0.048" z="0.024">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:box_inertia>
+    </link>
+    <xacro:solid_hard name="${prefix}_camera_servo_lower_link" material="Gazebo/Red" />
+
+    <joint name="${prefix}_camera_joint" type="fixed">
+      <parent link="${parent}" />
+      <child link="${prefix}_camera_servo_lower_link" />
+      <origin xyz="${dir*0.048} ${armdir*(0.12 + 0.0240 + 0.012)} 0.048" rpy="0 0 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_camera_joint" />
+
+    <link name="${prefix}_camera_servo_upper_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.048 0.024" />
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.048 0.048 0.024" />
+        </geometry>
+      </collision>
+
+      <xacro:box_inertia m="1.0" x="0.048" y="0.048" z="0.024">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:box_inertia>
+    </link>
+    <xacro:solid_hard name="${prefix}_camera_servo_upper_link" material="Gazebo/Red" />
+
+    <joint name="${prefix}_camera_servo_lower_joint" type="revolute">
+      <parent link="${prefix}_camera_servo_lower_link" />
+      <child link="${prefix}_camera_servo_upper_link" />
+      <origin xyz="0.0 0.0 0.024" rpy="0 0 0" />
+      <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
+      <axis xyz="0 0 ${-dir*0.1}" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_camera_servo_lower_joint" />
+
+    <link name="${prefix}_camera">
+      <visual>
+        <origin xyz="0 0.096 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.144 0.024 0.048" />
+        </geometry>
+        <material name="Red">
+          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0.096 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.144 0.024 0.048" />
+        </geometry>
+      </collision>
+
+      <xacro:box_inertia m="1.0" x="0.144" y="0.024" z="0.048">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:box_inertia>
+    </link>
+    <xacro:solid_hard name="${prefix}_camera" material="Gazebo/Red" />
+
+    <joint name="${prefix}_camera_servo_upper_joint" type="revolute">
+      <parent link="${prefix}_camera_servo_upper_link" />
+      <child link="${prefix}_camera" />
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 ${-dir*3*pi/6.0 + dir*armdir*pi/6.0}" />
+      <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
+      <axis xyz="${dir*0.1} 0 0" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_camera_servo_upper_joint" />
+
+    <!-- optical frame for the stereo camera, with z-forward notation, this is the frame stereo camera images users should refer to -->
+    <link name="${prefix}_camera_optical_0" type="camera" />
+    <joint name="${prefix}_camera_optical_0_joint" type="fixed">
+      <origin xyz="0.048 0.110 0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to z-forward camera coords -->
+      <parent link="${prefix}_camera" />
+      <child link="${prefix}_camera_optical_0" />
+    </joint>
+    <link name="${prefix}_camera_optical_1" type="camera" />
+    <joint name="${prefix}_camera_optical_1_joint" type="fixed">
+      <origin xyz="-0.048 0.110 0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to z-forward camera coords -->
+      <parent link="${prefix}_camera" />
+      <child link="${prefix}_camera_optical_1" />
+    </joint>
+
+    <xacro:cam prefix="${prefix}" index="0" dir="${dir}" armdir="${armdir}" />
+    <xacro:cam prefix="${prefix}" index="1" dir="${dir}" armdir="${armdir}" />
   </xacro:macro>
 
   <xacro:macro name="robot_half" params="prefix dir">
@@ -376,7 +544,9 @@
         </geometry>
       </collision> -->
 
-      <xacro:box_inertia m="2.0" x="0.24" y="0.048" z="0.058" />
+      <xacro:box_inertia m="2.0" x="0.235" y="0.048" z="0.048">
+        <origin xyz="0 0 0.024" rpy="0 0 0" />
+      </xacro:box_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_body_link" material="Gazebo/Red" />
 
@@ -397,7 +567,9 @@
           <box size="0.040 0.240 0.048" />
         </geometry>
       </collision>
-      <xacro:box_inertia m="0.5" x="0.040" y="0.240" z="0.048" />
+      <xacro:box_inertia m="0.5" x="0.040" y="0.240" z="0.048">
+        <origin xyz="${dir*0.100} 0 0.048" rpy="0 0 0" />
+      </xacro:box_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_body_link2" material="Gazebo/Red" />
     <joint name="${prefix}_body_link2_joint" type="fixed">
@@ -424,7 +596,9 @@
           <cylinder radius="${wheel_radius}" length="${wheel_width}" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}" />
+      <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}">
+        <origin xyz="0 0 0.048" rpy="${pi/2} 0 0" />
+      </xacro:cylinder_inertia>
     </link>
     <xacro:solid_hard name="${prefix}_body_link3" material="Gazebo/Green" />
     <joint name="${prefix}_body_link3_joint" type="fixed">
@@ -487,6 +661,8 @@
       <command_interface name="velocity" />
       <!-- <command_interface name="effort" /> -->
     </joint>
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_camera_servo_lower_joint" pmin="${-pi}" pmax="${pi}" />
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_camera_servo_upper_joint" pmin="${-pi}" pmax="${pi}" />
   </xacro:macro>
 
   <xacro:macro name="r2c_half" params="prefix">
@@ -546,17 +722,25 @@
   <xacro:trans_reg name="front_left_arm_joint" />
   <xacro:trans_reg name="front_left_arm_inner_joint" />
   <xacro:trans_wheel name="front_left_arm_wheel_joint" />
+  <xacro:trans_reg name="front_left_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_reg name="front_left_arm_camera_servo_upper_joint" red="1" />
   <xacro:trans_reg name="front_right_arm_joint" />
   <xacro:trans_reg name="front_left_arm_inner_joint" />
   <xacro:trans_wheel name="front_right_arm_wheel_joint" />
+  <xacro:trans_reg name="front_right_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_reg name="front_right_arm_camera_servo_upper_joint" red="1" />
   <xacro:trans_reg name="rear_turn_table_joint" />
   <xacro:trans_reg name="rear_body_joint" />
   <xacro:trans_reg name="rear_left_arm_joint" />
   <xacro:trans_reg name="rear_left_arm_inner_joint" />
   <xacro:trans_wheel name="rear_left_arm_wheel_joint" />
+  <xacro:trans_reg name="rear_left_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_reg name="rear_left_arm_camera_servo_upper_joint" red="1" />
   <xacro:trans_reg name="rear_right_arm_joint" />
   <xacro:trans_reg name="rear_right_arm_inner_joint" />
   <xacro:trans_wheel name="rear_right_arm_wheel_joint" />
+  <xacro:trans_reg name="rear_right_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_reg name="rear_right_arm_camera_servo_upper_joint" red="1" />
 
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.${plugin_extension}">

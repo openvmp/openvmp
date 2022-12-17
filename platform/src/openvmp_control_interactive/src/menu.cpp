@@ -18,27 +18,53 @@
 namespace openvmp_control_interactive {
 
 void Node::initMenu_() {
-  std::string mode = "Mode";
+  const std::string text_control = "Interactive Control";
+  const std::string text_body = "Whole Body";
+  const std::string text_cameras = "Cameras";
 
+  // Create the memu
   menu_handler_ = std::make_unique<interactive_markers::MenuHandler>();
-  interactive_markers::MenuHandler::EntryHandle mode_menu_handle =
-      menu_handler_->insert(mode);
 
+  // Create the sub-menu for interactive control
+  interactive_markers::MenuHandler::EntryHandle control_menu_handle =
+      menu_handler_->insert(text_control);
+
+  auto none_mode = modes_[Mode::NONE];
+  auto none_item = menu_handler_->insert(
+      control_menu_handle, none_mode->get_name(),
+      std::bind(&Node::modeCb_, this, std::placeholders::_1));
+  menu_handler_->setCheckState(none_item,
+                               interactive_markers::MenuHandler::CHECKED);
+  menu_modes_.insert({none_item, none_mode});
   mode_last_ = NONE;
-  for (auto &mode : modes_) {
-    auto item = menu_handler_->insert(
-        mode_menu_handle, mode.second->get_name(),
-        std::bind(&Node::modeCb_, this, std::placeholders::_1));
-    menu_modes_.insert({item, mode.second});
+  item_last_ = none_item;
 
-    if (mode.first == mode_last_) {
-      item_last_ = item;
-      menu_handler_->setCheckState(item,
-                                   interactive_markers::MenuHandler::CHECKED);
+  // Create sub-menus for various categories of interactive control
+  interactive_markers::MenuHandler::EntryHandle body_menu_handle =
+      menu_handler_->insert(control_menu_handle, text_body);
+  interactive_markers::MenuHandler::EntryHandle cameras_menu_handle =
+      menu_handler_->insert(control_menu_handle, text_cameras);
+
+  // Iterate through all modes and insert them as items
+  // into the corresponding sub-menu.
+  for (auto &mode : modes_) {
+    interactive_markers::MenuHandler::EntryHandle parent_menu_handle;
+    if (mode.second->is_whole_body()) {
+      parent_menu_handle = body_menu_handle;
+    } else if (mode.second->is_cameras()) {
+      parent_menu_handle = cameras_menu_handle;
     } else {
-      menu_handler_->setCheckState(item,
-                                   interactive_markers::MenuHandler::UNCHECKED);
+      // This mode has no parent menu item?
+      // It's probably 'Mode::NONE".
+      continue;
     }
+
+    auto item = menu_handler_->insert(
+        parent_menu_handle, mode.second->get_name(),
+        std::bind(&Node::modeCb_, this, std::placeholders::_1));
+    menu_handler_->setCheckState(item,
+                                 interactive_markers::MenuHandler::UNCHECKED);
+    menu_modes_.insert({item, mode.second});
   }
 
   float scale = 1.0;
@@ -63,11 +89,11 @@ void Node::initMenu_() {
   int_marker.header.frame_id = "base_footprint";
   int_marker.pose.position.z = 0.9;
   int_marker.scale = scale;
-  int_marker.name = mode;
+  int_marker.name = text_control;
   int_marker.controls.push_back(control);
 
   server_->insert(int_marker);
-  menu_handler_->apply(*server_, mode);
+  menu_handler_->apply(*server_, text_control);
 }
 
 void Node::modeCb_(

@@ -41,9 +41,11 @@ set(project_SOURCE_FILES
   src/mode_hang.cpp
   src/mode_grab.cpp
   src/mode_lift.cpp
+  src/mode_camera.cpp
   src/control.cpp
   src/control_none.cpp
   src/control_traj_vel.cpp
+  src/control_position.cpp
 )
 
 set(project_DEPENDENCIES
