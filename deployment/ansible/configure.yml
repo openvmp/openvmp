@@ -3,14 +3,53 @@
   hosts: openvmp-pi
 
   tasks:
-  tasks:
-  - name: 
-    ansible.builtin.lineinfile:
-      path: /root/.bashrc
-      line: "echo 'Welcome to OpenVMP. Use Ansible for any mutable changes.'"
-      create: true
-  - name: Setup RaspberryPI RS485 CAN HAT
-    ansible.builtin.lineinfile:
-      path: /boot/firmware/config.txt
-      line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
-      create: false
+    # Basic configuration
+    - name: Configure the moto
+      ansible.builtin.lineinfile:
+        path: /root/.bashrc
+        line: "echo 'Welcome to OpenVMP. Use Ansible for any mutable changes.'"
+        create: true
+    - name: Setup RaspberryPI RS485 CAN HAT
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
+        create: false
+    - name: Installing and updating ROS2
+      ansible.builtin.apt:
+        pkg:
+          - ros-core
+          - ros-dev-tools
+        update_cache: true
+        state: present
+    - name: Install socat
+      ansible.builtin.apt:
+        name: socat
+        update_cache: false
+        state: present
+
+    # Source code repository
+    - name: Creating source code repositories on the targets
+      shell: git init openvmp
+      args:
+        creates: openvmp/.git
+      changed_when: False
+    - name: Registering the target repository in the local repository
+      command: git remote add target-{{ inventory_hostname }} {{ inventory_hostname }}:openvmp
+      args:
+        # The documentation suggests to run ansible in the current directory only.
+        chdir: ../..
+        creates: .git/refs/remotes/target-{{ inventory_hostname }}
+      ignore_errors: yes
+      become: no
+      changed_when: False
+      delegate_to: localhost
+    - name: Pushing source code changes to the targets
+      shell: git push target-{{ inventory_hostname }}
+      become: no
+      changed_when: False
+      delegate_to: localhost
+    - name: Checking out the code if necessary
+      shell: git checkout main
+      args:
+        chdir: openvmp
+        creates: README.md

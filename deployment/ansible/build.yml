@@ -1,0 +1,11 @@
+---
+- name: Setup new Raspberry PI for OpenVMP
+  hosts: openvmp-pi
+
+  tasks:
+    - name: Build the source code
+      shell: colcon build
+      args:
+        chdir: openvmp/platform
+      environment:
+        COLCON_HOME: /home/root/openvmp/platform
