@@ -33,8 +33,8 @@ class CamerasMode : public PositionControl {
 
  private:
   const std::string &prefix_;
-  static const std::vector<const std::string> joints_;
-  static std::map<const std::string, double> joints_state_;
+  static const std::vector<std::string> joints_;
+  static std::map<std::string, double> joints_state_;
 
   void processFeedback_(
       const std::string &link_name,

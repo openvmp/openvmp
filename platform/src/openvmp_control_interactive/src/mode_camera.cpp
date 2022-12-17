@@ -13,14 +13,14 @@
 
 namespace openvmp_control_interactive {
 
-const std::vector<const std::string> CamerasMode::joints_ = {
+const std::vector<std::string> CamerasMode::joints_ = {
     "front_left_arm_camera_servo_upper_link",  "front_left_arm_camera",
     "front_right_arm_camera_servo_upper_link", "front_right_arm_camera",
     "rear_left_arm_camera_servo_upper_link",   "rear_left_arm_camera",
     "rear_right_arm_camera_servo_upper_link",  "rear_right_arm_camera",
 };
 
-std::map<const std::string, double> CamerasMode::joints_state_ = {
+std::map<std::string, double> CamerasMode::joints_state_ = {
     {"front_left_arm_camera_servo_upper_link", 0.0},
     {"front_left_arm_camera", 0.0},
     {"front_right_arm_camera_servo_upper_link", 0.0},
