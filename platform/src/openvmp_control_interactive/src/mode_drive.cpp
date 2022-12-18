@@ -98,6 +98,13 @@ void DriveMode::enter(std::shared_ptr<ControlImpl> from) {
 
 void DriveMode::leave(std::shared_ptr<ControlImpl> to) {
   RCLCPP_DEBUG(node_->get_logger(), "DriveMode::leave()");
+  if (!server_->setCallback("openvmp_drive_x", nullptr)) {
+    RCLCPP_ERROR(node_->get_logger(), "setCallback(nullptr) failed");
+  }
+  if (!server_->erase("openvmp_drive_x")) {
+    RCLCPP_ERROR(node_->get_logger(), "erase() failed");
+  }
+  server_->applyChanges();
 
   ControlImpl::leave(to);
 }

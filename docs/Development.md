@@ -20,6 +20,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 sudo apt install -y ros-humble-desktop-full ros-dev-tools
 sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
 sudo apt install -y ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros2-control
+sudo apt install -y ros-humble-camera-calibration-parsers v4l2loopback-utils
 
 # The following packages are required for testing purposes only
 # (during the regular build process though)
@@ -51,16 +52,14 @@ In order to see how most of the software modules play together,
 use the following command:
 
 ```
+sudo usermod -a -G video `whoami`  # Run this only once, may require re-login
+
+./src/openvmp_robot_don1/scripts/fake_hardware_setup.sh
 ros2 launch openvmp_robot robot.launch.py use_fake_hardware:=true
 ```
 
 It will start an RViz window with a single robot using dumb hardware stubs.
-
-See the robot id in the output of `ros2 node list` (4 alhanumeric characters). Using the robot id, send the following commands to control the robot:
-
-```
-ros2 run openvmp_motion_control_py stand --ros-args -p unit:=<robot id>
-ros2 run openvmp_motion_control_py walk --ros-args -p unit:=<robot id>
-```
+Click on the yellow circle under the robot
+to switch to any of the supported manual control modes.
 
 ![ROS/ROS2 index package for OpenVMP module: Development](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FDevelopment.md&dt=OpenVMP%20Documentation)

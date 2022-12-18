@@ -19,6 +19,8 @@
         pkg:
           - ros-core
           - ros-dev-tools
+          - ros-humble-camera-calibration-parsers
+          - v4l2loopback-utils
         update_cache: true
         state: present
     - name: Install socat

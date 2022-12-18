@@ -37,3 +37,6 @@
 [submodule "platform/src/brake"]
 	path = platform/src/brake
 	url = git@github.com:openvmp/brake.git
+[submodule "platform/src/third_party/ros2_usb_camera"]
+	path = platform/src/third_party/ros2_usb_camera
+	url = https://github.com/klintan/ros2_usb_camera.git

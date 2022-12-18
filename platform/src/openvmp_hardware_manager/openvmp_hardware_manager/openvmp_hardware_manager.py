@@ -13,6 +13,21 @@ drivers_map = {
     "bus": {
         "modbus_rtu": ["modbus_rtu", "modbus_rtu_standalone"],
     },
+    "camera": {
+        # "fake": [
+        #     "usb_camera_driver",
+        #     "usb_camera_driver_node",
+        #     "--ros-args",
+        #     "--param",
+        #     "fps:=25.0",
+        #     "--param",
+        #     "camera_calibration_file:=package://openvmp_robot/config/fake_video.ini",
+        # ],
+        # "usb": [
+        #     "usb_camera_driver",
+        #     "usb_camera_driver_node",
+        # ],
+    },
     "brake": {
         "fake": ["brake", "fake"],
         "switch": ["brake_switch", "brake_switch_standalone"],
@@ -41,6 +56,13 @@ class HardwareManagerNode(Node):
         index = 0
         for bus in buses:
             self.driver_instantiate("bus" + str(index), "bus", bus)
+            index = index + 1
+
+        # Cameras
+        cameras = cfg.get_cameras()
+        index = 0
+        for camera in cameras:
+            self.driver_instantiate("camera" + str(index), "camera", camera)
             index = index + 1
 
         # Joints
@@ -87,9 +109,12 @@ class HardwareManagerNode(Node):
             driver = driver_config["type"]
             for param in driver_config:
                 if param != "type" and param != "namespace":
+                    params.append("--param")
                     params.append(param + ":=" + str(driver_config[param]))
         driver_pkg = drivers_map[driver_class][driver][0]
         driver_exe = drivers_map[driver_class][driver][1]
+        for extra_param in drivers_map[driver_class][driver][2:]:
+            params.append(extra_param)
 
         # Determine
         path = obj["path"]
@@ -103,7 +128,6 @@ class HardwareManagerNode(Node):
                 driver_pkg,
                 driver_exe,
             ]
-            + params
             + [
                 "--ros-args",
                 "-r",
@@ -111,6 +135,7 @@ class HardwareManagerNode(Node):
                 "-r",
                 "__ns:=" + namespace,
             ]
+            + params
         )
         self.processes[id] = {}
         self.processes[id]["id"] = id
