@@ -14,11 +14,20 @@
         path: /boot/firmware/config.txt
         line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
         create: false
+    - name: Installing system packages
+      ansible.builtin.apt:
+        pkg:
+          - i2c-tools
+          - python3-pip
+        update_cache: true
+        state: present
     - name: Installing and updating ROS2
       ansible.builtin.apt:
         pkg:
-          - ros-core
-          - ros-dev-tools
+          - ros-humble-desktop-full
+          - ros-humble-ros2-control
+          - ros-humble-ros2-controllers
+          - python3-colcon-common-extensions
           - ros-humble-camera-calibration-parsers
           - v4l2loopback-utils
         update_cache: true

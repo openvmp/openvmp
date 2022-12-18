@@ -3,6 +3,15 @@
         "src/third_party/yaml-cpp": {
             "name": "YAML_CPP",
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wno-shadow"]
+        },
+        "src/third_party/RTIMULib2/RTIMULib": {
+            "name": "RTIMULibUI",
+        },
+        "src/third_party/RTIMULib2/Linux": {
+            "cmake-args": ["-DBUILD_GL=OFF","-DBUILD_DEMO=OFF","-DBUILD_CAL=OFF","-DBUILD_DRIVE=OFF"]
+        },
+        "src/third_party/RTIMULib2/RTHost": {
+            "cmake-args": ["-DQT5=ON", "-Wno-dev"]
         }
     }
 }

@@ -40,3 +40,9 @@
 [submodule "platform/src/third_party/ros2_usb_camera"]
 	path = platform/src/third_party/ros2_usb_camera
 	url = https://github.com/klintan/ros2_usb_camera.git
+[submodule "platform/src/third_party/ros2_berrygps"]
+	path = platform/src/third_party/ros2_berrygps
+	url = https://github.com/mattanimation/ros2_berrygps.git
+[submodule "platform/src/third_party/RTIMULib2"]
+	path = platform/src/third_party/RTIMULib2
+	url = https://github.com/mattanimation/RTIMULib2.git

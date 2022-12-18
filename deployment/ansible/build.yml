@@ -3,8 +3,23 @@
   hosts: openvmp-pi
 
   tasks:
+    - name: Pushing source code changes to the targets
+      shell: git push target-{{ inventory_hostname }}
+      become: no
+      changed_when: False
+      delegate_to: localhost
+    - name: Checking out the code if necessary
+      shell: git checkout main
+      args:
+        chdir: openvmp
+        creates: README.md
+    - name: Build the IMU Python module
+      shell: python3 setup.py build && python3 setup.py install
+      args:
+        chdir: openvmp/platform/src/third_party/RTIMULib2/Linux/python
+        creates: RTIMULib.egg-info/SOURCES.txt
     - name: Build the source code
-      shell: colcon build
+      shell: . /opt/ros/humble/setup.bash && colcon build
       args:
         chdir: openvmp/platform
       environment:
