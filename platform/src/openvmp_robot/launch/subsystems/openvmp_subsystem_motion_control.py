@@ -109,9 +109,26 @@ def launch_desc(context):
         ],
     )
 
+    trajectory_controller_state_throttle_cmd = Node(
+        package="topic_tools",
+        executable="throttle",
+        # name="controller_spawner_trajectory",
+        output="screen",
+        namespace=namespace,
+        arguments=[
+            "messages",
+            namespace + "/trajectory_controller/state",
+            "1",
+            # "--ros-args",
+            # "--log-level",
+            # "debug",
+        ],
+    )
+
     return [
         controller_manager_cmd,
         position_controller_spawner_cmd,
         velocity_controller_spawner_cmd,
         trajectory_controller_spawner_cmd,
+        trajectory_controller_state_throttle_cmd,
     ]

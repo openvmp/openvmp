@@ -17,10 +17,11 @@ sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 
-sudo apt install -y ros-humble-desktop-full ros-dev-tools
+sudo apt install -y ros-humble-desktop-full python3-colcon-common-extensions
 sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
 sudo apt install -y ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros2-control
 sudo apt install -y ros-humble-camera-calibration-parsers v4l2loopback-utils
+sudo apt install -y ros-humble-topic-tools
 
 # The following packages are required for testing purposes only
 # (during the regular build process though)

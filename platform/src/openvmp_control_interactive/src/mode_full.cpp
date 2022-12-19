@@ -20,7 +20,9 @@ FullMode::FullMode(
   state_lock_.lock();
   trajectory_state_subscription_ = node->create_subscription<
       control_msgs::msg::JointTrajectoryControllerState>(
-      node_->get_effective_namespace() + "/trajectory_controller/state", 1,
+      node_->get_effective_namespace() +
+          "/trajectory_controller/state_throttle",
+      1,
       std::bind(&FullMode::trajectoryStateHandler_, this,
                 std::placeholders::_1));
   state_lock_.unlock();
