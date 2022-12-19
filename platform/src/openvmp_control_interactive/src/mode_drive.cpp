@@ -131,7 +131,7 @@ void DriveMode::processFeedback_(
     RCLCPP_INFO(node_->get_logger(), "Lift on %.02f",
                 feedback->pose.position.z);
 
-    lift_ -= feedback->pose.position.z;
+    lift_ += feedback->pose.position.z;
     if (lift_ < LIFT_LIMIT_BOTTOM) lift_ = LIFT_LIMIT_BOTTOM;
     if (lift_ > LIFT_LIMIT_TOP) lift_ = LIFT_LIMIT_TOP;
     RCLCPP_INFO(node_->get_logger(), "Lift at %.02f", lift_);

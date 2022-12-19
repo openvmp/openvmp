@@ -48,7 +48,6 @@ def launch_desc(context):
 
     desc = []
     if context.launch_configurations["is_simulation"]:
-        # Interactive markers for Rviz
         for camera_id in range(8):
             if context.launch_configurations["use_fake_hardware"]:
                 camera_calibration_url = (

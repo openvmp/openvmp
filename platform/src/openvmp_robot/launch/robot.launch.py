@@ -70,7 +70,7 @@ def generate_launch_description_real():
         OpaqueFunction(function=openvmp_subsystem_reflection.launch_desc),
         OpaqueFunction(function=openvmp_subsystem_drivers.launch_desc),
         # TODO(clairbee): subsystem: power_management
-        # TODO(clairbee): subsystem: odometry
+        OpaqueFunction(function=openvmp_subsystem_odometry.launch_desc),
         OpaqueFunction(function=openvmp_subsystem_vision.launch_desc),
         # TODO(clairbee): subsystem: local_slam
         # TODO(clairbee): subsystem: global_slam

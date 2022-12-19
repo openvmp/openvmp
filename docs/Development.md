@@ -21,7 +21,7 @@ sudo apt install -y ros-humble-desktop-full python3-colcon-common-extensions
 sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
 sudo apt install -y ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros2-control
 sudo apt install -y ros-humble-camera-calibration-parsers v4l2loopback-utils
-sudo apt install -y ros-humble-topic-tools
+sudo apt install -y ros-humble-topic-tools ros-humble-robot-localization
 
 # The following packages are required for testing purposes only
 # (during the regular build process though)

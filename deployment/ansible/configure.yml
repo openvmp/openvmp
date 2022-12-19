@@ -31,6 +31,7 @@
           - python3-colcon-common-extensions
           - ros-humble-camera-calibration-parsers
           - v4l2loopback-utils
+          - ros-humble-robot-localization
         update_cache: true
         state: present
     - name: Install socat
