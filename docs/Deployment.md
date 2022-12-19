@@ -44,7 +44,7 @@ That's the inventory section used by all other OpenVMP Ansible playbooks.
 ### Configuration
 
 Use the following commands to configure the board for the first time
-as well as to update the configuration on each repository update
+as well as to update the configuration on each major update
 (or whenever needed for any other reason):
 
 ```
@@ -52,5 +52,14 @@ $ cd deployment/ansible
 $ ansible-playbook ./configure.yml
 ```
 
+### Building
+
+Use the following commands to update the source code repository on the target
+and to build all packages:
+
+```
+$ cd deployment/ansible
+$ ansible-playbook ./build.yml
+```
 
 ![ROS/ROS2 index package for OpenVMP module: Deployment](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2Deployment.md&dt=OpenVMP%20Documentation)

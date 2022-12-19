@@ -19,6 +19,7 @@
         pkg:
           - i2c-tools
           - python3-pip
+          - gpsd-tools
         update_cache: true
         state: present
     - name: Installing and updating ROS2
@@ -44,6 +45,11 @@
       args:
         creates: openvmp/.git
       changed_when: False
+    - name: Creating source code repositories on the targets
+      shell: git config --bool --add receive.denyCurrentBranch true
+      args:
+        chdir: openvmp
+      changed_when: False
     - name: Registering the target repository in the local repository
       command: git remote add target-{{ inventory_hostname }} {{ inventory_hostname }}:openvmp
       args:
@@ -54,13 +60,26 @@
       become: no
       changed_when: False
       delegate_to: localhost
+    # TODO(clairbee): consider dropping the below from 'configure.yml'
+    - name: Temporary move to another branch
+      shell: git checkout -b tmp
+      args:
+        chdir: openvmp
+        creates: .git/refs/heads/tmp
     - name: Pushing source code changes to the targets
       shell: git push target-{{ inventory_hostname }}
       become: no
       changed_when: False
       delegate_to: localhost
-    - name: Checking out the code if necessary
-      shell: git checkout main
+    - name: Checking out the main branch
+      shell: "git checkout main && git branch -d tmp"
       args:
         chdir: openvmp
-        creates: README.md
+        removes: .git/refs/heads/tmp
+    - name: Checking out or updating the submodules if necessary
+      shell: git submodule update --recursive --init
+      args:
+        chdir: openvmp
+        # TODO(clairbee): creates: List all submodules here
+      environment:
+        GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
