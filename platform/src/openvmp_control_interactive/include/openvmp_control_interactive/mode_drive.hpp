@@ -33,11 +33,11 @@ class DriveMode : public TrajVelControl {
   trajectory_msgs::msg::JointTrajectory msg_template_;
   trajectory_msgs::msg::JointTrajectoryPoint point_template_;
   double lift_;
-  static constexpr double LIFT_LIMIT_BOTTOM = -0.25;
-  static constexpr double LIFT_LIMIT_TOP = 0.25;
+  static constexpr double LIFT_LIMIT_BOTTOM = -3.14/4.0;
+  static constexpr double LIFT_LIMIT_TOP = 3.14/4.0;
   double turn_;
-  static constexpr double TURN_LIMIT_BOTTOM = -0.6;
-  static constexpr double TURN_LIMIT_TOP = 0.6;
+  static constexpr double TURN_LIMIT_BOTTOM = -3.14/6.0;
+  static constexpr double TURN_LIMIT_TOP = 3.14/6.0;
 
   void processFeedback_(
       const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr

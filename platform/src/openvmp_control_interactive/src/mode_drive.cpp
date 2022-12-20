@@ -78,8 +78,8 @@ void DriveMode::enter(std::shared_ptr<ControlImpl> from) {
         "rear_right_arm_joint",   "rear_right_arm_inner_joint"};
     point_template_.time_from_start.sec = 0;
     point_template_.time_from_start.nanosec = 500000000ULL;
-    point_template_.positions = {0, 0, 3.14, -0.75, 3.14, -0.75,
-                                 0, 0, 3.14, -0.75, 3.14, -0.75};
+    point_template_.positions = {0, 0, 3.14, -3.14/6.0, 3.14, -3.14/6.0,
+                                 0, 0, 3.14, -3.14/6.0, 3.14, -3.14/6.0};
   }
   RCLCPP_DEBUG(node_->get_logger(), "DriveMode::enter(): templates are ready");
 

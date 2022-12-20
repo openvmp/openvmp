@@ -413,7 +413,7 @@
     <joint name="${prefix}_inner_joint" type="revolute">
       <parent link="${prefix}_lower_part" />
       <child link="${prefix}_upper_part" />
-      <origin xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048)} ${wheel_radius+arm_height_delta-arm_height_shortage}" rpy="0 0 0" />
+      <origin xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048 + wheel_width/2)} ${wheel_radius+arm_height_delta+arm_height_shortage}" rpy="0 0 0" />
       <limit upper="${pi*0.7}" lower="${-pi*0.9}" effort="10" velocity="1.0" />
       <axis xyz="${-armdir*0.1} 0 0" />
     </joint>
@@ -421,7 +421,7 @@
 
     <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part" limit="0"
       radius="${wheel_radius}" width="${wheel_width}"
-      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius-arm_height_delta}" x_angle="${pi/2}"
+      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius+arm_height_delta}" x_angle="${pi/2}"
     />
 
 
@@ -510,7 +510,7 @@
     <joint name="${prefix}_camera_joint" type="fixed">
       <parent link="${parent}" />
       <child link="${prefix}_camera_servo_lower_link" />
-      <origin xyz="${dir*0.048} ${armdir*(0.12 + 0.0288 + 0.012)} 0.048" rpy="0 0 0" />
+      <origin xyz="${dir*0.024} ${armdir*(0.12 + 0.044 + 0.012)} 0.048" rpy="0 0 0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_camera_joint" />
 
@@ -551,7 +551,7 @@
       <visual>
         <origin xyz="0 0.048 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.144 0.024 0.048" />
+          <box size="0.096 0.024 0.048" />
         </geometry>
         <material name="Red">
           <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
@@ -565,7 +565,7 @@
         </geometry>
       </collision>
 
-      <xacro:box_inertia m="1.0" x="0.144" y="0.024" z="0.048">
+      <xacro:box_inertia m="1.0" x="0.096" y="0.024" z="0.048">
         <origin xyz="0 0 0" rpy="0 0 0" />
       </xacro:box_inertia>
     </link>
@@ -583,7 +583,7 @@
     <!-- optical frame for the stereo camera, with z-forward notation, this is the frame stereo camera images users should refer to -->
     <link name="${prefix}_camera_0"/>
     <joint name="${prefix}_camera_0_joint" type="fixed">
-      <origin xyz="0.048 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
+      <origin xyz="0.024 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
       <parent link="${prefix}_camera" />
       <child link="${prefix}_camera_0" />
     </joint>
@@ -595,7 +595,7 @@
     </joint>
     <link name="${prefix}_camera_1" />
     <joint name="${prefix}_camera_1_joint" type="fixed">
-      <origin xyz="-0.048 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
+      <origin xyz="-0.024 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
       <parent link="${prefix}_camera" />
       <child link="${prefix}_camera_1" />
     </joint>

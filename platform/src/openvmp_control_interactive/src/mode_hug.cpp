@@ -66,8 +66,8 @@ void HugMode::enter(std::shared_ptr<ControlImpl> from) {
         "rear_right_arm_joint",   "rear_right_arm_inner_joint"};
     point_template_.time_from_start.sec = 0;
     point_template_.time_from_start.nanosec = 500000000ULL;
-    point_template_.positions = {0, 0, 0, -2.85, 0, -2.85,
-                                 0, 0, 0, -2.85, 0, -2.85};
+    point_template_.positions = {0, 0, 0, -3.14, 0, -3.14,
+                                 0, 0, 0, -3.14, 0, -3.14};
   }
   RCLCPP_DEBUG(node_->get_logger(), "HugMode::enter(): templates are ready");
 
