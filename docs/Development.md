@@ -4,7 +4,8 @@
 
 ### Prerequisites
 
-The following instructions are for Ubuntu 22.04. Please, adjust them based on the needs of your OS.
+The following instructions are for Ubuntu 22.04.
+If it's not working for you, please, follow the instructions to install ROS2 Humble for your OS instead.
 
 ```
 sudo apt update
