@@ -33,19 +33,15 @@ outside of OpenVMP
 OpenVMP provides support for robots that can use different modes of transportation:
 
 - driving on or off road using wheels
-- crawling on multiple points of contact
-- walking straight on two, three or four legs
+- walking are crawling on four legs
 - climbing trees, poles, pipes, ropes, cables and other near-cylindrical objects
 - climbing and driving inside pipes and tunnels
 - climbing warehouse shelving units
 
 ### Individual performance
 
-Besides performing various movement and transportation mentioned above, OpenVMP can use the same limbs to perform various mechanical tasks:
-
-- digging & lifting objects
-- hauling & moving objects
-- opening & closing doors & windows
+OpenVMP can use the same limbs to perform various mechanical tasks.
+But its true power lays in the use of extension modules (see 'Modularity' below).
 
 Single OpenVMP units can perform these tasks by themselves over an extended
 period of time.
@@ -115,3 +111,5 @@ See the following documents for more info:
 - [Included ROS2 packages](docs/ROS2_packages.md)
 - [Roadmap](docs/Roadmap.md)
 - [License](docs/License.md)
+
+![ROS/ROS2 hybrid mobility versatile mobility robot: OpenVMP](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FREADME.md&dt=OpenVMP%20Documentation)
