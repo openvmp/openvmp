@@ -81,7 +81,7 @@ where `<id-of-the-robot>` could be seen in the Gazebo UI at the end of the name 
 
 -->
 
-## What do I see
+## What do I see?
 
 Once the simulation is running,
 there are several windows displayed on the screen.
@@ -100,7 +100,7 @@ that the robot is aware of.
 Depending on the state of the robot, RViz windows may visualize
 interactive controls to manually move the joints of the robot.
 
-## What do I do next
+## What do I do next?
 
 Once the simulation is running, each spawned OpenVMP unit can be controlled independently.
 

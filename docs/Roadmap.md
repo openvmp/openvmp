@@ -8,7 +8,7 @@ Reach out to opevmp@proton.me and/or submit your pull request.
 
 - fix the URDF model to get rid of vibration during simulation
 - fix Gazebo world physics to prevent the model from "flying away"
-- specialized ros2_control controller for walking
+- specialized ros2\_control controller for walking
 - add odometry components
 - add SLAM components
 
@@ -76,4 +76,3 @@ Reach out to opevmp@proton.me and/or submit your pull request.
 - Extensions for RViz interactive markers
   - to display play/pause symbols for each joint (in the center of the same plane where the other markers are displayed now) to be used for pausing movement routines or for engaging/disengaging joint brakes
 
-![ROS/ROS2 index package for OpenVMP module: Roadmap](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FRoadmap.md&dt=OpenVMP%20Documentation)

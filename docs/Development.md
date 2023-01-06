@@ -64,4 +64,3 @@ It will start an RViz window with a single robot using dumb hardware stubs.
 Click on the yellow circle under the robot
 to switch to any of the supported manual control modes.
 
-![ROS/ROS2 index package for OpenVMP module: Development](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FDevelopment.md&dt=OpenVMP%20Documentation)

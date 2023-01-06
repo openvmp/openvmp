@@ -90,5 +90,3 @@ and does not include third-party libraries that are present in the non-repo
   get replaced by other robots eventually or it will morph into a swarm leader
   robot.
 
-
-![ROS/ROS2 index package for OpenVMP module: ROS2 packages](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2ROS2_packages.md&dt=ROS2%20package%20index)
