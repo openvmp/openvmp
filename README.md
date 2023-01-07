@@ -1,6 +1,6 @@
 # OpenVMP
 
-[![License](docs/license.svg)](docs/License.md)
+[![License](docs/license.svg)](./License.md)
 
 Version: Alpha 1
 
