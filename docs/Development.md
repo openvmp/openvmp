@@ -26,7 +26,7 @@ sudo apt install -y ros-humble-topic-tools ros-humble-robot-localization
 
 # The following packages are required for testing purposes only
 # (during the regular build process though)
-sudo apt install -y socat
+sudo apt install -y ros-humble-ros-testing socat
 
 # The following packages are required for debugging purposes only
 sudo apt install -y xterm
