@@ -1,42 +1,42 @@
 [submodule "platform/src/serial"]
 	path = platform/src/serial
-	url = git@github.com:openvmp/serial.git
+	url = ../serial.git
 [submodule "platform/src/modbus"]
 	path = platform/src/modbus
-	url = git@github.com:openvmp/modbus.git
+	url = ../modbus.git
 [submodule "platform/src/modbus_rtu"]
 	path = platform/src/modbus_rtu
-	url = git@github.com:openvmp/modbus_rtu.git
+	url = ../modbus_rtu.git
 [submodule "platform/src/modbus_tcp"]
 	path = platform/src/modbus_tcp
-	url = git@github.com:openvmp/modbus_tcp.git
+	url = ../modbus_tcp.git
 [submodule "platform/src/stepper_driver_em2rs"]
 	path = platform/src/stepper_driver_em2rs
-	url = git@github.com:openvmp/stepper_driver_em2rs.git
+	url = ../stepper_driver_em2rs.git
 [submodule "platform/src/stepper_driver"]
 	path = platform/src/stepper_driver
-	url = git@github.com:openvmp/stepper_driver.git
+	url = ../stepper_driver.git
 [submodule "platform/src/stepper_driver_terminal"]
 	path = platform/src/stepper_driver_terminal
-	url = git@github.com:openvmp/stepper_driver_terminal.git
+	url = ../stepper_driver_terminal.git
 [submodule "platform/src/yaml-cpp"]
 	path = platform/src/third_party/yaml-cpp
-	url = git@github.com:jbeder/yaml-cpp.git
+	url = https://github.com/jbeder/yaml-cpp.git
 [submodule "platform/src/switch"]
 	path = platform/src/switch
-	url = git@github.com:openvmp/switch.git
+	url = ../switch.git
 [submodule "platform/src/switch_r413d08"]
 	path = platform/src/switch_r413d08
-	url = git@github.com:openvmp/switch_r413d08.git
+	url = ../switch_r413d08.git
 [submodule "deployment/ansible/roles/ansible-ubuntu-wifi"]
 	path = deployment/ansible/roles/ansible-ubuntu-wifi
-	url = git@github.com:fcastello/ansible-ubuntu-wifi.git
+	url = https://github.com/fcastello/ansible-ubuntu-wifi.git
 [submodule "platform/src/remote_hardware_interface"]
 	path = platform/src/remote_hardware_interface
-	url = git@github.com:openvmp/remote_hardware_interface.git
+	url = ../remote_hardware_interface.git
 [submodule "platform/src/brake"]
 	path = platform/src/brake
-	url = git@github.com:openvmp/brake.git
+	url = ../brake.git
 [submodule "platform/src/third_party/ros2_usb_camera"]
 	path = platform/src/third_party/ros2_usb_camera
 	url = https://github.com/klintan/ros2_usb_camera.git
