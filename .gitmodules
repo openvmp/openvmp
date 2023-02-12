@@ -46,3 +46,6 @@
 [submodule "platform/src/third_party/RTIMULib2"]
 	path = platform/src/third_party/RTIMULib2
 	url = https://github.com/mattanimation/RTIMULib2.git
+[submodule "models"]
+	path = models
+	url = git@github.com:openvmp/openvmp-models.git

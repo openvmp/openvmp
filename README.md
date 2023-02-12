@@ -4,6 +4,8 @@
 
 Version: Alpha 1
 
+![OpenVMP rendered robot model](./docs/images/front.png)
+
 ![walking robot](./docs/images/walk.png)
 ![driving robot](./docs/images/drive.png)
 ![remotely controlled robot](./docs/images/control.png)
