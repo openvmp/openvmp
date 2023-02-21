@@ -26,10 +26,10 @@ sudo apt install -y ros-humble-topic-tools ros-humble-robot-localization
 
 # The following packages are required for testing purposes only
 # (during the regular build process though)
-sudo apt install -y ros-humble-ros-testing socat
+sudo apt install -y ros-humble-ros-testing socat xterm
 
-# The following packages are required for debugging purposes only
-sudo apt install -y xterm
+# The following packages are required for deployment purposes only
+sudo apt install -y ansible
 ```
 
 ### Visual Studio Code
@@ -63,4 +63,3 @@ ros2 launch openvmp_robot robot.launch.py use_fake_hardware:=true
 It will start an RViz window with a single robot using dumb hardware stubs.
 Click on the yellow circle under the robot
 to switch to any of the supported manual control modes.
-
