@@ -14,7 +14,12 @@
         path: /boot/firmware/config.txt
         line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
         create: false
-    - name: Installing system packages
+    - name: Disable unattended upgrades to be in control
+      ansible.builtin.apt:
+        pkg:
+          - unattended-upgrades
+        state: absent
+    - name: Installing and updating system packages
       ansible.builtin.apt:
         pkg:
           - i2c-tools
