@@ -1,5 +1,5 @@
 ---
-- name: Setup new Raspberry PI for OpenVMP
+- name: Configure Raspberry PI for OpenVMP
   hosts: openvmp-pi
 
   tasks:
@@ -9,7 +9,30 @@
         path: /root/.bashrc
         line: "echo 'Welcome to OpenVMP. Use Ansible for any mutable changes.'"
         create: true
-    - name: Setup RaspberryPI RS485 CAN HAT
+    - name: Disable console to free the UART port
+      replace:
+        dest: /boot/firmware/cmdline.txt
+        regexp: "console=[A-Za-z]*0,[0-9]* "
+        replace: ""
+    - name: Disable Bluetooth to free the UART port - part 1
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtoverlay=disable-bt"
+        create: false
+    - name: Disable Bluetooth to free the UART port - part 2
+      ansible.builtin.systemd:
+        name: hciuart
+        state: stopped
+    - name: Disable Bluetooth to free the UART port - part 3
+      ansible.builtin.systemd:
+        name: bluetooth
+        state: stopped
+    - name: Setup RaspberryPI RS485 CAN HAT - part 1
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtparam=spi=on"
+        create: false
+    - name: Setup RaspberryPI RS485 CAN HAT - part 2
       ansible.builtin.lineinfile:
         path: /boot/firmware/config.txt
         line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
