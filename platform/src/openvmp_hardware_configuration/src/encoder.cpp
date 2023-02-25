@@ -13,14 +13,10 @@
 
 namespace openvmp_hardware_configuration {
 
-Encoder::Encoder(const std::string &joint, const YAML::Node &node)
-    : logger_{rclcpp::get_logger("openvmp_hardware_configuration::Encoder(" +
-                                 joint + ")")} {
-  if (!node || node.IsNull() || !node.IsMap()) {
-    RCLCPP_ERROR(logger_, "Incorrect syntax");
-    return;
-  }
-
+Encoder::Encoder(const std::string &joint,
+                 const YAML::Node &node,
+                 const std::string &id)
+    : Device(joint, node, id) {
   // auto type = node["type"].as_string();
   // if (type == "absolute") {
   //   type_ = ABSOLUTE;
@@ -29,7 +25,6 @@ Encoder::Encoder(const std::string &joint, const YAML::Node &node)
   //   return;
   // }
 
-  path_ = node["path"].as<std::string>();
   // ppr_ = node["ppr"].as<int>();
 }
 

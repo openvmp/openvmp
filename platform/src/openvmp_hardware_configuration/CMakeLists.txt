@@ -22,12 +22,13 @@ include_directories(
 )
 
 set(project_SOURCE_FILES
+  src/configuration.cpp
+  src/joint.cpp
+  src/device.cpp
   src/actuator.cpp
   src/brake.cpp
   src/encoder.cpp
   src/gearbox.cpp
-  src/joint.cpp
-  src/configuration.cpp
 )
 
 set(project_LIBRARIES

@@ -11,6 +11,7 @@
 #define OPENVMP_HARDWARE_CONFIGURATION_ENCODER_H
 
 #include "rclcpp/rclcpp.hpp"
+#include "openvmp_hardware_configuration/device.hpp"
 
 namespace YAML {
 class Node;
@@ -18,19 +19,15 @@ class Node;
 
 namespace openvmp_hardware_configuration {
 
-class Encoder {
+class Encoder : public Device {
  public:
-  Encoder(const std::string &, const YAML::Node &);
-
+  Encoder(const std::string &, const YAML::Node &, const std::string &);
   virtual ~Encoder() {}
 
   // enum Type { ABSOLUTE };
 
  private:
-  rclcpp::Logger logger_;
-
   // Type type_;
-  std::string path_;
   // int ppr_;
 };
 

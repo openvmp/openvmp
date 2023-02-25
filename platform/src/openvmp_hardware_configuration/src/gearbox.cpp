@@ -13,14 +13,10 @@
 
 namespace openvmp_hardware_configuration {
 
-Gearbox::Gearbox(const std::string &joint, const YAML::Node &node)
-    : logger_{rclcpp::get_logger("openvmp_hardware_configuration::Gearbox(" +
-                                 joint + ")")} {
-  if (!node || node.IsNull() || !node.IsMap()) {
-    RCLCPP_ERROR(logger_, "Incorrect syntax");
-    return;
-  }
-
+Gearbox::Gearbox(const std::string &joint,
+                 const YAML::Node &node,
+                 const std::string &id)
+    : Device(joint, node, id) {
   auto type = node["type"].as<std::string>();
   if (type == "worm") {
     type_ = WORM;

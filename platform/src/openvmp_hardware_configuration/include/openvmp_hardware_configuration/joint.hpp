@@ -25,7 +25,6 @@ namespace openvmp_hardware_configuration {
 class Joint {
  public:
   Joint(const YAML::Node &);
-
   virtual ~Joint() {}
 
   const std::string &get_name() const { return name_; }

@@ -12,72 +12,66 @@ joints:
       type: worm
     actuator:
       type: stepper # TODO(clairbee): should it be 'position'|'velocity'?
-      path: /stepper/actuator100
       torque: 0.5 # TODO(clairbee): replace this with torque curves
       torqueDetent: 0.1
       torqueStalling: 0.72
       driver:
         type: em2rs
-        path: /modbus/bus0
+        stepper_driver_model: DM556RS
+        stepper_prefix: $PATH
+        modbus_prefix: /modbus/bus0
+        modbus_is_remote: true
     brake:
-      path: /brake100
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 0
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 0
     encoder:
       type: absolute
-      path: /encoder/sensor100
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_body_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator101
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.48
     brake:
-      path: /brake101
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 1
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 1
     encoder:
       type: absolute
-      path: /encoder/sensor101
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_left_arm_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator102
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake102
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 2
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 2
     encoder:
       type: absolute
-      path: /encoder/sensor102
       driver:
         type: amt21
         ppr: 1000
@@ -87,325 +81,284 @@ joints:
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator103
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake103
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 3
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 3
     encoder:
       type: absolute
-      path: /encoder/sensor103
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_left_arm_wheel_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator104
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake104
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 4
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 4
     encoder:
       type: absolute
-      path: /encoder/sensor104
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_right_arm_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator105
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake105
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 5
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 5
     encoder:
       type: absolute
-      path: /encoder/sensor105
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_right_arm_inner_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator106
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake106
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 6
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 6
     encoder:
       type: absolute
-      path: /encoder/sensor106
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_right_arm_wheel_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator107
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake107
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board1
-        channel: 7
+      #driver:
+      #  type: switch
+      #  path: /switch/board1
+      #  channel: 7
     encoder:
       type: absolute
-      path: /encoder/sensor107
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_turn_table_joint
     gearbox:
       ratio: 10
       type: worm
     actuator:
       type: stepper
-      path: /stepper/actuator200
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake200
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 0
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 0
     encoder:
       type: absolute
-      path: /encoder/sensor200
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_body_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator201
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake201
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 1
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 1
     encoder:
       type: absolute
-      path: /encoder/sensor201
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_left_arm_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator202
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake202
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 2
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 2
     encoder:
       type: absolute
-      path: /encoder/sensor202
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_left_arm_inner_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator203
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake203
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 3
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 3
     encoder:
       type: absolute
-      path: /encoder/sensor203
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_left_arm_wheel_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator204
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake204
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 4
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 4
     encoder:
       type: absolute
-      path: /encoder/sensor204
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_right_arm_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator205
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake205
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 5
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 5
     encoder:
       type: absolute
-      path: /encoder/sensor205
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_right_arm_inner_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator206
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake206
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 6
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 6
     encoder:
       type: absolute
-      path: /encoder/sensor206
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: rear_right_arm_wheel_joint
     gearbox:
       ratio: 10
       type: planetary
     actuator:
       type: stepper
-      path: /stepper/actuator207
       torque: 0.4
       torqueDetent: 0.1
       torqueStalling: 0.72
     brake:
-      path: /brake207
       torque: 0.5
       engagedByDefault: true
-      driver:
-        type: switch
-        path: /switch/board2
-        channel: 7
+      #driver:
+      #  type: switch
+      #  path: /switch/board2
+      #  channel: 7
     encoder:
       type: absolute
-      path: /encoder/sensor207
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
 
 buses:
-  - path: /modbus/bus0
+  - path: /modbus/$NAME
     driver:
       type: modbus_rtu
-      serial: /dev/ttyS0
-      data: 115200
-      parity: 0
-      stop: 1
-  - path: /modbus/bus1
-    driver:
-      type: modbus_rtu
-      serial: /dev/ttyS1
-      data: 115200
-      parity: 0
-      stop: 1
+      serial_is_remote: false
+      serial_dev_name: /dev/ttyAMA0
+      serial_baud_rate: 115200
+      serial_data: 8
+      serial_parity: false
+      serial_stop: 1
+      serial_flow_control: true
+      serial_prefix: /serial/rtu0
+      modbus_prefix: $PATH

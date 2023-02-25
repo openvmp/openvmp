@@ -13,14 +13,10 @@
 
 namespace openvmp_hardware_configuration {
 
-Brake::Brake(const std::string &joint, const YAML::Node &node)
-    : logger_{rclcpp::get_logger("openvmp_hardware_configuration::Brake(" +
-                                 joint + ")")} {
-  if (!node || node.IsNull() || !node.IsMap()) {
-    RCLCPP_ERROR(logger_, "Incorrect syntax");
-    return;
-  }
-
+Brake::Brake(const std::string &joint,
+             const YAML::Node &node,
+             const std::string &id)
+    : Device(joint, node, id) {
   // auto type = node["type"].as<std::string>();
 
   // if (type == "switch") {
@@ -30,7 +26,6 @@ Brake::Brake(const std::string &joint, const YAML::Node &node)
   //   return;
   // }
 
-  path_ = node["path"].as<std::string>();
   torque_ = node["torque"].as<double>();
   if (node["engagedByDefault"]) {
     engaged_by_default_ = node["engagedByDefault"].as<bool>();

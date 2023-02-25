@@ -30,7 +30,7 @@ drivers_map = {
     },
     "brake": {
         "fake": ["brake", "fake"],
-        "switch": ["brake_switch", "brake_switch_standalone"],
+        "switch": ["brake_switch", "brake_standalone"],
     },
     "encoder": {
         # "fake": ["encoder", "fake"],
@@ -70,15 +70,15 @@ class HardwareManagerNode(Node):
         for joint in joints:
             if "brake" in joint:
                 self.driver_instantiate(
-                    joint["name"] + "-brake", "brake", joint["brake"]
+                    "joint_" + joint["name"] + "_brake", "brake", joint["brake"]
                 )
             if "encoder" in joint:
                 self.driver_instantiate(
-                    joint["name"] + "-encoder", "encoder", joint["encoder"]
+                    "joint_" + joint["name"] + "_encoder", "encoder", joint["encoder"]
                 )
             if "actuator" in joint:
                 self.driver_instantiate(
-                    joint["name"] + "-actuator", "actuator", joint["actuator"]
+                    "joint_" + joint["name"] + "_actuator", "actuator", joint["actuator"]
                 )
 
         # try:
@@ -91,6 +91,14 @@ class HardwareManagerNode(Node):
         #         process["proc"].terminate()
 
     def driver_instantiate(self, id, driver_class, obj):
+        name = id
+        if "name" in obj:
+          name = obj["name"]
+        path = "/" + name
+        if "path" in obj:
+          path = obj["path"]
+        path = path.replace("$DRIVER_NAME", name)
+
         self.get_logger().info("Launching a driver for {}".format(obj))
 
         # Determine ROS2 node launch parameters
@@ -107,41 +115,46 @@ class HardwareManagerNode(Node):
         else:
             driver_config = obj["driver"]
             driver = driver_config["type"]
+
+        if "driver" in obj:
+            driver_config = obj["driver"]
             for param in driver_config:
                 if param != "type" and param != "namespace":
+                    value = str(driver_config[param])
+                    value = value.replace("$NAMESPACE", self.get_namespace()
+                    value = value.replace("$DRIVER_NAME", name)
+                    value = value.replace("$PATH", path)
                     params.append("--param")
-                    params.append(param + ":=" + str(driver_config[param]))
+                    params.append(param + ":=" + value)
         driver_pkg = drivers_map[driver_class][driver][0]
         driver_exe = drivers_map[driver_class][driver][1]
         for extra_param in drivers_map[driver_class][driver][2:]:
             params.append(extra_param)
 
-        # Determine
-        path = obj["path"]
-        node_name = os.path.basename(path)
-        namespace = self.get_namespace() + path
+        # Launch the process
+        node_name = "driver_" + name
+        namespace = self.get_namespace()
 
-        proc = subprocess.Popen(
-            [
+        cmd = [
                 "ros2",
                 "run",
                 driver_pkg,
                 driver_exe,
-            ]
-            + [
+            ] + [
                 "--ros-args",
                 "-r",
                 "__node:=" + node_name,
                 "-r",
                 "__ns:=" + namespace,
-            ]
-            + params
-        )
+            ] + params
+        self.get_logger().info("Executing the command: {}".format(cmd))
+        proc = subprocess.Popen(cmd)
         self.processes[id] = {}
         self.processes[id]["id"] = id
         self.processes[id]["driver_class"] = driver_class
         self.processes[id]["obj"] = obj
         self.processes[id]["process"] = proc
+        time.sleep(1)
 
 
 def main(args=None):

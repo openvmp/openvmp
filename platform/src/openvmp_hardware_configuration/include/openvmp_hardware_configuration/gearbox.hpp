@@ -11,6 +11,7 @@
 #define OPENVMP_HARDWARE_CONFIGURATION_GEARBOX_H
 
 #include "rclcpp/rclcpp.hpp"
+#include "openvmp_hardware_configuration/device.hpp"
 
 namespace YAML {
 class Node;
@@ -18,10 +19,9 @@ class Node;
 
 namespace openvmp_hardware_configuration {
 
-class Gearbox {
+class Gearbox : public Device {
  public:
-  Gearbox(const std::string &, const YAML::Node &);
-
+  Gearbox(const std::string &, const YAML::Node &, const std::string &);
   virtual ~Gearbox() {}
 
   enum Type { WORM, PLANETARY };
@@ -31,8 +31,6 @@ class Gearbox {
   Type get_type() const { return type_; }
 
  private:
-  rclcpp::Logger logger_;
-
   Type type_;
   double ratio_;
 };

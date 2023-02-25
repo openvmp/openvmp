@@ -16,52 +16,68 @@ class ActionClientNode(Node):
 
         self.brake_clients = {}
         self.brake_clients["front_turn_table_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake100/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_turn_table_joint_brake/command",
         )
         self.brake_clients["front_body_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake101/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_body_joint_brake/command",
         )
         self.brake_clients["front_left_arm_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake102/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_left_arm_joint_brake/command",
         )
         self.brake_clients["front_left_arm_inner_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake103/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_left_arm_inner_joint_brake/command",
         )
         self.brake_clients["front_left_arm_wheel_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake104/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_left_arm_wheel_joint_brake/command",
         )
         self.brake_clients["front_right_arm_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake105/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_right_arm_joint_brake/command",
         )
         self.brake_clients["front_right_arm_inner_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake106/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_right_arm_inner_joint_brake/command",
         )
         self.brake_clients["front_right_arm_wheel_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake107/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_front_right_arm_wheel_joint_brake/command",
         )
         self.brake_clients["rear_turn_table_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake200/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_turn_table_joint_brake/command",
         )
         self.brake_clients["rear_body_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake201/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_body_joint_brake/command",
         )
         self.brake_clients["rear_left_arm_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake202/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_left_arm_joint_brake/command",
         )
         self.brake_clients["rear_left_arm_inner_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake203/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_left_arm_inner_joint_brake/command",
         )
         self.brake_clients["rear_left_arm_wheel_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake204/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_left_arm_wheel_joint_brake/command",
         )
         self.brake_clients["rear_right_arm_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake205/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_right_arm_joint_brake/command",
         )
         self.brake_clients["rear_right_arm_inner_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake206/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_right_arm_inner_joint_brake/command",
         )
         self.brake_clients["rear_right_arm_wheel_joint"] = self.create_client(
-            BrakeCommand, "/openvmp/robot_" + id + "/brake207/command"
+            BrakeCommand,
+            "/openvmp/robot_" + id + "/joint_rear_right_arm_inner_joint_brake/command",
         )
         for joint in self.brake_clients:
             self.brake_clients[joint].wait_for_service()

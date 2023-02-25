@@ -11,6 +11,7 @@
 #define OPENVMP_HARDWARE_CONFIGURATION_ACTUATOR_H
 
 #include "rclcpp/rclcpp.hpp"
+#include "openvmp_hardware_configuration/device.hpp"
 
 namespace YAML {
 class Node;
@@ -18,10 +19,11 @@ class Node;
 
 namespace openvmp_hardware_configuration {
 
-class Actuator {
+class Actuator : public Device {
  public:
-  Actuator(const std::string &joint_name, const YAML::Node &node);
-
+  Actuator(const std::string &joint_name,
+           const YAML::Node &node,
+           const std::string &id);
   virtual ~Actuator() {}
 
   enum Type { STEPPER };
@@ -31,10 +33,7 @@ class Actuator {
   double get_torque_stalling() const { return torque_stalling_; }
 
  private:
-  rclcpp::Logger logger_;
-
   Type type_;
-  std::string path_;
   double torque_;
   double torque_detent_;
   double torque_stalling_;
