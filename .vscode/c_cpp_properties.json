@@ -1,19 +1,19 @@
 {
-    "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "compileCommands": "${workspaceFolder}/platform/build/compile_commands.json",
-            "cStandard": "c99",
-            "cppStandard": "c++14",
-            "intelliSenseMode": "linux-gcc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/platform/src/*/include",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/gcc",
+      "compileCommands": "${workspaceFolder}/platform/build/compile_commands.json",
+      "cStandard": "c99",
+      "cppStandard": "c++14",
+      "intelliSenseMode": "linux-gcc-x64",
+      "configurationProvider": "ms-vscode.cmake-tools"
+    }
+  ],
+  "version": 4
 }

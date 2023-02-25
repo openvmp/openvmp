@@ -16,20 +16,25 @@
   "clang-format.executable": "/usr/local/bin/clang-format",
   "clang-format.style": "Google",
   "files.exclude": {
+    ".git/**": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/license.svg": true,
+    "**/LICENSE.txt": true,
+    "models/generated_files/**": true,
     "platform/build/**": true,
     "platform/install/**": true,
     "platform/log/**": true,
-    "platform/src/third_party__yaml-cpp": true,
-    "**/license.svg": true,
-    "**/LICENSE.txt": true,
-    "**/__pycache__": true
+    "platform/src/third_party": true
   },
   "yaml.format.enable": true,
-  "git.autoRepositoryDetection": true,
+  "git.autoRepositoryDetection": false,
   "git.detectSubmodules": true,
-  "git.detectSubmodulesLimit": 30,
+  "git.detectSubmodulesLimit": 50,
   "git.scanRepositories": [
     "platform/src",
+    "models",
+    "models/parts/gobilda",
   ],
   "C_Cpp.clang_format_path": "/usr/local/bin/clang-format",
   "files.associations": {
