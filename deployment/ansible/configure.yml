@@ -3,7 +3,7 @@
   hosts: openvmp-pi
 
   tasks:
-    # Basic configuration
+    # OS configuration
     - name: Configure the moto
       ansible.builtin.lineinfile:
         path: /root/.bashrc
@@ -68,7 +68,7 @@
         update_cache: false
         state: present
 
-    # Source code repository
+    # Robot source code
     - name: Creating source code repositories on the targets
       shell: git init openvmp
       args:
@@ -112,3 +112,28 @@
         # TODO(clairbee): creates: List all submodules here
       environment:
         GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+    # Robot configuration
+    - name: Create the folder to persist configuration
+      ansible.builtin.file:
+        path: /root/.openvmp
+        state: directory
+        mode: "0755"
+    - name: Give this robot a name
+      ansible.builtin.copy:
+        dest: /root/.openvmp/id
+        content: "{{ lookup('community.general.random_string', upper=true, lower=false, numbers=false, special=false, length=1) }}{{ lookup('community.general.random_string', upper=true, lower=false, numbers=true, special=false, length=3) }}"
+        force: false
+    - name: Helper script to set the environment variables
+      ansible.builtin.copy:
+        dest: /root/.openvmp/env.sh
+        content: |
+          source /opt/ros/humble/setup.bash
+          source /root/openvmp/platform/install/local_setup.bash
+          export ROBOT_ID=$(cat /root/.openvmp/id)
+        mode: 0755
+    - name: Set the environment variables on each login session
+      ansible.builtin.lineinfile:
+        path: /root/.bashrc
+        line: source /root/.openvmp/env.sh
+        create: true

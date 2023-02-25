@@ -36,8 +36,10 @@ That's the inventory section used by all other OpenVMP Ansible playbooks.
 
 ```ini
 [openvmp-pi]
-root@<<<put your Raspberry PI WiFi IPs here>>>
+root@<<<put your Raspberry PI WiFi IP here>>> robot_kind=don1
 ```
+
+Please, note, `don1` is the only `robot_kind` supported by OpenVMP at the moment.
 
 ### Configuration
 

@@ -30,6 +30,3 @@ flowchart TB
     omchw -.-> ohm
     ohc --> ohsg
 ```
-
-
-![ROS2 package for robot hardware specifications: openvmp\_hardware\_configuration](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FREADME.md&dt=ROS2%20package%20for%20robot%20hardware%20specifications)

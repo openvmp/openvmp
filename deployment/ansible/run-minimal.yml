@@ -3,3 +3,14 @@
   hosts: openvmp-pi
 
   tasks:
+    - name: Create the systemd service for the 'drivers' subsystem
+      template:
+        src: templates/systemd.service
+        dest: /lib/systemd/system/openvmp-drivers.service
+      vars:
+        subsystem_name: drivers
+        service_description: "OpenVMP subsystem: device drivers"
+    - name: Launch the 'drivers' subsystem
+      systemd:
+        name: openvmp-drivers
+        state: restarted
