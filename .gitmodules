@@ -49,3 +49,6 @@
 [submodule "models"]
 	path = models
 	url = git@github.com:openvmp/openvmp-models.git
+[submodule "platform/src/brake_switch"]
+	path = platform/src/brake_switch
+	url = git@github.com:openvmp/brake_switch.git
