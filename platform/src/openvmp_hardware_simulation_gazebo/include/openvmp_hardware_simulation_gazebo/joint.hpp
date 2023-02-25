@@ -17,6 +17,7 @@
 #include "openvmp_hardware_configuration/configuration.hpp"
 #include "openvmp_hardware_simulation_gazebo/actuator.hpp"
 #include "openvmp_hardware_simulation_gazebo/brake.hpp"
+#include "openvmp_hardware_simulation_gazebo/device_node.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace openvmp_hardware_simulation_gazebo {
@@ -39,8 +40,8 @@ class Joint {
   gazebo::physics::JointPtr joint_;
   std::shared_ptr<openvmp_hardware_configuration::Joint> config_;
 
-  std::shared_ptr<Actuator> actuator_;
-  std::shared_ptr<Brake> brake_;
+  std::shared_ptr<DeviceNode<Actuator, openvmp_hardware_configuration::Actuator>> actuator_;
+  std::shared_ptr<DeviceNode<Brake, openvmp_hardware_configuration::Brake>> brake_;
 };
 
 }  // namespace openvmp_hardware_simulation_gazebo

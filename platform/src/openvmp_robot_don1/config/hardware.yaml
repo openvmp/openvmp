@@ -18,7 +18,6 @@ joints:
       driver:
         type: em2rs
         stepper_driver_model: DM556RS
-        stepper_prefix: $PATH
         modbus_prefix: /modbus/bus0
         modbus_is_remote: true
     brake:
@@ -72,9 +71,9 @@ joints:
       #  channel: 2
     encoder:
       type: absolute
-      driver:
-        type: amt21
-        ppr: 1000
+      #driver:
+      #  type: amt21
+      #  ppr: 1000
   - name: front_left_arm_inner_joint
     gearbox:
       ratio: 10
@@ -350,7 +349,7 @@ joints:
       #  ppr: 1000
 
 buses:
-  - path: /modbus/$NAME
+  - path: /modbus/$DRIVER_NAME
     driver:
       type: modbus_rtu
       serial_is_remote: false
@@ -361,4 +360,3 @@ buses:
       serial_stop: 1
       serial_flow_control: true
       serial_prefix: /serial/rtu0
-      modbus_prefix: $PATH

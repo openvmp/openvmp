@@ -11,13 +11,12 @@ from openvmp_hardware_configuration_py import config
 
 drivers_map = {
     "bus": {
-        "modbus_rtu": ["modbus_rtu", "modbus_rtu_standalone"],
+        "modbus_rtu": ["modbus_rtu", "modbus_rtu_standalone", "--param", "modbus_prefix:=$PATH"],
     },
     "camera": {
         # "fake": [
         #     "usb_camera_driver",
         #     "usb_camera_driver_node",
-        #     "--ros-args",
         #     "--param",
         #     "fps:=25.0",
         #     "--param",
@@ -29,8 +28,8 @@ drivers_map = {
         # ],
     },
     "brake": {
-        "fake": ["brake", "fake"],
-        "switch": ["brake_switch", "brake_standalone"],
+        "fake": ["brake", "fake", "--param", "brake_prefix:=$PATH"],
+        "switch": ["brake_switch", "brake_switch_standalone", "--param", "brake_prefix:=$PATH"],
     },
     "encoder": {
         # "fake": ["encoder", "fake"],
@@ -38,7 +37,7 @@ drivers_map = {
     },
     "actuator": {
         # "puldir": ["stepper_driver_puldir", "stepper_driver_puldir_standalone"],
-        "em2rs": ["stepper_driver_em2rs", "stepper_driver_em2rs_standalone"],
+        "em2rs": ["stepper_driver_em2rs", "stepper_driver_em2rs_standalone", "--param", "stepper_prefix:=$PATH"],
     },
 }
 
@@ -121,15 +120,19 @@ class HardwareManagerNode(Node):
             for param in driver_config:
                 if param != "type" and param != "namespace":
                     value = str(driver_config[param])
-                    value = value.replace("$NAMESPACE", self.get_namespace()
-                    value = value.replace("$DRIVER_NAME", name)
-                    value = value.replace("$PATH", path)
                     params.append("--param")
                     params.append(param + ":=" + value)
         driver_pkg = drivers_map[driver_class][driver][0]
         driver_exe = drivers_map[driver_class][driver][1]
         for extra_param in drivers_map[driver_class][driver][2:]:
             params.append(extra_param)
+
+        params_resolved = []
+        for param in params:
+            param = param.replace("$NAMESPACE", self.get_namespace())
+            param = param.replace("$DRIVER_NAME", name)
+            param = param.replace("$PATH", path)
+            params_resolved.append(param)
 
         # Launch the process
         node_name = "driver_" + name
@@ -146,7 +149,7 @@ class HardwareManagerNode(Node):
                 "__node:=" + node_name,
                 "-r",
                 "__ns:=" + namespace,
-            ] + params
+            ] + params_resolved
         self.get_logger().info("Executing the command: {}".format(cmd))
         proc = subprocess.Popen(cmd)
         self.processes[id] = {}

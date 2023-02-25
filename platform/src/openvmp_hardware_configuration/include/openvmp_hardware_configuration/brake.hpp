@@ -24,6 +24,7 @@ class Brake : public Device {
   Brake(const std::string &, const YAML::Node &, const std::string &);
   virtual ~Brake() {}
 
+  std::string get_prefix() const;
   double get_torque() const { return torque_; }
   bool get_engaged_by_default() const { return engaged_by_default_; };
 

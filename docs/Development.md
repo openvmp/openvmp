@@ -30,6 +30,7 @@ sudo apt install -y ros-humble-ros-testing socat xterm
 
 # The following packages are required for deployment purposes only
 sudo apt install -y ansible
+ansible-galaxy collection install community.general
 ```
 
 ### Visual Studio Code

@@ -32,4 +32,8 @@ Brake::Brake(const std::string &joint,
   }
 }
 
+std::string Brake::get_prefix() const {
+ return "/joint_" + get_joint() + "_brake";
+}
+
 }  // namespace openvmp_hardware_configuration

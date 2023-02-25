@@ -1,5 +1,5 @@
 ---
-- name: Setup new Raspberry PI for OpenVMP
+- name: Build OpenVMP on the target boards
   hosts: openvmp-pi
 
   tasks:

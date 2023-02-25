@@ -38,4 +38,8 @@ Actuator::Actuator(const std::string &joint,
   }
 }
 
+std::string Actuator::get_prefix() const {
+ return "/joint_" + get_joint() + "_brake";
+}
+
 }  // namespace openvmp_hardware_configuration

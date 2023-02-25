@@ -20,8 +20,6 @@ namespace openvmp_hardware_simulation_gazebo {
 class Node : public rclcpp::Node {
  public:
   Node(const std::string &ns);
-
- private:
 };
 
 }  // namespace openvmp_hardware_simulation_gazebo

@@ -15,9 +15,7 @@ namespace openvmp_hardware_simulation_gazebo {
 
 Brake::Brake(rclcpp::Node *node, std::weak_ptr<Joint> joint,
              std::shared_ptr<openvmp_hardware_configuration::Brake> config)
-    : brake::Interface(node,
-                       node->get_effective_namespace() + config->get_path(),
-                       config->get_engaged_by_default()),
+    : brake::Interface(node, config->get_engaged_by_default()),
       joint_{joint} {
   torque_ = config->get_torque();
 }

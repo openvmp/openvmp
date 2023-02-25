@@ -23,10 +23,13 @@ Device::Device(const std::string &joint,
     return;
   }
 
+  joint_ = joint;
+
   name_ = id;
   if (node["name"]) {
     name_ = node["name"].as<std::string>();
   }
+
   path_ = "/" + name_;
   if (node["path"]) {
     path_ = node["path"].as<std::string>();

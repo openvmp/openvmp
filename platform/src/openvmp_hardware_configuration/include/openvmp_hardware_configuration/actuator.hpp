@@ -28,6 +28,7 @@ class Actuator : public Device {
 
   enum Type { STEPPER };
 
+  std::string get_prefix() const;
   double get_torque() const { return torque_; }
   double get_torque_detent() const { return torque_detent_; }
   double get_torque_stalling() const { return torque_stalling_; }
