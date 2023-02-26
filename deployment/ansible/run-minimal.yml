@@ -15,7 +15,7 @@
       systemd:
         name: openvmp-drivers
         state: restarted
-        enabled: false
+        enabled: true
 
     # Reflection
     - name: Create the systemd service for the 'reflection' subsystem
@@ -29,4 +29,4 @@
       systemd:
         name: openvmp-reflection
         state: restarted
-        enabled: false
+        enabled: true
