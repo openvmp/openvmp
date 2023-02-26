@@ -1,4 +1,6 @@
 ---
+- import_playbook: run-minimal.yml
+
 - name: Run the complete set of OpenVMP software on the target
   hosts: openvmp-pi
 

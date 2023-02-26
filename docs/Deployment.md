@@ -71,8 +71,8 @@ ansible-playbook ./build.yml
 
 ### Launching the minimal set of services
 
-Use the following commands to run OpenVMP device drivers software
-on the target boards:
+Use the following commands to run OpenVMP device drivers and other basic
+software on the target boards:
 
 ```sh
 cd deployment/ansible
@@ -92,15 +92,17 @@ ansible-playbook ./run-full.yml
 ### Testing connectivity with development machines
 
 Once some services are running on the target boards,
-other robot subsystems can be launched and tested on the development machine.
+it's possible to interact with them from the development machine.
 Use the following command on the development machines to confirm
-that the target machines is visible to ROS2 on the development machine:
+that the target machines are visible to ROS2 on the development machine:
 
 ```sh
 ros2 node list
+ros2 topic list
+ros2 service list
 ```
 
-The output contains the IDs assigned to the target robots.
+Please, note, the output contains the IDs assigned to the target robots.
 
 If there is no output, check the firewall settings on the development machine
 to confirm that they allow ROS2 network connections.
@@ -119,6 +121,12 @@ stepper motor driver of the front turn table joint
 (the one which turns the front limbs left and right relative to the main robot
 body).
 
+Use the following command to move some joints around:
+
+```sh
+ros2 service call /openvmp/robot_<<<robot_ID_goes_here>>>/joint_front_turn_table_joint_actuator/velocity/set stepper_driver/srv/VelocitySet '{"velocity":2.0}'
+```
+
 ### Testing robot software on the development machine
 
 While the device drivers (and, potentially, other OpenVMP subsystems)
@@ -130,12 +138,5 @@ testing and troubleshooting purposes.
 ros2 launch openvmp_robot robot.launch.py kind:=don1 id:=<<<robot_ID_goes_here>>> subsystem:=<<<robot_subsystem_name_goes_here>>>
 ```
 
-The list of available subsystems may evolve over time.
-The following subsystems should suffice to control the robot which has only device drivers running:
-
-- `reflection`
-- `motion_control`
-- `teleop`
-
-If the robot is running the full set of OpenVMP software then the only subsystem
+If the robot is running the minimal set of OpenVMP software then the only subsystem
 required to control the robot remotely is `teleop`.

@@ -3,6 +3,7 @@
   hosts: openvmp-pi
 
   tasks:
+    # Drivers
     - name: Create the systemd service for the 'drivers' subsystem
       template:
         src: templates/systemd.service
@@ -14,3 +15,18 @@
       systemd:
         name: openvmp-drivers
         state: restarted
+        enabled: false
+
+    # Reflection
+    - name: Create the systemd service for the 'reflection' subsystem
+      template:
+        src: templates/systemd.service
+        dest: /lib/systemd/system/openvmp-reflection.service
+      vars:
+        subsystem_name: reflection
+        service_description: "OpenVMP subsystem: reflection"
+    - name: Launch the 'reflection' subsystem
+      systemd:
+        name: openvmp-reflection
+        state: restarted
+        enabled: false
