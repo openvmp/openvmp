@@ -37,6 +37,11 @@
         path: /boot/firmware/config.txt
         line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
         create: false
+    - name: Setup RaspberryPI UART5 for RS485
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtoverlay=uart5"
+        create: false
     - name: Disable unattended upgrades to be in control
       ansible.builtin.apt:
         pkg:
