@@ -19,6 +19,7 @@ joints:
         type: em2rs
         stepper_driver_model: DM556RS
         modbus_prefix: /modbus/bus0
+        modbus_leaf_id: 2
         modbus_is_remote: true
     brake:
       torque: 0.5
