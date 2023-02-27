@@ -15,7 +15,7 @@
   <depend>builtin_interfaces</depend>
 
   <!--<exec_depend>openvmp_hardware_simulation_gazebo</exec_depend>-->
-  <exec_depend>openvmp_world_simulation_gazebo</exec_depend>
+  <!--<exec_depend>openvmp_world_simulation_gazebo</exec_depend>-->
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>xacro</exec_depend>
