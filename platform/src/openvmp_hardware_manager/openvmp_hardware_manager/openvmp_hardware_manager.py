@@ -2,6 +2,7 @@ import sys
 import os
 import time
 import subprocess
+import importlib
 import rclpy
 from rclpy.node import Node
 from rclpy.parameter import Parameter
@@ -11,7 +12,12 @@ from openvmp_hardware_configuration_py import config
 
 drivers_map = {
     "bus": {
-        "modbus_rtu": ["modbus_rtu", "modbus_rtu_standalone", "--param", "modbus_prefix:=$PATH"],
+        "modbus_rtu": [
+            "modbus_rtu",
+            "modbus_rtu_standalone",
+            "--param",
+            "modbus_prefix:=$PATH",
+        ],
     },
     "camera": {
         # "fake": [
@@ -29,7 +35,12 @@ drivers_map = {
     },
     "brake": {
         "fake": ["brake", "fake", "--param", "brake_prefix:=$PATH"],
-        "switch": ["brake_switch", "brake_switch_standalone", "--param", "brake_prefix:=$PATH"],
+        "switch": [
+            "brake_switch",
+            "brake_switch_standalone",
+            "--param",
+            "brake_prefix:=$PATH",
+        ],
     },
     "encoder": {
         # "fake": ["encoder", "fake"],
@@ -37,7 +48,12 @@ drivers_map = {
     },
     "actuator": {
         # "puldir": ["stepper_driver_puldir", "stepper_driver_puldir_standalone"],
-        "em2rs": ["stepper_driver_em2rs", "stepper_driver_em2rs_standalone", "--param", "stepper_prefix:=$PATH"],
+        "em2rs": [
+            "stepper_driver_em2rs",
+            "stepper_driver_em2rs_standalone",
+            "--param",
+            "stepper_prefix:=$PATH",
+        ],
     },
 }
 
@@ -77,7 +93,9 @@ class HardwareManagerNode(Node):
                 )
             if "actuator" in joint:
                 self.driver_instantiate(
-                    "joint_" + joint["name"] + "_actuator", "actuator", joint["actuator"]
+                    "joint_" + joint["name"] + "_actuator",
+                    "actuator",
+                    joint["actuator"],
                 )
 
         # try:
@@ -92,16 +110,17 @@ class HardwareManagerNode(Node):
     def driver_instantiate(self, id, driver_class, obj):
         name = id
         if "name" in obj:
-          name = obj["name"]
+            name = obj["name"]
         path = "/" + name
         if "path" in obj:
-          path = obj["path"]
+            path = obj["path"]
         path = path.replace("$DRIVER_NAME", name)
 
         self.get_logger().info("Launching a driver for {}".format(obj))
 
         # Determine ROS2 node launch parameters
         params = []
+        init = []
         if self.use_fake_hardware or not "driver" in obj:
             driver = "fake"
             if not "fake" in drivers_map[driver_class]:
@@ -114,11 +133,13 @@ class HardwareManagerNode(Node):
         else:
             driver_config = obj["driver"]
             driver = driver_config["type"]
+            if "init" in driver_config:
+                init = driver_config["init"]
 
         if "driver" in obj:
             driver_config = obj["driver"]
             for param in driver_config:
-                if param != "type" and param != "namespace":
+                if param != "type" and param != "init":
                     value = str(driver_config[param])
                     params.append("--param")
                     params.append(param + ":=" + value)
@@ -138,18 +159,22 @@ class HardwareManagerNode(Node):
         node_name = "driver_" + name
         namespace = self.get_namespace()
 
-        cmd = [
+        cmd = (
+            [
                 "ros2",
                 "run",
                 driver_pkg,
                 driver_exe,
-            ] + [
+            ]
+            + [
                 "--ros-args",
                 "-r",
                 "__node:=" + node_name,
                 "-r",
                 "__ns:=" + namespace,
-            ] + params_resolved
+            ]
+            + params_resolved
+        )
         self.get_logger().info("Executing the command: {}".format(cmd))
         proc = subprocess.Popen(cmd)
         self.processes[id] = {}
@@ -157,7 +182,31 @@ class HardwareManagerNode(Node):
         self.processes[id]["driver_class"] = driver_class
         self.processes[id]["obj"] = obj
         self.processes[id]["process"] = proc
-        time.sleep(1)
+
+        for step in init:
+            service = step["service"]
+            service_type = step["type"]
+
+            init_path = namespace + path + service
+            self.get_logger().info("Initializing: {}".format(init_path))
+
+            parts = service_type.split("/")
+            if len(parts) == 2:
+                parts = [parts[0], "srv", parts[1]]
+            module = importlib.import_module(".".join(parts[:-1]))
+            srv_name = parts[-1]
+            srv_module = getattr(module, srv_name)
+            req = srv_module.Request()
+            for key in step:
+                if key == "service" or key == "type":
+                    continue
+                setattr(req, key, step[key])
+
+            client = self.create_client(srv_module, init_path)
+            client.wait_for_service()
+            f = client.call_async(req)
+            rclpy.spin_until_future_complete(self, f)
+            client.destroy()
 
 
 def main(args=None):

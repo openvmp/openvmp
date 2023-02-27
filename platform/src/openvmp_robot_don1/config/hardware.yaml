@@ -21,6 +21,10 @@ joints:
         modbus_prefix: /modbus/bus0
         modbus_leaf_id: 2
         modbus_is_remote: true
+        init:
+          - service: /modbus/set_do1
+            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            value: 0x24
     brake:
       torque: 0.5
       engagedByDefault: true
