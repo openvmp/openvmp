@@ -52,3 +52,12 @@
 [submodule "platform/src/brake_switch"]
 	path = platform/src/brake_switch
 	url = ../brake_switch.git
+[submodule "platform/src/serial_bus"]
+	path = platform/src/serial_bus
+	url = ../serial_bus.git
+[submodule "platform/src/encoder"]
+	path = platform/src/encoder
+	url = ../encoder.git
+[submodule "platform/src/encoder_amt21"]
+	path = platform/src/encoder_amt21
+	url = ../encoder_amt21.git
