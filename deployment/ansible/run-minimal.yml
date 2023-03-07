@@ -17,6 +17,20 @@
         state: restarted
         enabled: true
 
+    # Motion control
+    - name: Create the systemd service for the 'motion_control' subsystem
+      template:
+        src: templates/systemd.service
+        dest: /lib/systemd/system/openvmp-motion-control.service
+      vars:
+        subsystem_name: motion_control
+        service_description: "OpenVMP subsystem: motion_control"
+    - name: Launch the 'motion_control' subsystem
+      systemd:
+        name: openvmp-motion-control
+        state: restarted
+        enabled: true
+
     # Reflection
     - name: Create the systemd service for the 'reflection' subsystem
       template:
