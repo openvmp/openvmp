@@ -14,17 +14,6 @@
 namespace openvmp_hardware_simulation_gazebo {
 
 Node::Node(const std::string &ns)
-    : rclcpp::Node::Node(
-          "openvmp_hardware_simulation_gazebo"
-          // ,
-          //                      rclcpp::NodeOptions().arguments({
-          //                          //  "--ros-args",
-          //                          //  "-r",
-          //                          //  "__ns",
-          //                          //  ns,
-          //                      })
-      ) {
-        (void)ns;
-      }
+    : rclcpp::Node::Node("openvmp_hardware_simulation_gazebo", ns) {}
 
 }  // namespace openvmp_hardware_simulation_gazebo

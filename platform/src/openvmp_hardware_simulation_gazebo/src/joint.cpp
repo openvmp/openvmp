@@ -8,9 +8,9 @@
  */
 
 #include "openvmp_hardware_simulation_gazebo/joint.hpp"
-#include "openvmp_hardware_simulation_gazebo/device_node.hpp"
 
 #include "openvmp_hardware_configuration/gearbox.hpp"
+#include "openvmp_hardware_simulation_gazebo/device_node.hpp"
 
 namespace openvmp_hardware_simulation_gazebo {
 
@@ -21,23 +21,21 @@ Joint::Joint(rclcpp::Node *node, gazebo::physics::JointPtr joint,
 void Joint::init(std::shared_ptr<Joint> shared_this) {
   auto brake_config = config_->get_brake();
   if (brake_config) {
-    brake_ = std::make_shared<DeviceNode<Brake,
-                                         openvmp_hardware_configuration::Brake>
-                             >(
-                "simulation_driver_joint_" + config_->get_name() + "_brake",
-                shared_this, brake_config, "brake_prefix"
-             );
+    brake_ = std::make_shared<
+        DeviceNode<Brake, openvmp_hardware_configuration::Brake> >(
+        node_->get_namespace(),
+        "simulation_driver_joint_" + config_->get_name() + "_brake",
+        shared_this, brake_config, "brake_prefix");
   }
   RCLCPP_DEBUG(node_->get_logger(), "Successfuly initialized the brake");
 
   auto actuator_config = config_->get_actuator();
   if (actuator_config) {
-    actuator_ = std::make_shared<DeviceNode<Actuator,
-                                      openvmp_hardware_configuration::Actuator>
-                                >(
-                 "simulation_driver_joint_" + config_->get_name() + "_actuator",
-                 shared_this, actuator_config, "actuator_prefix"
-                );
+    actuator_ = std::make_shared<
+        DeviceNode<Actuator, openvmp_hardware_configuration::Actuator> >(
+        node_->get_namespace(),
+        "simulation_driver_joint_" + config_->get_name() + "_actuator",
+        shared_this, actuator_config, "actuator_prefix");
   }
   RCLCPP_DEBUG(node_->get_logger(), "Successfuly initialized the actuator");
 
