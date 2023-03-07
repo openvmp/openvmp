@@ -61,3 +61,6 @@
 [submodule "platform/src/encoder_amt21"]
 	path = platform/src/encoder_amt21
 	url = ../encoder_amt21.git
+[submodule "platform/src/actuator"]
+	path = platform/src/actuator
+	url = ../actuator.git

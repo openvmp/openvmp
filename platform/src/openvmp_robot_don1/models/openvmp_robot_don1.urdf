@@ -6,7 +6,8 @@
   <!-- xmlns="http://www.ros.org/wiki/urdf"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xacro="http://www.ros.org/wiki/xacro" -->
-  <!-- xsi:schemaLocation="http://www.ros.org/wiki/urdf https://raw.github.com/laas/urdf_validator/master/urdf.xsd" -->
+  <!-- xsi:schemaLocation="http://www.ros.org/wiki/urdf
+  https://raw.github.com/laas/urdf_validator/master/urdf.xsd" -->
 
 
   <!-- ****************** COMMAND LINE PARAMETERS *******************************  -->
@@ -14,7 +15,8 @@
   <xacro:arg name="simulate" default="false" />
   <xacro:arg name="fake_hardware" default="false" />
   <xacro:arg name="namespace" default="" />
-  <xacro:arg name="controllers_yaml_path" default="$(find openvmp_robot_don1)/config/ros2_controllers.yaml" />
+  <xacro:arg name="controllers_yaml_path"
+    default="$(find openvmp_robot_don1)/config/ros2_controllers.yaml" />
   <xacro:arg name="has_extra_parameters_file" default="false" />
   <xacro:arg name="extra_parameters_file" default="" />
   <xacro:arg name="mesh_extension" default="stl" />
@@ -28,7 +30,6 @@
   </xacro:if>
 
   <!-- ****************** ROBOT CONSTANTS *******************************  -->
-  <!-- <plugin>remote_motion_hardware/ActuatorInterface</plugin> -->
   <!-- Define the size of the robot's main chassis in meters -->
   <xacro:property name="board_length" value="0.6" />
   <xacro:property name="board_width" value="0.2" />
@@ -97,7 +98,8 @@
     <inertial>
       <xacro:insert_block name="origin" />
       <mass value="${m}" />
-      <inertia ixx="${(m/12) * (y*y + z*z)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (x*x + z*z)}" iyz="0.0" izz="${(m/12) * (x*x + y*y)}" />
+      <inertia ixx="${(m/12) * (y*y + z*z)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (x*x + z*z)}"
+        iyz="0.0" izz="${(m/12) * (x*x + y*y)}" />
     </inertial>
   </xacro:macro>
 
@@ -105,7 +107,8 @@
     <inertial>
       <xacro:insert_block name="origin" />
       <mass value="${m}" />
-      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy="0" ixz="0" iyy="${(m/12) * (3*r*r + h*h)}" iyz="0" izz="${(m/2) * (r*r)}" />
+      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy="0" ixz="0" iyy="${(m/12) * (3*r*r + h*h)}"
+        iyz="0" izz="${(m/2) * (r*r)}" />
     </inertial>
   </xacro:macro>
 
@@ -263,7 +266,8 @@
 
   <!-- *********************** DRIVE WHEELS ******************************  -->
 
-  <xacro:macro name="wheel" params="prefix parent limit radius width x_off y_off z_off x_angle collision:=true dir:=1">
+  <xacro:macro name="wheel"
+    params="prefix parent limit radius width x_off y_off z_off x_angle collision:=true dir:=1">
     <link name="${prefix}_link">
       <visual>
         <!-- <origin xyz="${x_off} ${y_off} ${z_off}" rpy="${x_angle} 0 0"/> -->
@@ -336,7 +340,7 @@
             <center>0.5 0.5</center>
           </distortion>
         </camera>
-        <plugin name="plugin_name_${prefix}_${index}" filename="libgazebo_ros_camera.so">
+        <plugin name="camera_${prefix}_${index}" filename="libgazebo_ros_camera.so">
           <ros>
             <!-- <namespace>stereo</namespace> -->
             <remapping>~/image_raw:=image_raw</remapping>
@@ -413,7 +417,9 @@
     <joint name="${prefix}_inner_joint" type="revolute">
       <parent link="${prefix}_lower_part" />
       <child link="${prefix}_upper_part" />
-      <origin xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048 + wheel_width/2)} ${wheel_radius+arm_height_delta+arm_height_shortage}" rpy="0 0 0" />
+      <origin
+        xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048 + wheel_width/2)} ${wheel_radius+arm_height_delta+arm_height_shortage}"
+        rpy="0 0 0" />
       <limit upper="${pi*0.7}" lower="${-pi*0.9}" effort="10" velocity="1.0" />
       <axis xyz="${-armdir*0.1} 0 0" />
     </joint>
@@ -421,7 +427,8 @@
 
     <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part" limit="0"
       radius="${wheel_radius}" width="${wheel_width}"
-      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}" z_off="-${wheel_radius+arm_height_delta}" x_angle="${pi/2}"
+      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}"
+      z_off="-${wheel_radius+arm_height_delta}" x_angle="${pi/2}"
     />
 
 
@@ -458,7 +465,8 @@
       <visual>
         <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)" scale="0.001 ${-armdir*0.001} 0.001" />
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)"
+            scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
         <material name="Red">
           <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
@@ -467,7 +475,8 @@
       <collision>
         <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)" scale="0.001 ${-armdir*0.001} 0.001" />
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)"
+            scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
       </collision>
       <xacro:box_inertia m="0.5" x="0.048" y="0.048" z="0.048">
@@ -580,8 +589,9 @@
     </joint>
     <xacro:gazebo_joint name="${prefix}_camera_servo_upper_joint" />
 
-    <!-- optical frame for the stereo camera, with z-forward notation, this is the frame stereo camera images users should refer to -->
-    <link name="${prefix}_camera_0"/>
+    <!-- optical frame for the stereo camera, with z-forward notation, this is the frame stereo
+    camera images users should refer to -->
+    <link name="${prefix}_camera_0" />
     <joint name="${prefix}_camera_0_joint" type="fixed">
       <origin xyz="0.024 0.062 0.0" rpy="0.0 0.0 ${pi/2}" />
       <parent link="${prefix}_camera" />
@@ -589,7 +599,8 @@
     </joint>
     <link name="${prefix}_camera_optical_0" type="camera" />
     <joint name="${prefix}_camera_optical_0_joint" type="fixed">
-      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to z-forward camera coords -->
+      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to
+      z-forward camera coords -->
       <parent link="${prefix}_camera_0" />
       <child link="${prefix}_camera_optical_0" />
     </joint>
@@ -601,9 +612,10 @@
     </joint>
     <link name="${prefix}_camera_optical_1" type="camera" />
     <joint name="${prefix}_camera_optical_1_joint" type="fixed">
-      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> rotate frame from x-forward to z-forward camera coords
-      <parent link="${prefix}_camera_1" />
-      <child link="${prefix}_camera_optical_1" />
+      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> rotate frame from x-forward to
+      z-forward camera coords <parent link="${prefix}_camera_1" />
+      <child
+        link="${prefix}_camera_optical_1" />
     </joint>
 
     <xacro:cam prefix="${prefix}" index="0" dir="${dir}" armdir="${armdir}" />
@@ -613,7 +625,8 @@
   <xacro:macro name="robot_half" params="prefix dir">
     <xacro:wheel prefix="${prefix}_turn_table" parent="base_link" limit="${pi/2}"
       radius="${turn_table_radius}" width="${turn_table_height}"
-      x_off="${dir*turn_table_xoff}" y_off="0.0" z_off="${base_height_gap + base_height/8 - turn_table_height/2}" x_angle="0"
+      x_off="${dir*turn_table_xoff}" y_off="0.0"
+      z_off="${base_height_gap + base_height/8 - turn_table_height/2}" x_angle="0"
       collision="false" dir="-1"
     />
     <!-- dir="${dir}" -->
@@ -710,8 +723,10 @@
     </joint>
     <xacro:gazebo_joint name="${prefix}_body_joint" />
 
-    <xacro:robot_arm prefix="${prefix}_left_arm" parent="${prefix}_body_link" dir="${dir}" armdir="1" />
-    <xacro:robot_arm prefix="${prefix}_right_arm" parent="${prefix}_body_link" dir="${dir}" armdir="-1" />
+    <xacro:robot_arm prefix="${prefix}_left_arm" parent="${prefix}_body_link" dir="${dir}"
+      armdir="1" />
+    <xacro:robot_arm prefix="${prefix}_right_arm" parent="${prefix}_body_link" dir="${dir}"
+      armdir="-1" />
   </xacro:macro>
 
   <xacro:robot_half prefix="front" dir="1" />
@@ -719,6 +734,7 @@
 
   <xacro:macro name="r2c_joint_limit" params="name pmin pmax">
     <joint name="${name}">
+      <param name="prefix">/actuator/${name}</param>
       <state_interface name="position">
         <param name="initial_value">0.0</param>
       </state_interface>
@@ -741,8 +757,10 @@
 
   <xacro:macro name="r2c_quarter" params="prefix side">
     <xacro:r2c_joint_limit name="${prefix}_${side}_arm_joint" pmin="${-pi}" pmax="${pi}" />
-    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_inner_joint" pmin="${-pi*0.9}" pmax="${pi*0.7}" />
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_inner_joint" pmin="${-pi*0.9}"
+      pmax="${pi*0.7}" />
     <joint name="${prefix}_${side}_arm_wheel_joint">
+      <param name="prefix">/actuator/${prefix}_${side}_arm_wheel_joint</param>
       <state_interface name="position">
         <param name="initial_value">0.0</param>
       </state_interface>
@@ -754,8 +772,10 @@
       <command_interface name="velocity" />
       <!-- <command_interface name="effort" /> -->
     </joint>
-    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_camera_servo_lower_joint" pmin="${-pi}" pmax="${pi}" />
-    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_camera_servo_upper_joint" pmin="${-pi}" pmax="${pi}" />
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_camera_servo_lower_joint" pmin="${-pi}"
+      pmax="${pi}" />
+    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_camera_servo_upper_joint" pmin="${-pi}"
+      pmax="${pi}" />
   </xacro:macro>
 
   <xacro:macro name="r2c_half" params="prefix">
@@ -778,7 +798,8 @@
       </xacro:if>
       <xacro:unless value="$(arg simulate)">
         <xacro:unless value="$(arg fake_hardware)">
-          <plugin>remote_hardware_interface/RemoteActuatorInterface</plugin>
+          <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
+          <param name="namespace">${arg namespace}</param>
         </xacro:unless>
       </xacro:unless>
     </hardware>
@@ -844,7 +865,8 @@
       <robot_param_node>$(arg namespace)/robot_state_publisher</robot_param_node> -->
       <parameters>$(arg controllers_yaml_path)</parameters>
     </plugin>
-    <plugin name="openvmp_hardware_simulation_gazebo" filename="libopenvmp_hardware_simulation_gazebo.${plugin_extension}">
+    <plugin name="openvmp_hardware_simulation_gazebo"
+      filename="libopenvmp_hardware_simulation_gazebo.${plugin_extension}">
       <ns>$(arg namespace)</ns>
       <hardware_configuration>$(find openvmp_robot_don1)/config/hardware.yaml</hardware_configuration>
     </plugin>
