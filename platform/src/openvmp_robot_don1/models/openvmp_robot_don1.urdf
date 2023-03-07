@@ -799,7 +799,7 @@
       <xacro:unless value="$(arg simulate)">
         <xacro:unless value="$(arg fake_hardware)">
           <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
-          <param name="namespace">${arg namespace}</param>
+          <param name="namespace">$(arg namespace)</param>
         </xacro:unless>
       </xacro:unless>
     </hardware>

@@ -18,7 +18,7 @@ joints:
       driver:
         type: em2rs
         stepper_driver_model: DM556RS
-        modbus_prefix: /modbus/bus0
+        modbus_prefix: /bus/modbus/rtu0
         modbus_leaf_id: 2
         modbus_is_remote: true
         init:
@@ -53,9 +53,10 @@ joints:
       #  channel: 0
     encoder:
       type: absolute
-      #driver:
-      #  type: amt21
-      #  ppr: 1000
+      driver:
+        type: amt21
+        encoder_model: AMT212E
+        serial_bus_prefix: /bus/rs485/line0
   - name: front_body_joint
     gearbox:
       ratio: 10
@@ -68,7 +69,7 @@ joints:
       driver:
         type: em2rs
         stepper_driver_model: DM556RS
-        modbus_prefix: /modbus/bus0
+        modbus_prefix: /bus/modbus/rtu0
         modbus_leaf_id: 3
         modbus_is_remote: true
         init:
@@ -402,7 +403,7 @@ joints:
       #  ppr: 1000
 
 buses:
-  - path: /modbus/$DRIVER_NAME
+  - path: /bus/modbus/rtu0
     driver:
       type: modbus_rtu
       serial_is_remote: false
@@ -412,4 +413,15 @@ buses:
       serial_parity: false
       serial_stop: 1
       serial_flow_control: true
-      serial_prefix: /serial/rtu0
+      serial_prefix: /serial/modbus_rtu0
+  - path: /bus/rs485/line0
+    driver:
+      type: serial_bus
+      serial_is_remote: false
+      serial_dev_name: /dev/ttyAMA1
+      serial_baud_rate: 115200
+      serial_data: 8
+      serial_parity: false
+      serial_stop: 1
+      serial_flow_control: false
+      serial_prefix: /serial/rs485_line0

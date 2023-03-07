@@ -18,6 +18,12 @@ drivers_map = {
             "--param",
             "modbus_prefix:=$PATH",
         ],
+        "serial_bus": [
+            "serial_bus",
+            "serial_bus_standalone",
+            "--param",
+            "serial_bus_prefix:=$PATH",
+        ],
     },
     "camera": {
         # "fake": [
@@ -44,7 +50,7 @@ drivers_map = {
     },
     "encoder": {
         # "fake": ["encoder", "fake"],
-        # "amt21": ["encoder_amt21", "encoder_amt32_standalone"],
+        "amt21": ["encoder_amt21", "encoder_amt21_standalone"],
     },
     "actuator": {
         # "puldir": ["stepper_driver_puldir", "stepper_driver_puldir_standalone"],
