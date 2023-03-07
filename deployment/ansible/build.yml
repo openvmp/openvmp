@@ -18,6 +18,11 @@
       args:
         chdir: openvmp
         removes: .git/refs/heads/tmp
+    - name: Setting the origin for relative submodule paths
+      shell: git remote add origin https://github.com/openvmp/openvmp.git
+      args:
+        chdir: openvmp
+        creates: .git/refs/remotes/origin
     - name: Checking out or updating the submodules if necessary
       shell: git submodule update --recursive --init
       args:
