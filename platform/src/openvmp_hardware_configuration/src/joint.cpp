@@ -25,10 +25,18 @@ Joint::Joint(const YAML::Node &node)
   logger_ = rclcpp::get_logger("openvmp_hardware_configuration::Joint(" +
                                name_ + ")");
 
-  actuator_ = std::make_shared<Actuator>(name_, node["actuator"], "joint_" + name_ + "_actuator");
-  brake_ = std::make_shared<Brake>(name_, node["brake"], "joint_" + name_ + "_brake");
-  encoder_ = std::make_shared<Encoder>(name_, node["encoder"], "joint_" + name_ + "_encoder");
-  gearbox_ = std::make_shared<Gearbox>(name_, node["gearbox"], "joint_" + name_ + "_gearbox");
+  actuator_ = std::make_shared<Actuator>(name_, node["actuator"],
+                                         "joint_" + name_ + "_actuator");
+  if (node["brake"]) {
+    brake_ = std::make_shared<Brake>(name_, node["brake"],
+                                     "joint_" + name_ + "_brake");
+  }
+  encoder_ = std::make_shared<Encoder>(name_, node["encoder"],
+                                       "joint_" + name_ + "_encoder");
+  if (node["gearbox"]) {
+    gearbox_ = std::make_shared<Gearbox>(name_, node["gearbox"],
+                                         "joint_" + name_ + "_gearbox");
+  }
 }
 
 }  // namespace openvmp_hardware_configuration
