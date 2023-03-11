@@ -13,13 +13,14 @@
 
 namespace openvmp_hardware_configuration {
 
-Actuator::Actuator(const std::string &joint,
-                   const YAML::Node &node,
+Actuator::Actuator(const std::string &joint, const YAML::Node &node,
                    const std::string &id)
     : Device(joint, node, id) {
   auto type = node["type"].as<std::string>();
   if (type == "stepper") {
     type_ = STEPPER;
+  } else if (type == "servo") {
+    type_ = SERVO;
   } else {
     RCLCPP_ERROR(logger_, "Invalid type");
     return;
@@ -38,8 +39,6 @@ Actuator::Actuator(const std::string &joint,
   }
 }
 
-std::string Actuator::get_prefix() const {
- return "/joint_" + get_joint() + "_brake";
-}
+std::string Actuator::get_prefix() const { return "/actuator/" + get_joint(); }
 
 }  // namespace openvmp_hardware_configuration

@@ -30,6 +30,7 @@ class Joint {
   const std::string &get_name() const { return name_; }
 
   std::shared_ptr<Actuator> get_actuator() { return actuator_; }
+  std::shared_ptr<Encoder> get_encoder() { return encoder_; }
   std::shared_ptr<Brake> get_brake() { return brake_; }
   std::shared_ptr<Gearbox> get_gearbox() { return gearbox_; }
   // double get_brake_torque() const;

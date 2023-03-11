@@ -10,8 +10,8 @@
 #ifndef OPENVMP_HARDWARE_CONFIGURATION_ENCODER_H
 #define OPENVMP_HARDWARE_CONFIGURATION_ENCODER_H
 
-#include "rclcpp/rclcpp.hpp"
 #include "openvmp_hardware_configuration/device.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 namespace YAML {
 class Node;
@@ -23,6 +23,8 @@ class Encoder : public Device {
  public:
   Encoder(const std::string &, const YAML::Node &, const std::string &);
   virtual ~Encoder() {}
+
+  std::string get_prefix() const;
 
   // enum Type { ABSOLUTE };
 

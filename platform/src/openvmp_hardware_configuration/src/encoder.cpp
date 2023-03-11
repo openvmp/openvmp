@@ -13,8 +13,7 @@
 
 namespace openvmp_hardware_configuration {
 
-Encoder::Encoder(const std::string &joint,
-                 const YAML::Node &node,
+Encoder::Encoder(const std::string &joint, const YAML::Node &node,
                  const std::string &id)
     : Device(joint, node, id) {
   // auto type = node["type"].as_string();
@@ -27,5 +26,7 @@ Encoder::Encoder(const std::string &joint,
 
   // ppr_ = node["ppr"].as<int>();
 }
+
+std::string Encoder::get_prefix() const { return "/encoder/" + get_joint(); }
 
 }  // namespace openvmp_hardware_configuration

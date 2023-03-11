@@ -13,8 +13,7 @@
 
 namespace openvmp_hardware_configuration {
 
-Brake::Brake(const std::string &joint,
-             const YAML::Node &node,
+Brake::Brake(const std::string &joint, const YAML::Node &node,
              const std::string &id)
     : Device(joint, node, id) {
   // auto type = node["type"].as<std::string>();
@@ -32,8 +31,6 @@ Brake::Brake(const std::string &joint,
   }
 }
 
-std::string Brake::get_prefix() const {
- return "/joint_" + get_joint() + "_brake";
-}
+std::string Brake::get_prefix() const { return "/brake/" + get_joint(); }
 
 }  // namespace openvmp_hardware_configuration
