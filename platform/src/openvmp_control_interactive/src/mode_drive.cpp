@@ -78,8 +78,8 @@ void DriveMode::enter(std::shared_ptr<ControlImpl> from) {
         "rear_right_arm_joint",   "rear_right_arm_inner_joint"};
     point_template_.time_from_start.sec = 0;
     point_template_.time_from_start.nanosec = 500000000ULL;
-    point_template_.positions = {0, 0, 3.14, -3.14/6.0, 3.14, -3.14/6.0,
-                                 0, 0, 3.14, -3.14/6.0, 3.14, -3.14/6.0};
+    point_template_.positions = {0, 0, 3.14, -3.14 / 6.0, 3.14, -3.14 / 6.0,
+                                 0, 0, 3.14, -3.14 / 6.0, 3.14, -3.14 / 6.0};
   }
   RCLCPP_DEBUG(node_->get_logger(), "DriveMode::enter(): templates are ready");
 
@@ -141,6 +141,8 @@ void DriveMode::processFeedback_(
     for (int i : {3, 5, 9, 11}) {
       point.positions[i] -= lift_;
     }
+    point.positions[0] += turn_;
+    point.positions[6] -= turn_;
     msg.points.push_back(point);
     if (trajectory_commands_) {
       trajectory_commands_->publish(msg);
@@ -152,10 +154,13 @@ void DriveMode::processFeedback_(
     turn_ -= feedback->pose.position.y;
     if (turn_ < TURN_LIMIT_BOTTOM) turn_ = TURN_LIMIT_BOTTOM;
     if (turn_ > TURN_LIMIT_TOP) turn_ = TURN_LIMIT_TOP;
-    RCLCPP_INFO(node_->get_logger(), "Turn at %.02f", lift_);
+    RCLCPP_INFO(node_->get_logger(), "Turn at %.02f", turn_);
 
     trajectory_msgs::msg::JointTrajectory msg = msg_template_;
     trajectory_msgs::msg::JointTrajectoryPoint point = point_template_;
+    for (int i : {3, 5, 9, 11}) {
+      point.positions[i] -= lift_;
+    }
     point.positions[0] += turn_;
     point.positions[6] -= turn_;
     msg.points.push_back(point);
