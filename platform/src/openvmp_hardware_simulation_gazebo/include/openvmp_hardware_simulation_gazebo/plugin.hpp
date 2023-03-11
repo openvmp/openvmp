@@ -33,9 +33,12 @@ class OpenVMPSimulationPlugin : public gazebo::ModelPlugin {
   void Load(gazebo::physics::ModelPtr model,
             sdf::ElementPtr plugin_config) override;
 
+  void addSubNode(rclcpp::Node::SharedPtr sub_node_);
+
  private:
   rclcpp::executors::MultiThreadedExecutor exec_;
   std::shared_ptr<Node> node_;
+  std::vector<std::shared_ptr<rclcpp::Node>> sub_nodes_;
   std::shared_ptr<std::thread> node_spinner_;
 
   std::string namespace_;

@@ -98,13 +98,18 @@ void OpenVMPSimulationPlugin::Load(gazebo::physics::ModelPtr model,
 
       auto joint =
           std::make_shared<Joint>(node_.get(), model_joint, joint_config);
-      joint->init(joint);
+      joint->init(this, joint);
       joints_.insert({name, joint});
     } catch (const std::exception &e) {
       RCLCPP_ERROR(node_->get_logger(),
                    "Exception while preparing the joint: %s", e.what());
     }
   }
+}
+
+void OpenVMPSimulationPlugin::addSubNode(rclcpp::Node::SharedPtr sub_node) {
+  sub_nodes_.push_back(sub_node);
+  exec_.add_node(sub_node);
 }
 
 GZ_REGISTER_MODEL_PLUGIN(OpenVMPSimulationPlugin)

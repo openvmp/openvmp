@@ -13,19 +13,16 @@
 #include <memory>
 #include <string>
 
-/* not yet
-#include "actuator/interface.hpp"
-#include "actuator/srv/command.hpp"
-*/
 #include "gazebo/physics/Joint.hh"
 #include "openvmp_hardware_configuration/actuator.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "remote_actuator/implementation.hpp"
 
 namespace openvmp_hardware_simulation_gazebo {
 
 class Joint;
 
-class Actuator /*: public actuator::Interface*/ {
+class Actuator : public remote_actuator::Implementation {
  public:
   Actuator(rclcpp::Node *node, std::weak_ptr<Joint> joint,
            std::shared_ptr<openvmp_hardware_configuration::Actuator> config);
@@ -34,11 +31,10 @@ class Actuator /*: public actuator::Interface*/ {
   double get_friction();
 
  protected:
-  /*
-   virtual void command_handler_real_(
-       const std::shared_ptr<actuator::srv::Command::Request> request,
-       std::shared_ptr<actuator::srv::Command::Response> response) override;
-       */
+  virtual bool has_position() override { return true; }
+  virtual bool has_velocity() override { return true; }
+  virtual void position_set_real_(double) override;
+  virtual void velocity_set_real_(double) override;
 
   std::weak_ptr<Joint> joint_;
 

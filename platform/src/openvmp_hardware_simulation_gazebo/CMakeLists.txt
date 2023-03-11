@@ -19,17 +19,23 @@ find_package(gazebo_ros REQUIRED)
 find_package(sdformat9 REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
 find_package(brake REQUIRED)
+find_package(remote_actuator REQUIRED)
+find_package(remote_encoder REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 link_directories(
   ${gazebo_dev_LIBRARY_DIRS}
   ${brake_LIBRARY_DIRS}
+  ${remote_actuator_LIBRARY_DIRS}
+  ${remote_encoder_LIBRARY_DIRS}
 )
 
 # Logic shared by all targets
 include_directories(
   include
   ${brake_INCLUDE_DIRS}
+  ${remote_actuator_INCLUDE_DIRS}
+  ${remote_encoder_INCLUDE_DIRS}
   ${openvmp_hardware_configuration_INCLUDE_DIRS}
 )
 
@@ -38,12 +44,15 @@ set(project_SOURCE_FILES
   src/node.cpp
   src/joint.cpp
   src/actuator.cpp
+  src/encoder.cpp
   src/brake.cpp
 )
 
 set(project_LIBRARIES
   ${rclcpp_LIBRARIES}
   ${brake_LIBRARIES}
+  ${remote_actuator_LIBRARIES}
+  ${remote_encoder_LIBRARIES}
 )
 
 set(project_DEPENDENCIES
@@ -53,6 +62,8 @@ set(project_DEPENDENCIES
   sdformat9
   openvmp_hardware_configuration
   brake
+  remote_actuator
+  remote_encoder
 )
 
 # Library target
