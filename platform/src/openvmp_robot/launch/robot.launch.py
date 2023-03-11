@@ -67,7 +67,6 @@ def generate_launch_description_real():
         declare_is_simulation_cmd,
         declare_use_fake_hardware_cmd,
         declare_pos_cmd,
-        OpaqueFunction(function=openvmp_subsystem_reflection.launch_desc),
         OpaqueFunction(function=openvmp_subsystem_drivers.launch_desc),
         # TODO(clairbee): subsystem: power_management
         OpaqueFunction(function=openvmp_subsystem_odometry.launch_desc),
@@ -81,6 +80,8 @@ def generate_launch_description_real():
         # TODO(clairbee): subsystem: task_control
         # TODO(clairbee): subsystem: motion_planning
         OpaqueFunction(function=openvmp_subsystem_motion_control.launch_desc),
+        # 'reflection' depends on 'motion_control'
+        OpaqueFunction(function=openvmp_subsystem_reflection.launch_desc),
         # TODO(clairbee): subsystem: navigation
         OpaqueFunction(function=openvmp_subsystem_teleop.launch_desc),
     ]

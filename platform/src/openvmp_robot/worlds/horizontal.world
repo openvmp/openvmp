@@ -2,13 +2,15 @@
 <sdf version="1.7">
   <world name="horizontal">
     <physics type="ode">
-      <max_step_size>0.001</max_step_size>
+      <max_step_size>0.002</max_step_size>
+      <real_time_update_rate>500</real_time_update_rate>
+      <!-- <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
-      <real_time_update_rate>1000</real_time_update_rate>
+      <real_time_update_rate>1000</real_time_update_rate> -->
       <ode>
         <solver>
           <type>quick</type>
-          <iters>1000</iters>
+          <iters>500</iters>
           <sor>1.4</sor>
           <!-- <iters>250</iters>
           <sor>1.4</sor> -->
@@ -18,8 +20,8 @@
           <erp>0.2</erp> -->
           <!-- <cfm>0.00001</cfm> -->
           <!-- <erp>0.8</erp> -->
-          <!-- <contact_max_correcting_vel>0.000001</contact_max_correcting_vel>
-          <contact_surface_layer>0.001</contact_surface_layer> -->
+          <contact_max_correcting_vel>0.000001</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
         </constraints>
       </ode>
     </physics>

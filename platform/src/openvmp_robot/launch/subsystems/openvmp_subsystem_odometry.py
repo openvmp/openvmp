@@ -39,8 +39,7 @@ def launch_desc(context):
     desc = []
 
     # Robot Localization
-    desc.append(
-        Node(
+    ekf_node_cmd = Node(
             package="robot_localization",
             executable="ekf_node",
             # name="ekf_filter_node",
@@ -60,6 +59,7 @@ def launch_desc(context):
                 ("/tf", namespace + "/tf"),
             ],
         )
-    )
+    # TODO(clairbee): temporarily disabled until it's working
+    #desc.append(ekf_node_cmd)
 
     return desc

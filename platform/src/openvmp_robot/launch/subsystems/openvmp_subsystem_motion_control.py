@@ -1,4 +1,6 @@
 import os
+
+from launch.actions import TimerAction
 from launch_ros.actions import Node
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, Command
@@ -20,7 +22,6 @@ def launch_desc(context):
     namespace = openvmp_config.get_namespace(context)
 
     controller_manager_cmd = Node(
-        condition=UnlessCondition(is_simulation),
         package="controller_manager",
         executable="ros2_control_node",
         output="screen",
@@ -123,12 +124,23 @@ def launch_desc(context):
             # "--log-level",
             # "debug",
         ],
+        parameters=[
+            {
+                "use_sim_time": context.launch_configurations["is_simulation"]
+                == "true",
+            }
+        ],
     )
 
     return [
-        controller_manager_cmd,
-        position_controller_spawner_cmd,
-        velocity_controller_spawner_cmd,
-        trajectory_controller_spawner_cmd,
-        trajectory_controller_state_throttle_cmd,
+        TimerAction(
+            period=6.0,
+            actions=[
+                controller_manager_cmd,
+                position_controller_spawner_cmd,
+                velocity_controller_spawner_cmd,
+                trajectory_controller_spawner_cmd,
+                trajectory_controller_state_throttle_cmd,
+            ],
+        ),
     ]

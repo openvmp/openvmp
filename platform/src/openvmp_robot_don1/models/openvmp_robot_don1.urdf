@@ -732,6 +732,32 @@
   <xacro:robot_half prefix="front" dir="1" />
   <xacro:robot_half prefix="rear" dir="-1" />
 
+  <xacro:macro name="r2c_joint_vel" params="name pmin pmax">
+    <joint name="${name}">
+      <param name="prefix">/actuator/${name}</param>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <!-- <state_interface name="effort" /> -->
+      <!--<command_interface
+      name="position">
+        <param name="min">${pmin}</param>
+        <param name="max">${pmax}</param>
+      </command_interface>-->
+      <command_interface name="velocity">
+        <!--<param
+        name="min">0.25</param>-->
+        <!--<param
+        name="max">0.25</param>-->
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <!-- <command_interface name="effort" /> -->
+    </joint>
+  </xacro:macro>
+
   <xacro:macro name="r2c_joint_limit" params="name pmin pmax">
     <joint name="${name}">
       <param name="prefix">/actuator/${name}</param>
@@ -756,8 +782,8 @@
   </xacro:macro>
 
   <xacro:macro name="r2c_quarter" params="prefix side">
-    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_joint" pmin="${-pi}" pmax="${pi}" />
-    <xacro:r2c_joint_limit name="${prefix}_${side}_arm_inner_joint" pmin="${-pi*0.9}"
+    <xacro:r2c_joint_vel name="${prefix}_${side}_arm_joint" pmin="${-pi}" pmax="${pi}" />
+    <xacro:r2c_joint_vel name="${prefix}_${side}_arm_inner_joint" pmin="${-pi*0.9}"
       pmax="${pi*0.7}" />
     <joint name="${prefix}_${side}_arm_wheel_joint">
       <param name="prefix">/actuator/${prefix}_${side}_arm_wheel_joint</param>
@@ -779,8 +805,8 @@
   </xacro:macro>
 
   <xacro:macro name="r2c_half" params="prefix">
-    <xacro:r2c_joint_limit name="${prefix}_turn_table_joint" pmin="${-pi/2}" pmax="${pi/2}" />
-    <xacro:r2c_joint_limit name="${prefix}_body_joint" pmin="${-pi*7.0/6.0}" pmax="${pi*7/6}" />
+    <xacro:r2c_joint_vel name="${prefix}_turn_table_joint" pmin="${-pi/2}" pmax="${pi/2}" />
+    <xacro:r2c_joint_vel name="${prefix}_body_joint" pmin="${-pi*7.0/6.0}" pmax="${pi*7/6}" />
     <xacro:r2c_quarter prefix="${prefix}" side="left" />
     <xacro:r2c_quarter prefix="${prefix}" side="right" />
   </xacro:macro>
@@ -790,7 +816,9 @@
   </xacro:if>
   <ros2_control name="MotionHardwareSystem" type="system">
     <hardware>
-      <xacro:if value="$(arg simulate)">
+      <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
+      <param name="namespace">$(arg namespace)</param>
+      <!-- <xacro:if value="$(arg simulate)">
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
       </xacro:if>
       <xacro:if value="$(arg fake_hardware)">
@@ -801,13 +829,25 @@
           <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
           <param name="namespace">$(arg namespace)</param>
         </xacro:unless>
-      </xacro:unless>
+      </xacro:unless> -->
     </hardware>
     <xacro:r2c_half prefix="front" />
     <xacro:r2c_half prefix="rear" />
   </ros2_control>
 
   <xacro:macro name="trans_reg" params="name red:=17">
+    <transmission name="${name}_transmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>${red}</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+  <xacro:macro name="trans_pos" params="name red:=1">
     <transmission name="${name}_transmission">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${name}">
@@ -836,35 +876,39 @@
   <xacro:trans_reg name="front_left_arm_joint" />
   <xacro:trans_reg name="front_left_arm_inner_joint" />
   <xacro:trans_wheel name="front_left_arm_wheel_joint" />
-  <xacro:trans_reg name="front_left_arm_camera_servo_lower_joint" red="1" />
-  <xacro:trans_reg name="front_left_arm_camera_servo_upper_joint" red="1" />
+  <xacro:trans_pos name="front_left_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_pos name="front_left_arm_camera_servo_upper_joint" red="1" />
   <xacro:trans_reg name="front_right_arm_joint" />
   <xacro:trans_reg name="front_left_arm_inner_joint" />
   <xacro:trans_wheel name="front_right_arm_wheel_joint" />
-  <xacro:trans_reg name="front_right_arm_camera_servo_lower_joint" red="1" />
-  <xacro:trans_reg name="front_right_arm_camera_servo_upper_joint" red="1" />
+  <xacro:trans_pos name="front_right_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_pos name="front_right_arm_camera_servo_upper_joint" red="1" />
   <xacro:trans_reg name="rear_turn_table_joint" />
   <xacro:trans_reg name="rear_body_joint" />
   <xacro:trans_reg name="rear_left_arm_joint" />
   <xacro:trans_reg name="rear_left_arm_inner_joint" />
   <xacro:trans_wheel name="rear_left_arm_wheel_joint" />
-  <xacro:trans_reg name="rear_left_arm_camera_servo_lower_joint" red="1" />
-  <xacro:trans_reg name="rear_left_arm_camera_servo_upper_joint" red="1" />
+  <xacro:trans_pos name="rear_left_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_pos name="rear_left_arm_camera_servo_upper_joint" red="1" />
   <xacro:trans_reg name="rear_right_arm_joint" />
   <xacro:trans_reg name="rear_right_arm_inner_joint" />
   <xacro:trans_wheel name="rear_right_arm_wheel_joint" />
-  <xacro:trans_reg name="rear_right_arm_camera_servo_lower_joint" red="1" />
-  <xacro:trans_reg name="rear_right_arm_camera_servo_upper_joint" red="1" />
+  <xacro:trans_pos name="rear_right_arm_camera_servo_lower_joint" red="1" />
+  <xacro:trans_pos name="rear_right_arm_camera_servo_upper_joint" red="1" />
 
   <gazebo>
+    <!--  No need for gazebo_ro2_control since we are using a separate control
+          node that hooks up to gazebo via openvmp_hardware_simulation_gazebo
+          using remote_actuator and alike.
+          Keep it here as an alternative to be used for troubleshooting.
+
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.${plugin_extension}">
       <ros>
         <namespace>$(arg namespace)</namespace>
       </ros>
-      <!-- <robot_param>$(arg namespace)/robot_description</robot_param>
-      <robot_param_node>$(arg namespace)/robot_state_publisher</robot_param_node> -->
       <parameters>$(arg controllers_yaml_path)</parameters>
     </plugin>
+    -->
     <plugin name="openvmp_hardware_simulation_gazebo"
       filename="libopenvmp_hardware_simulation_gazebo.${plugin_extension}">
       <ns>$(arg namespace)</ns>

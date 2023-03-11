@@ -40,7 +40,12 @@ drivers_map = {
         # ],
     },
     "brake": {
-        "fake": ["brake", "fake", "--param", "brake_prefix:=$PATH"],
+        "fake": [
+            "brake",
+            "fake",
+            "--param",
+            "brake_prefix:=$PATH",
+        ],
         "switch": [
             "brake_switch",
             "brake_switch_standalone",
@@ -49,16 +54,34 @@ drivers_map = {
         ],
     },
     "encoder": {
-        # "fake": ["encoder", "fake"],
-        "amt21": ["encoder_amt21", "encoder_amt21_standalone"],
+        "fake": [
+            "remote_encoder",
+            "fake",
+            "--param",
+            "encoder_prefix:=$PATH",
+        ],
+        "amt21": [
+            "encoder_amt21",
+            "encoder_amt21_standalone",
+            "--param",
+            "encoder_prefix:=$PATH",
+        ],
     },
     "actuator": {
+        "fake": [
+            "remote_actuator",
+            "fake",
+            "--param",
+            "actuator_prefix:=$PATH",
+        ],
         # "puldir": ["stepper_driver_puldir", "stepper_driver_puldir_standalone"],
         "em2rs": [
             "stepper_driver_em2rs",
             "stepper_driver_em2rs_standalone",
             "--param",
-            "stepper_prefix:=$PATH",
+            "actuator_prefix:=$PATH",
+            "--param",
+            "stepper_prefix:=$PATH/stepper",
         ],
     },
 }
@@ -70,20 +93,20 @@ class HardwareManagerNode(Node):
     def __init__(self, cfg: config.Config, name="hardware_manager"):
         super().__init__(name)
         self.declare_parameter("use_fake_hardware", False)
-        self.use_fake_hardware = self.get_parameter("use_fake_hardware").value
+        self.use_fake_hardware = self.get_parameter("use_fake_hardware").get_parameter_value().bool_value
 
         # Buses
         buses = cfg.get_buses()
         index = 0
         for bus in buses:
-            self.driver_instantiate("bus" + str(index), "bus", bus)
+            self.driver_instantiate("bus" + str(index), "bus" + str(index), "bus", bus)
             index = index + 1
 
         # Cameras
         cameras = cfg.get_cameras()
         index = 0
         for camera in cameras:
-            self.driver_instantiate("camera" + str(index), "camera", camera)
+            self.driver_instantiate("camera" + str(index), "camera" + str(index), "camera", camera)
             index = index + 1
 
         # Joints
@@ -91,15 +114,22 @@ class HardwareManagerNode(Node):
         for joint in joints:
             if "brake" in joint:
                 self.driver_instantiate(
-                    "joint_" + joint["name"] + "_brake", "brake", joint["brake"]
+                    "joint_" + joint["name"] + "_brake",
+                    joint["name"],
+                    "brake",
+                    joint["brake"]
                 )
             if "encoder" in joint:
                 self.driver_instantiate(
-                    "joint_" + joint["name"] + "_encoder", "encoder", joint["encoder"]
+                    "joint_" + joint["name"] + "_encoder",
+                    joint["name"],
+                    "encoder",
+                    joint["encoder"]
                 )
             if "actuator" in joint:
                 self.driver_instantiate(
                     "joint_" + joint["name"] + "_actuator",
+                    joint["name"],
                     "actuator",
                     joint["actuator"],
                 )
@@ -113,11 +143,11 @@ class HardwareManagerNode(Node):
         #     for process in self.processes:
         #         process["proc"].terminate()
 
-    def driver_instantiate(self, id, driver_class, obj):
+    def driver_instantiate(self, node_name, id, driver_class, obj):
         name = id
         if "name" in obj:
             name = obj["name"]
-        path = "/" + name
+        path = "/" + driver_class + "/" + name
         if "path" in obj:
             path = obj["path"]
         path = path.replace("$DRIVER_NAME", name)
@@ -142,7 +172,7 @@ class HardwareManagerNode(Node):
             if "init" in driver_config:
                 init = driver_config["init"]
 
-        if "driver" in obj:
+        if driver != "fake" and "driver" in obj:
             driver_config = obj["driver"]
             for param in driver_config:
                 if param != "type" and param != "init":
@@ -162,7 +192,7 @@ class HardwareManagerNode(Node):
             params_resolved.append(param)
 
         # Launch the process
-        node_name = "driver_" + name
+        node_name = "driver_" + node_name
         namespace = self.get_namespace()
 
         cmd = (

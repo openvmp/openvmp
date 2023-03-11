@@ -43,9 +43,6 @@ def launch_desc(context):
     package_name = openvmp_config.get_package(context)
     namespace = openvmp_config.get_namespace(context)
 
-    pkg_share = FindPackageShare(package=package_name).find(package_name)
-    common_pkg_share = FindPackageShare(package="openvmp_robot").find("openvmp_robot")
-
     desc = []
     if context.launch_configurations["is_simulation"]:
         for camera_id in range(8):
@@ -61,30 +58,30 @@ def launch_desc(context):
                     + str(camera_id)
                     + ".yaml"
                 )
-            desc.append(
-                Node(
-                    condition=UnlessCondition(is_simulation),
-                    package="usb_camera_driver",
-                    executable="usb_camera_driver_node",
-                    name=NODE_NAMES[camera_id],
-                    output="screen",
-                    namespace=namespace + "/" + NODE_NAMES[camera_id],
-                    parameters=[
-                        {
-                            "frame_id": FRAME_IDS[camera_id],
-                            "camera_id": camera_id,
-                            "fps": 25.0,
-                            "image_width": 320,
-                            "image_height": 200,
-                            "camera_calibration_file": camera_calibration_url,
-                        },
-                    ],
-                    arguments=[
-                        "--ros-args",
-                        "-r",
-                        "image:=image_raw",
-                    ],
-                )
+            usb_camera_driver_cmd = Node(
+                condition=UnlessCondition(is_simulation),
+                package="usb_camera_driver",
+                executable="usb_camera_driver_node",
+                name=NODE_NAMES[camera_id],
+                output="screen",
+                namespace=namespace + "/" + NODE_NAMES[camera_id],
+                parameters=[
+                    {
+                        "frame_id": FRAME_IDS[camera_id],
+                        "camera_id": camera_id,
+                        "fps": 25.0,
+                        "image_width": 320,
+                        "image_height": 200,
+                        "camera_calibration_file": camera_calibration_url,
+                    },
+                ],
+                arguments=[
+                    "--ros-args",
+                    "-r",
+                    "image:=image_raw",
+                ],
             )
+            # TODO(clairbee): temporarily disabled until it's useful
+            #desc.append(usb_camera_driver_cmd)
 
     return desc

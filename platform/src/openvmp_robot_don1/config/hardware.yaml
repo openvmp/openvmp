@@ -24,26 +24,26 @@ joints:
         init:
           - service: /modbus/set_do1
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0x24  # disengage brakes on power on
+            value: 0x24 # disengage brakes on power on
             # value: 0xA0  # TODO(clairbee): disengage brakes during the command only
           - service: /modbus/set_brake_delay_release
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0  # as fast as possible
+            value: 0 # as fast as possible
           - service: /modbus/set_brake_delay_lock
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0  # as fast as possible
+            value: 0 # as fast as possible
           - service: /modbus/set_brake_locking_velocity_threshold
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 10  # TODO(clairbee): what is it??? no effect observed!
+            value: 10 # TODO(clairbee): what is it??? no effect observed!
           - service: /modbus/set_jog_interval
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 50  # at least 20 commands per second
+            value: 50 # at least 20 commands per second
           - service: /modbus/set_jog_acc_dec
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0  # accelerate and decelerate as fast as possible
+            value: 0 # accelerate and decelerate as fast as possible
           - service: /modbus/set_peak_current
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 20  # 2.0A max at this joint
+            value: 20 # 2.0A max at this joint
     brake:
       torque: 0.5
       engagedByDefault: true
@@ -56,6 +56,7 @@ joints:
       driver:
         type: amt21
         encoder_model: AMT212E
+        encoder_amt21_addr: 0x04
         serial_bus_prefix: /bus/rs485/line0
   - name: front_body_joint
     gearbox:
@@ -75,26 +76,26 @@ joints:
         init:
           - service: /modbus/set_do1
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0x24  # enable brake output
+            value: 0x24 # enable brake output
             # value: 0xA0  # TODO(clairbee): disengage brakes during the command only
           - service: /modbus/set_brake_delay_release
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0  # as fast as possible
+            value: 0 # as fast as possible
           - service: /modbus/set_brake_delay_lock
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0  # as fast as possible
+            value: 0 # as fast as possible
           - service: /modbus/set_brake_locking_velocity_threshold
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 10  # TODO(clairbee): what is it??? no effect observed!
+            value: 10 # TODO(clairbee): what is it??? no effect observed!
           - service: /modbus/set_jog_interval
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 50  # at least 20 commands per second
+            value: 50 # at least 20 commands per second
           - service: /modbus/set_jog_acc_dec
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 0  # accelerate and decelerate as fast as possible
+            value: 0 # accelerate and decelerate as fast as possible
           - service: /modbus/set_peak_current
             type: modbus/srv/ConfiguredHoldingRegisterWrite
-            value: 20  # 2.0A max at this joint
+            value: 20 # 2.0A max at this joint
     brake:
       torque: 0.5
       engagedByDefault: true
@@ -401,6 +402,54 @@ joints:
       #driver:
       #  type: amt21
       #  ppr: 1000
+  - name: front_left_arm_camera_servo_lower_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: front_left_arm_camera_servo_upper_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: front_right_arm_camera_servo_lower_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: front_right_arm_camera_servo_upper_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: rear_left_arm_camera_servo_lower_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: rear_left_arm_camera_servo_upper_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: rear_right_arm_camera_servo_lower_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
+  - name: rear_right_arm_camera_servo_upper_joint
+    actuator:
+      type: servo
+      torque: 0.1
+    encoder:
+      type: absolute
 
 buses:
   - path: /bus/modbus/rtu0

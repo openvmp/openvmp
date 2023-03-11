@@ -46,22 +46,22 @@ def include_unit_launch_descriptions(context):
         launch_desc.extend(
             [
                 TimerAction(
-                    period=0.0 + 10.0 * pos,
+                    period=0.0 + 7.0 * pos,
                     actions=[
                         OpaqueFunction(function=spawn_func, args=[str(robot_id), pos]),
-                        #     ],
-                        # ),
-                        # TimerAction(
-                        #     period=5.0 + 10.0 * pos,
-                        #     actions=[
-                        IncludeLaunchDescription(
-                            PythonLaunchDescriptionSource(robot_launch_py_path),
-                            launch_arguments={
-                                "kind": context.launch_configurations["kind"],
-                                "id": robot_id,
-                                "is_simulation": "true",
-                                "pos": str(pos_to_pass),
-                            }.items(),
+                        TimerAction(
+                            period=7.0 + 7.0 * pos,
+                            actions=[
+                                IncludeLaunchDescription(
+                                    PythonLaunchDescriptionSource(robot_launch_py_path),
+                                    launch_arguments={
+                                        "kind": context.launch_configurations["kind"],
+                                        "id": robot_id,
+                                        "is_simulation": "true",
+                                        "pos": str(pos_to_pass),
+                                    }.items(),
+                                ),
+                            ],
                         ),
                     ],
                 ),

@@ -111,7 +111,7 @@ def launch_desc(context):
     return [
         start_control_interactive_cmd,
         TimerAction(
-            period=7.0,
+            period=11.0,
             actions=[
                 start_rviz_cmd,
             ],

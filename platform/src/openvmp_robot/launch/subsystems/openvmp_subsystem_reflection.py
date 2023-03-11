@@ -1,5 +1,5 @@
+from launch.actions import TimerAction
 from launch_ros.actions import Node
-
 
 from openvmp_robot.launch.config import openvmp_config
 from openvmp_robot.launch.config import files as openvmp_config_files
@@ -66,6 +66,11 @@ def launch_desc(context):
     )
 
     return [
-        start_robot_state_publisher_cmd,
-        joint_state_broadcaster_spawner_cmd,
+        TimerAction(
+            period=9.0,
+            actions=[
+              start_robot_state_publisher_cmd,
+              joint_state_broadcaster_spawner_cmd,
+            ]
+        )
     ]
