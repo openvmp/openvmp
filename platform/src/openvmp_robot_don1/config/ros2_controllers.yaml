@@ -260,7 +260,7 @@
           d: 0.025
           # i_clamp: 0.9
           # ff_velocity_scale: 0.5
-        # rear_left_arm_joint:
+        rear_left_arm_joint:
           p: 1.0
           i: 0.1
           d: 0.025
