@@ -264,13 +264,12 @@
   <!-- <xacro:gazebo_fixed_joint name="base_joint2" /> -->
 
 
-  <!-- *********************** DRIVE WHEELS ******************************  -->
+  <!-- *********************** TURN TABLE WHEELS ******************************  -->
 
-  <xacro:macro name="wheel"
-    params="prefix parent limit radius width x_off y_off z_off x_angle collision:=true dir:=1">
+  <xacro:macro name="turn_table"
+    params="prefix parent limit radius width x_off y_off z_off x_angle dir:=1">
     <link name="${prefix}_link">
       <visual>
-        <!-- <origin xyz="${x_off} ${y_off} ${z_off}" rpy="${x_angle} 0 0"/> -->
         <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
         <geometry>
           <cylinder radius="${radius}" length="${width}" />
@@ -279,25 +278,6 @@
           <color rgba="${255/255} ${255/255} ${255/255} 1.0" />
         </material>
       </visual>
-
-      <xacro:if value="${collision}">
-        <collision>
-          <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
-          <geometry>
-            <cylinder radius="${radius}" length="${width}" />
-          </geometry>
-          <surface>
-            <friction>
-              <ode>
-                <mu>10.0</mu>
-                <mu2>10.0</mu2>
-                <slip1>0.25</slip1>
-                <slip2>0.25</slip2>
-              </ode>
-            </friction>
-          </surface>
-        </collision>
-      </xacro:if>
 
       <xacro:cylinder_inertia m="0.5" r="${radius}" h="${width}">
         <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
@@ -312,8 +292,59 @@
       <parent link="${parent}" />
       <child link="${prefix}_link" />
       <origin xyz="${x_off} ${y_off} ${z_off}" rpy="0 0 0" />
-      <limit upper="${limit}" lower="${-limit}" effort="10" velocity="1.0" />
+      <limit upper="${limit}" lower="${-limit}" effort="100" velocity="2.0" />
       <axis xyz="0 0 ${dir}" />
+    </joint>
+    <xacro:gazebo_joint name="${prefix}_joint" />
+  </xacro:macro>
+
+  <!-- *********************** DRIVE WHEELS ******************************  -->
+
+  <xacro:macro name="wheel"
+    params="prefix parent radius width x_off y_off z_off x_angle dir:=1">
+    <link name="${prefix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${width}" />
+        </geometry>
+        <material name="White">
+          <color rgba="${255/255} ${255/255} ${255/255} 1.0" />
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${width}" />
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>10.0</mu>
+              <mu2>10.0</mu2>
+              <slip1>0.25</slip1>
+              <slip2>0.25</slip2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+      <xacro:cylinder_inertia m="0.5" r="${radius}" h="${width}">
+        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+      </xacro:cylinder_inertia>
+    </link>
+    <xacro:solid_soft name="${prefix}_link" material="Gazebo/Green" />
+
+    <!-- Connect the wheels to the origin at the appropriate location, and
+         define a continuous joint to allow the wheels to freely rotate about
+         an axis -->
+    <joint name="${prefix}_joint" type="continuous">
+      <parent link="${parent}" />
+      <child link="${prefix}_link" />
+      <origin xyz="${x_off} ${y_off} ${z_off}" rpy="0 0 0" />
+      <limit effort="100" velocity="2.0" />
+      <axis xyz="0 ${dir} 0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_joint" />
   </xacro:macro>
@@ -425,7 +456,7 @@
     </joint>
     <xacro:gazebo_joint name="${prefix}_inner_joint" />
 
-    <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part" limit="0"
+    <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part"
       radius="${wheel_radius}" width="${wheel_width}"
       x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}"
       z_off="-${wheel_radius+arm_height_delta}" x_angle="${pi/2}"
@@ -623,11 +654,11 @@
   </xacro:macro>
 
   <xacro:macro name="robot_half" params="prefix dir">
-    <xacro:wheel prefix="${prefix}_turn_table" parent="base_link" limit="${pi/2}"
+    <xacro:turn_table prefix="${prefix}_turn_table" parent="base_link" limit="${pi/2}"
       radius="${turn_table_radius}" width="${turn_table_height}"
       x_off="${dir*turn_table_xoff}" y_off="0.0"
       z_off="${base_height_gap + base_height/8 - turn_table_height/2}" x_angle="0"
-      collision="false" dir="-1"
+      dir="-1"
     />
     <!-- dir="${dir}" -->
 
