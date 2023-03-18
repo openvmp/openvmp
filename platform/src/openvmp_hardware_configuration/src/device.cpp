@@ -13,10 +13,12 @@
 
 namespace openvmp_hardware_configuration {
 
-Device::Device(const std::string &joint,
-               const YAML::Node &node,
-               const std::string &id)
-    : logger_{rclcpp::get_logger("openvmp_hardware_configuration::" + id +")")} {
+Device::Device(const std::string &joint, const std::string &driver_class,
+               const std::string &id, const YAML::Node &node)
+    : logger_{rclcpp::get_logger("openvmp_hardware_configuration::" + joint +
+                                 "::" + id + ")")} {
+  RCLCPP_DEBUG(logger_, "Initializing the device");
+
   if (!node || node.IsNull() || !node.IsMap()) {
     RCLCPP_ERROR(logger_, "Incorrect syntax");
     // TODO(clairbee): throw an exception?
@@ -33,6 +35,10 @@ Device::Device(const std::string &joint,
   path_ = "/" + name_;
   if (node["path"]) {
     path_ = node["path"].as<std::string>();
+  }
+
+  if (node["driver"]) {
+    driver_ = std::make_shared<Driver>(driver_class, id, node["driver"]);
   }
 }
 

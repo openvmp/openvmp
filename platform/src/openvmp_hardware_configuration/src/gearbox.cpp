@@ -13,10 +13,10 @@
 
 namespace openvmp_hardware_configuration {
 
-Gearbox::Gearbox(const std::string &joint,
-                 const YAML::Node &node,
+Gearbox::Gearbox(const std::string &joint, const YAML::Node &node,
                  const std::string &id)
-    : Device(joint, node, id) {
+    : Device(joint, "gearbox", id, node) {
+  RCLCPP_DEBUG(logger_, "Initializing the gearbox");
   auto type = node["type"].as<std::string>();
   if (type == "worm") {
     type_ = WORM;

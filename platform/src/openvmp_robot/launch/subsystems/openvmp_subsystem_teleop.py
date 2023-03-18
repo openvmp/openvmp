@@ -87,7 +87,7 @@ def launch_desc(context):
         package="rviz2",
         executable="rviz2",
         # name="rviz2",
-        # output="screen",  # too noisy if something goes wrong
+        output="screen",
         namespace=namespace,
         arguments=[
             "-d",

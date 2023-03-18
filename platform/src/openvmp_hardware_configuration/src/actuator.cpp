@@ -15,7 +15,8 @@ namespace openvmp_hardware_configuration {
 
 Actuator::Actuator(const std::string &joint, const YAML::Node &node,
                    const std::string &id)
-    : Device(joint, node, id) {
+    : Device(joint, "actuator", id, node) {
+  RCLCPP_DEBUG(logger_, "Initializing the actuator");
   auto type = node["type"].as<std::string>();
   if (type == "stepper") {
     type_ = STEPPER;

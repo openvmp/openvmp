@@ -15,6 +15,7 @@ namespace openvmp_hardware_configuration {
 
 Joint::Joint(const YAML::Node &node)
     : logger_{rclcpp::get_logger("openvmp_hardware_configuration::Joint")} {
+  RCLCPP_DEBUG(logger_, "Constructing the joint");
   if (!node || node.IsNull() || !node.IsMap() || !node["name"]) {
     logger_ = rclcpp::get_logger("openvmp_motion_hardware::Joint");
     RCLCPP_ERROR(logger_, "Incorrect syntax of the joint");
@@ -22,8 +23,10 @@ Joint::Joint(const YAML::Node &node)
   }
 
   name_ = node["name"].as<std::string>();
+
   logger_ = rclcpp::get_logger("openvmp_hardware_configuration::Joint(" +
                                name_ + ")");
+  RCLCPP_DEBUG(logger_, "Initializing the joint");
 
   actuator_ = std::make_shared<Actuator>(name_, node["actuator"],
                                          "joint_" + name_ + "_actuator");

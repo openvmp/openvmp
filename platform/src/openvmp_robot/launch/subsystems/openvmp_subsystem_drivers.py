@@ -34,17 +34,20 @@ def launch_desc(context):
                 # name="hardware_manager",
                 output="screen",
                 namespace=namespace,
-                arguments=[
-                    hardware_config_path,
-                ],
                 parameters=[
                     {
+                        "config_path": hardware_config_path,
                         "use_fake_hardware": context.launch_configurations[
                             "use_fake_hardware"
                         ]
                         == "true",
                     },
                 ],
+                # arguments=[
+                #     "--ros-args",
+                #     "--log-level",
+                #     "debug",
+                # ],
             )
         )
 

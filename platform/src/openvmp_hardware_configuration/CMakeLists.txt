@@ -3,7 +3,7 @@ project(openvmp_hardware_configuration)
 
 # Compiler settings
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -29,6 +29,8 @@ set(project_SOURCE_FILES
   src/brake.cpp
   src/encoder.cpp
   src/gearbox.cpp
+  src/driver.cpp
+  src/bus.cpp
 )
 
 set(project_LIBRARIES

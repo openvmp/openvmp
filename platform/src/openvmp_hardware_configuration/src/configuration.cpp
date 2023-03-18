@@ -24,14 +24,33 @@ Configuration::Configuration(const std::string &config_filename)
   auto joints = config["joints"];
   for (auto joint : joints) {
     RCLCPP_DEBUG(logger_, "Found a joint");
+    if (!joint.IsMap()) {
+      RCLCPP_ERROR(logger_, "Found an invalid joint entry");
+      continue;
+    }
+    RCLCPP_DEBUG(logger_, "Joint is a map");
 
     if (!joint["name"]) {
       RCLCPP_ERROR(logger_, "Each joint must have a name");
       continue;
     }
 
+    RCLCPP_DEBUG(logger_, "Joint has a name");
     auto name = joint["name"].as<std::string>();
     joints_.insert({name, std::make_shared<Joint>(joint)});
+  }
+
+  auto buses = config["buses"];
+  for (size_t i = 0; i < buses.size(); i++) {
+    auto bus = buses[i];
+    RCLCPP_DEBUG(logger_, "Found a bus");
+
+    if (!bus["path"]) {
+      RCLCPP_ERROR(logger_, "Each bus must have a path");
+      continue;
+    }
+
+    buses_.push_back(std::make_shared<Bus>(bus, i));
   }
 }
 
