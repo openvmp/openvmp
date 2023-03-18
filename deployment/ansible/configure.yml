@@ -72,6 +72,12 @@
         name: socat
         update_cache: false
         state: present
+    - name: Global sysctl configuration
+      ansible.builtin.copy:
+        dest: /etc/sysctl.d/999-openvmp.conf
+        content: |
+          net.ipv4.ipfrag_time = 3
+          net.core.rmem_max = 4194304
 
     # Robot source code
     - name: Creating source code repositories on the targets

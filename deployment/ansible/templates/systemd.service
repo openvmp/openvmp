@@ -2,13 +2,16 @@
 Description={{ service_description }}
 Documentation=https://github.com/openvmp/openvmp/blob/main/docs/Deployment.md
 After=network.target
+Requires={{ service_requires }}
+PartOf=openvmp.service
 
 [Service]
 # Environment=
 Type=simple
 User=root
 ExecStart=/bin/bash -c 'source /root/.openvmp/env.sh; cd /root/openvmp/platform && ros2 launch openvmp_robot robot.launch.py kind:={{ robot_kind }} id:=$ROBOT_ID subsystem:={{ subsystem_name }}'
-Restart=on-failure
+Restart=always
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target

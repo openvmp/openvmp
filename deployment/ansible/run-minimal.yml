@@ -3,6 +3,17 @@
   hosts: openvmp-pi
 
   tasks:
+    # Meta service
+    - name: Create the meta service
+      ansible.builtin.copy:
+        dest: /lib/systemd/system/openvmp.service
+        content: |
+          [Unit]
+          Description=Stopping this service makes all OpenVMP services stop
+          After=rsyslog.service
+          [Service]
+          ExecStart=true
+
     # Drivers
     - name: Create the systemd service for the 'drivers' subsystem
       template:
@@ -11,6 +22,7 @@
       vars:
         subsystem_name: drivers
         service_description: "OpenVMP subsystem: device drivers"
+        service_requires: rsyslog.service
     - name: Launch the 'drivers' subsystem
       systemd:
         name: openvmp-drivers
@@ -25,6 +37,7 @@
       vars:
         subsystem_name: motion_control
         service_description: "OpenVMP subsystem: motion_control"
+        service_requires: openvmp-drivers.service
     - name: Launch the 'motion_control' subsystem
       systemd:
         name: openvmp-motion-control
@@ -39,8 +52,19 @@
       vars:
         subsystem_name: reflection
         service_description: "OpenVMP subsystem: reflection"
+        service_requires: openvmp-motion-control.service
     - name: Launch the 'reflection' subsystem
       systemd:
         name: openvmp-reflection
         state: restarted
         enabled: true
+
+    # 'minimal' target
+    - name: Create the systemd target
+      ansible.builtin.copy:
+        dest: /lib/systemd/system/openvmp-minimal.target
+        content: |
+          [Unit]
+          Description=Starting this target starts the minimum set of services
+          Requires=openvmp-reflection.service
+          After=openvmp-reflection.service
