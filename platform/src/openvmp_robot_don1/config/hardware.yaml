@@ -22,26 +22,26 @@ joints:
         modbus_leaf_id: 2
         modbus_is_remote: true
         init:
-          - service: /modbus/set_do1
+          - service: /stepper/modbus/set_do1
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0x24 # disengage brakes on power on
             # value: 0xA0  # TODO(clairbee): disengage brakes during the command only
-          - service: /modbus/set_brake_delay_release
+          - service: /stepper/modbus/set_brake_delay_release
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
-          - service: /modbus/set_brake_delay_lock
+          - service: /stepper/modbus/set_brake_delay_lock
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
-          - service: /modbus/set_brake_locking_velocity_threshold
+          - service: /stepper/modbus/set_brake_locking_velocity_threshold
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 10 # TODO(clairbee): what is it??? no effect observed!
-          - service: /modbus/set_jog_interval
+          - service: /stepper/modbus/set_jog_interval
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 50 # at least 20 commands per second
-          - service: /modbus/set_jog_acc_dec
+          - service: /stepper/modbus/set_jog_acc_dec
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # accelerate and decelerate as fast as possible
-          - service: /modbus/set_peak_current
+          - service: /stepper/modbus/set_peak_current
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 20 # 2.0A max at this joint
     brake:
@@ -53,11 +53,12 @@ joints:
       #  channel: 0
     encoder:
       type: absolute
-      driver:
-        type: amt21
-        encoder_model: AMT212E
-        encoder_amt21_addr: 0x04
-        serial_bus_prefix: /bus/rs485/line0
+      #driver:
+      #  type: amt21
+      #  encoder_model: AMT212E
+      #  encoder_amt21_addr: 0x04
+      #  encoder_readings_per_second: 10.0
+      #  serial_bus_prefix: /bus/rs485/line0
   - name: front_body_joint
     gearbox:
       ratio: 10
@@ -74,26 +75,26 @@ joints:
         modbus_leaf_id: 3
         modbus_is_remote: true
         init:
-          - service: /modbus/set_do1
+          - service: /stepper/modbus/set_do1
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0x24 # enable brake output
             # value: 0xA0  # TODO(clairbee): disengage brakes during the command only
-          - service: /modbus/set_brake_delay_release
+          - service: /stepper/modbus/set_brake_delay_release
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
-          - service: /modbus/set_brake_delay_lock
+          - service: /stepper/modbus/set_brake_delay_lock
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
-          - service: /modbus/set_brake_locking_velocity_threshold
+          - service: /stepper/modbus/set_brake_locking_velocity_threshold
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 10 # TODO(clairbee): what is it??? no effect observed!
-          - service: /modbus/set_jog_interval
+          - service: /stepper/modbus/set_jog_interval
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 50 # at least 20 commands per second
-          - service: /modbus/set_jog_acc_dec
+          - service: /stepper/modbus/set_jog_acc_dec
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # accelerate and decelerate as fast as possible
-          - service: /modbus/set_peak_current
+          - service: /stepper/modbus/set_peak_current
             type: modbus/srv/ConfiguredHoldingRegisterWrite
             value: 20 # 2.0A max at this joint
     brake:
@@ -107,7 +108,10 @@ joints:
       type: absolute
       #driver:
       #  type: amt21
-      #  ppr: 1000
+      #  encoder_model: AMT212E
+      #  encoder_amt21_addr: 0x50
+      #  encoder_readings_per_second: 10.0
+      #  serial_bus_prefix: /bus/rs485/line0
   - name: front_left_arm_joint
     gearbox:
       ratio: 10

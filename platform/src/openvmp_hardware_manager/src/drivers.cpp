@@ -63,7 +63,7 @@ std::map<std::string, Drivers> driver_classes = {
                  .params = {{"encoder_prefix",
                              YAML::Node(std::string("$PATH"))},
                             {"encoder_readings_per_second",
-                             YAML::Node(std::string("50.0"))}},
+                             YAML::Node(std::string("10.0"))}},
              }},
             {"switch",
              {
