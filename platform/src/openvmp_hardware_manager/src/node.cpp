@@ -31,7 +31,8 @@ Node::Node(std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exec)
 
     RCLCPP_INFO(get_logger(), "bus: %s", bus_config->get_path().c_str());
     drivers_.emplace_back(this, exec, "bus", "driver_bus" + std::to_string(i),
-                          "bus" + std::to_string(i), bus_config->get_driver(),
+                          "bus" + std::to_string(i), bus_config->get_path(),
+                          bus_config->get_driver(),
                           param_use_fake_hardware_.as_bool());
   }
 
@@ -45,21 +46,21 @@ Node::Node(std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exec)
     if (brake) {
       drivers_.emplace_back(
           this, exec, "brake", "driver_" + joint_name + "_brake", joint_name,
-          brake->get_driver(), param_use_fake_hardware_.as_bool());
+          "", brake->get_driver(), param_use_fake_hardware_.as_bool());
     }
 
     auto actuator = joint->get_actuator();
     if (actuator) {
       drivers_.emplace_back(this, exec, "actuator",
                             "driver_" + joint_name + "_actuator", joint_name,
-                            actuator->get_driver(),
+                            "", actuator->get_driver(),
                             param_use_fake_hardware_.as_bool());
     }
 
     auto encoder = joint->get_encoder();
     if (encoder) {
       drivers_.emplace_back(this, exec, "encoder",
-                            "driver_" + joint_name + "_encoder", joint_name,
+                            "driver_" + joint_name + "_encoder", joint_name, "",
                             encoder->get_driver(),
                             param_use_fake_hardware_.as_bool());
     }

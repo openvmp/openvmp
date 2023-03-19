@@ -18,20 +18,24 @@ namespace openvmp_hardware_manager {
 Driver::Driver(rclcpp::Node *parent,
                std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exec,
                const std::string &driver_class, const std::string &node_name,
-               const std::string &id,
+               const std::string &id, const std::string &path_,
                std::shared_ptr<openvmp_hardware_configuration::Driver> config,
                bool use_fake_hardware)
     : exec_{exec} {
-  RCLCPP_DEBUG(parent->get_logger(), "Initializing the driver: %s: %s: %s",
-               driver_class.c_str(), node_name.c_str(), id.c_str());
+  RCLCPP_INFO(parent->get_logger(), "Initializing the driver: %s: %s: %s",
+              driver_class.c_str(), node_name.c_str(), id.c_str());
 
   if (use_fake_hardware) {
     config.reset();
   }
 
   auto ns = parent->get_namespace();
-  auto path = "/" + driver_class + "/" + id;
+  std::string path = path_;
+  if (path == "") {
+    path = "/" + driver_class + "/" + id;
+  }
   path = std::regex_replace(path, std::regex(R"(\$DRIVER_NAME)"), id);
+  // RCLCPP_INFO(parent->get_logger(), "Driver's path %s", path.c_str());
   auto node_options = rclcpp::NodeOptions{};
 
   std::string type;
@@ -45,9 +49,9 @@ Driver::Driver(rclcpp::Node *parent,
   auto driver_info_it = dc.find(type);
   if (driver_info_it == dc.end()) {
     if (type == "fake") {
-      RCLCPP_DEBUG(parent->get_logger(),
-                   "No need to instantiate a fake driver of class %s",
-                   driver_class.c_str());
+      RCLCPP_INFO(parent->get_logger(),
+                  "No need to instantiate a fake driver of class %s",
+                  driver_class.c_str());
     } else {
       RCLCPP_ERROR(parent->get_logger(), "Unsupported driver %s of class %s",
                    type.c_str(), driver_class.c_str());
@@ -96,37 +100,53 @@ Driver::Driver(rclcpp::Node *parent,
   }
 
   // Create the node and make it spin
+  // RCLCPP_INFO(parent->get_logger(), "launching the node %s",
+  // node_name.c_str());
   node_ = std::make_shared<rclcpp::Node>(node_name, ns, node_options);
   exec_->add_node(node_);
+  // RCLCPP_INFO(parent->get_logger(), "done launching the node %s",
+  //             node_name.c_str());
 
   instance_ = driver_info.factory(node_.get());
+  // RCLCPP_INFO(parent->get_logger(), "created the interface");
 
-  // FIXME(clairbee): perform initialization
+  // RCLCPP_INFO(parent->get_logger(), "initialization steps: %lu",
+  // init.size());
   for (auto &step : init) {
+    // RCLCPP_INFO(parent->get_logger(), "initialization step");
     if (step.type == "modbus/srv/ConfiguredHoldingRegisterWrite") {
-      if (!clnt_modbus_chrw_) {
-        clnt_modbus_chrw_ =
-            node_->create_client<modbus::srv::ConfiguredHoldingRegisterWrite>(
-                step.service);
-        clnt_modbus_chrw_->wait_for_service();
-      }
+      rclcpp::Client<modbus::srv::ConfiguredHoldingRegisterWrite>::SharedPtr
+          clnt_modbus_chrw;
 
-      modbus::srv::ConfiguredHoldingRegisterWrite::Request::SharedPtr request;
+      auto service_path = ns + path + step.service;
+      // RCLCPP_INFO(parent->get_logger(), "connecting to the service %s",
+      //             service_path.c_str());
+
+      clnt_modbus_chrw =
+          node_->create_client<modbus::srv::ConfiguredHoldingRegisterWrite>(
+              service_path);
+      clnt_modbus_chrw->wait_for_service();
+
+      auto request = std::make_shared<
+          modbus::srv::ConfiguredHoldingRegisterWrite::Request>();
       request->value = step.fields["value"].as<int>();
 
-      auto f = clnt_modbus_chrw_->async_send_request(request);
+      auto f = clnt_modbus_chrw->async_send_request(request);
       f.wait();
-      RCLCPP_DEBUG(parent->get_logger(),
-                   "configured_holding_register_write(): response received");
 
-      modbus::srv::ConfiguredHoldingRegisterWrite::Response::SharedPtr
-          _response = f.get();
+      auto _response = f.get();
+      // RCLCPP_INFO(parent->get_logger(), "response to init request received:
+      // %d",
+      //             response->exception_code);
     } else {
       RCLCPP_ERROR(parent->get_logger(),
                    "Unsupported initialization step type: %s",
                    step.type.c_str());
     }
   }
+  // RCLCPP_INFO(parent->get_logger(), "Done initializing the driver: %s: %s:
+  // %s",
+  //             driver_class.c_str(), node_name.c_str(), id.c_str());
 }
 
 }  // namespace openvmp_hardware_manager

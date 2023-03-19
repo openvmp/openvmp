@@ -43,7 +43,7 @@ Driver::Driver(const std::string &driver_class, const std::string &id,
       const auto &type = init_param["type"].as<std::string>();
       RCLCPP_DEBUG(logger_, "Found a driver initialization step: %s: %s",
                    service.c_str(), type.c_str());
-      DriverInit init = {.service = service, .type = type};
+      DriverInit init = {.service = service, .type = type, .fields = {}};
 
       for (const auto &field : init_param) {
         const auto &key = field.first.as<std::string>();
@@ -56,6 +56,7 @@ Driver::Driver(const std::string &driver_class, const std::string &id,
         RCLCPP_INFO(logger_, "init: %s: %s", key.c_str(),
                     field.second.as<std::string>().c_str());
       }
+      init_.push_back(init);
     }
   }
 

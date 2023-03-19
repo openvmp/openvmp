@@ -13,9 +13,13 @@
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
   auto exec = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
-  auto node = std::make_shared<openvmp_hardware_manager::Node>(exec);
+  std::shared_ptr<openvmp_hardware_manager::Node> node;
 
-  exec->add_node(node);
+  auto thread = std::thread([exec, &node]() {
+    node = std::make_shared<openvmp_hardware_manager::Node>(exec);
+    exec->add_node(node);
+  });
+
   exec->spin();
   exec.reset();
 

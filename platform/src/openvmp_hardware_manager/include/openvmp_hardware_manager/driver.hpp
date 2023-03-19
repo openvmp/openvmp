@@ -23,7 +23,7 @@ class Driver {
   Driver(rclcpp::Node *parent,
          std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exec,
          const std::string &driver_class, const std::string &node_name,
-         const std::string &id,
+         const std::string &id, const std::string &path,
          std::shared_ptr<openvmp_hardware_configuration::Driver> config,
          bool use_fake_hardware);
   virtual ~Driver() = default;
@@ -31,9 +31,6 @@ class Driver {
  private:
   std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exec_;
   std::shared_ptr<rclcpp::Node> node_;
-
-  rclcpp::Client<modbus::srv::ConfiguredHoldingRegisterWrite>::SharedPtr
-      clnt_modbus_chrw_;
 
   std::shared_ptr<void> instance_;
 };
