@@ -307,7 +307,7 @@
 
       # state_publish_rate: 200.0  # Defaults to 50
       state_publish_rate: 20.0 # Defaults to 50
-      action_monitor_rate: 10.0 # Defaults to 20
+      action_monitor_rate: 20.0 # Defaults to 20
 
       allow_partial_joints_goal: false # Defaults to false
       open_loop_control: false
@@ -316,3 +316,35 @@
       constraints:
         stopped_velocity_tolerance: 0.01 # Defaults to 0.01
         goal_time: 0.0 # Defaults to 0.0 (start immediately)
+        front_turn_table_joint:
+          goal: 0.01
+        front_body_joint:
+          goal: 0.01
+        front_left_arm_joint:
+          goal: 0.01
+        front_left_arm_inner_joint:
+          goal: 0.01
+        # front_left_arm_wheel_joint:
+        #   goal: 0.01
+        front_right_arm_joint:
+          goal: 0.01
+        front_right_arm_inner_joint:
+          goal: 0.01
+        # front_right_arm_wheel_joint:
+        #   goal: 0.01
+        rear_turn_table_joint:
+          goal: 0.01
+        rear_body_joint:
+          goal: 0.01
+        rear_left_arm_joint:
+          goal: 0.01
+        rear_left_arm_inner_joint:
+          goal: 0.01
+        # rear_left_arm_wheel_joint:
+        #   goal: 0.01
+        rear_right_arm_joint:
+          goal: 0.01
+        rear_right_arm_inner_joint:
+          goal: 0.01
+        # rear_right_arm_wheel_joint:
+        #   goal: 0.01
