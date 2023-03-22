@@ -26,14 +26,14 @@ std::map<std::string, Drivers> driver_classes = {
         {
             {"modbus_rtu",
              {
-                 .factory = (driver_factory_ptr)&modbus_rtu::Factory::New,
+                 .factory = [] (rclcpp::Node *node) { return modbus_rtu::Factory::New(node); },
                  .params = {{"modbus_prefix",
                              YAML::Node(std::string("$PATH"))}},
                  .init = {},
              }},
             {"serial_bus",
              {
-                 .factory = (driver_factory_ptr)&serial_bus::Factory::New,
+                 .factory = [] (rclcpp::Node *node) { return serial_bus::Factory::New(node); },
                  .params = {{"serial_bus_prefix",
                              YAML::Node(std::string("$PATH"))}},
                  .init = {},
@@ -45,13 +45,13 @@ std::map<std::string, Drivers> driver_classes = {
         {
             {"fake",
              {
-                 .factory = (driver_factory_ptr)&brake::FakeFactory::New,
+                 .factory = [] (rclcpp::Node *node) { return brake::FakeFactory::New(node); },
                  .params = {{"brake_prefix", YAML::Node(std::string("$PATH"))}},
                  .init = {},
              }},
             {"switch",
              {
-                 .factory = (driver_factory_ptr)&brake_switch::Factory::New,
+                 .factory = [] (rclcpp::Node *node) { return brake_switch::Factory::New(node); },
                  .params = {{"brake_prefix", YAML::Node(std::string("$PATH"))}},
                  .init = {},
              }},
@@ -63,7 +63,7 @@ std::map<std::string, Drivers> driver_classes = {
             {"fake",
              {
                  .factory =
-                     (driver_factory_ptr)&remote_encoder::FakeFactory::New,
+                     [] (rclcpp::Node *node) { return remote_encoder::FakeFactory::New(node); },
                  .params = {{"encoder_prefix",
                              YAML::Node(std::string("$PATH"))},
                             {"encoder_readings_per_second",
@@ -72,7 +72,7 @@ std::map<std::string, Drivers> driver_classes = {
              }},
             {"amt21",
              {
-                 .factory = (driver_factory_ptr)&encoder_amt21::Factory::New,
+                 .factory = [] (rclcpp::Node *node) { return encoder_amt21::Factory::New(node); },
                  .params = {{"encoder_prefix",
                              YAML::Node(std::string("$PATH"))}},
                  .init = {},
@@ -85,7 +85,7 @@ std::map<std::string, Drivers> driver_classes = {
             {"fake",
              {
                  .factory =
-                     (driver_factory_ptr)&remote_actuator::FakeFactory::New,
+                     [] (rclcpp::Node *node) { return remote_actuator::FakeFactory::New(node); },
                  .params = {{"actuator_prefix",
                              YAML::Node(std::string("$PATH"))}},
                  .init = {},
@@ -93,7 +93,7 @@ std::map<std::string, Drivers> driver_classes = {
             {"em2rs",
              {
                  .factory =
-                     (driver_factory_ptr)&stepper_driver_em2rs::Factory::New,
+                     [] (rclcpp::Node *node) { return stepper_driver_em2rs::Factory::New(node); },
                  .params = {{"actuator_prefix",
                              YAML::Node(std::string("$PATH"))},
                             {"stepper_prefix",

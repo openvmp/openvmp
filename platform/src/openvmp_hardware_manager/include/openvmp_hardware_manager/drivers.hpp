@@ -21,15 +21,8 @@
 
 namespace openvmp_hardware_manager {
 
-class Abstract {
- public:
-  virtual ~Abstract() = 0;
-};
-
-typedef std::shared_ptr<Abstract> (*driver_factory_ptr)(rclcpp::Node *);
-
 struct DriverInfo {
-  driver_factory_ptr factory;
+  std::function<std::shared_ptr<void>(rclcpp::Node *)> factory;
   std::vector<std::pair<std::string, YAML::Node>> params;
   std::vector<openvmp_hardware_configuration::DriverInit> init;
 };
