@@ -201,29 +201,29 @@
 
       gains:
         front_turn_table_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         front_body_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         front_left_arm_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         front_left_arm_inner_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         # front_left_arm_wheel_joint:
         #   p: 1.0
         #   i: 0.1
@@ -231,17 +231,17 @@
         #   i_clamp: 1.0
         #   ff_velocity_scale: 1.0
         front_right_arm_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         front_right_arm_inner_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         # front_right_arm_wheel_joint:
         #   p: 1.0
         #   i: 0.1
@@ -249,27 +249,27 @@
         #   i_clamp: 1.0
         #   ff_velocity_scale: 1.0
         rear_turn_table_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         rear_body_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         rear_left_arm_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         rear_left_arm_inner_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
           ff_velocity_scale: 0.3
         # rear_left_arm_wheel_joint:
@@ -279,17 +279,17 @@
         #   i_clamp: 1.0
         #   ff_velocity_scale: 1.0
         rear_right_arm_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         rear_right_arm_inner_joint:
-          p: 1.0
-          i: 0.1
-          d: 0.025
+          p: 6.0
+          i: 1.0
+          d: 0.5
           # i_clamp: 0.9
-          ff_velocity_scale: 0.3
+          # ff_velocity_scale: 0.3
         # rear_right_arm_wheel_joint:
         #   p: 1.0
         #   i: 0.1
