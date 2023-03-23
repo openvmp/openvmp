@@ -102,6 +102,7 @@ Driver::Driver(rclcpp::Node *parent,
   // Create the node and make it spin
   // RCLCPP_INFO(parent->get_logger(), "launching the node %s",
   // node_name.c_str());
+  node_options.use_intra_process_comms(true);
   node_ = std::make_shared<rclcpp::Node>(node_name, ns, node_options);
   exec_->add_node(node_);
   // RCLCPP_INFO(parent->get_logger(), "done launching the node %s",
