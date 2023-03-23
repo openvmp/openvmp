@@ -10,8 +10,8 @@
 #ifndef OPENVMP_HARDWARE_CONFIGURATION_GEARBOX_H
 #define OPENVMP_HARDWARE_CONFIGURATION_GEARBOX_H
 
-#include "rclcpp/rclcpp.hpp"
 #include "openvmp_hardware_configuration/device.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 namespace YAML {
 class Node;
@@ -24,7 +24,7 @@ class Gearbox : public Device {
   Gearbox(const std::string &, const YAML::Node &, const std::string &);
   virtual ~Gearbox() {}
 
-  enum Type { WORM, PLANETARY };
+  enum Type { INVALID, WORM, PLANETARY };
   static constexpr double WORM_SELF_LOCK_RATIO = 100.0;
 
   double get_ratio() const { return ratio_; }

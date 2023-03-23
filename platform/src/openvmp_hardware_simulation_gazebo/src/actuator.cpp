@@ -45,7 +45,7 @@ void Actuator::position_set_real_(double position) {
 
 void Actuator::velocity_set_real_(double velocity) {
   auto joint_ptr = joint_.lock();
-  if (velocity < 0.0001) {
+  if (::abs(velocity) < 0.00001) {
     mode_ = DETENT;
   } else {
     mode_ = RUNNING;

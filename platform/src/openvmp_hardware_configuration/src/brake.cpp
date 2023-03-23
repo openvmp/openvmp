@@ -29,6 +29,8 @@ Brake::Brake(const std::string &joint, const YAML::Node &node,
   torque_ = node["torque"].as<double>();
   if (node["engagedByDefault"]) {
     engaged_by_default_ = node["engagedByDefault"].as<bool>();
+  } else {
+    engaged_by_default_ = false;
   }
 }
 

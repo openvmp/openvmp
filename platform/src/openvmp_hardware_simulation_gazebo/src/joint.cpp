@@ -96,24 +96,20 @@ void Joint::updateFriction() {
   joint_->SetParam("friction", 0, friction);
 }
 
-void Joint::setPosition(double position) {
-  joint_->SetPosition(0, position /* * 2.0 * M_PI*/);
-}
+void Joint::setPosition(double position) { joint_->SetPosition(0, position); }
 
 void Joint::setVelocity(double velocity) {
-  // TODO(clairbee): consider simulating auto-release of brakes
-  // if (brake_) {
-  //   brake_->device->set_engaged(velocity > 0.00001);
-  // }
-  // updateFriction();
-  joint_->SetParam("fmax", 0, 2000.0);
-  joint_->SetParam("vel", 0, velocity * 2.0 * M_PI);
+  if (brake_) {
+    brake_->device->set_engaged(::abs(velocity) < 0.00001);
+  }
+
+  joint_->SetParam("fmax", 0, 200000000.0);
+  joint_->SetParam("vel", 0, velocity);
+  // joint_->SetVelocity(0, velocity);
 }
 
-double Joint::getPosition() {
-  return joint_->Position(0) /* / / (2.0 * M_PI) */;
-}
+double Joint::getPosition() { return joint_->Position(0); }
 
-double Joint::getVelocity() { return joint_->GetVelocity(0) / (2.0 * M_PI); }
+double Joint::getVelocity() { return joint_->GetVelocity(0); }
 
 }  // namespace openvmp_hardware_simulation_gazebo

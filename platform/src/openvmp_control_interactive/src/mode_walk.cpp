@@ -110,7 +110,8 @@ void WalkMode::processFeedback_(
 
     trajectory_msgs::msg::JointTrajectory msg = msg_template_;
     builtin_interfaces::msg::Duration no_delay;
-    next_phase_animation_(dist > 0 ? 1 : -1, msg, no_delay);
+    next_phase_animation_(dist > 0 ? ::ceil(dist) : ::floor(dist), msg,
+                          no_delay);
 
     if (trajectory_commands_) {
       trajectory_commands_->publish(msg);
@@ -143,7 +144,7 @@ void WalkMode::next_phase_(
     int dir, trajectory_msgs::msg::JointTrajectoryPoint &point,
     const builtin_interfaces::msg::Duration &time_from_start) {
   point.time_from_start = time_from_start;
-  point.time_from_start.nanosec += 500000000ULL;
+  point.time_from_start.sec += 2;
 
   phase_ += dir;
   phase_ %= 4;

@@ -76,8 +76,8 @@ void DriveMode::enter(std::shared_ptr<ControlImpl> from) {
         "rear_turn_table_joint",  "rear_body_joint",
         "rear_left_arm_joint",    "rear_left_arm_inner_joint",
         "rear_right_arm_joint",   "rear_right_arm_inner_joint"};
-    point_template_.time_from_start.sec = 0;
-    point_template_.time_from_start.nanosec = 500000000ULL;
+    point_template_.time_from_start.sec = 2;
+    point_template_.time_from_start.nanosec = 0;
     point_template_.positions = {0, 0, 3.14, -3.14 / 6.0, 3.14, -3.14 / 6.0,
                                  0, 0, 3.14, -3.14 / 6.0, 3.14, -3.14 / 6.0};
   }

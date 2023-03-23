@@ -24,6 +24,8 @@ Gearbox::Gearbox(const std::string &joint, const YAML::Node &node,
     type_ = PLANETARY;
   } else {
     RCLCPP_ERROR(logger_, "Invalid type");
+    type_ = INVALID;
+    ratio_ = 0.0;
     return;
   }
 
