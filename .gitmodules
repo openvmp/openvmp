@@ -26,7 +26,7 @@
 	path = deployment/ansible/roles/ansible-ubuntu-wifi
 	url = https://github.com/fcastello/ansible-ubuntu-wifi.git
 [submodule "platform/src/remote_hardware_interface"]
-	path = platform/src/remote_hardware_interface
+	path = platform/src/hardware_interface
 	url = ../remote_hardware_interface.git
 [submodule "platform/src/brake"]
 	path = platform/src/brake
