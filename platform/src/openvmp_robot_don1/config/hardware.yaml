@@ -23,26 +23,26 @@ joints:
         modbus_is_remote: true
         init:
           - service: /stepper/modbus/set_do1
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0x24 # disengage brakes on power on
             # value: 0xA0  # TODO(clairbee): disengage brakes during the command only
           - service: /stepper/modbus/set_brake_delay_release
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
           - service: /stepper/modbus/set_brake_delay_lock
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
           - service: /stepper/modbus/set_brake_locking_velocity_threshold
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 10 # TODO(clairbee): what is it??? no effect observed!
           - service: /stepper/modbus/set_jog_interval
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 50 # at least 20 commands per second
           - service: /stepper/modbus/set_jog_acc_dec
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # accelerate and decelerate as fast as possible
           - service: /stepper/modbus/set_peak_current
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 20 # 2.0A max at this joint
     brake:
       torque: 0.5
@@ -76,26 +76,26 @@ joints:
         modbus_is_remote: true
         init:
           - service: /stepper/modbus/set_do1
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0x24 # enable brake output
             # value: 0xA0  # TODO(clairbee): disengage brakes during the command only
           - service: /stepper/modbus/set_brake_delay_release
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
           - service: /stepper/modbus/set_brake_delay_lock
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # as fast as possible
           - service: /stepper/modbus/set_brake_locking_velocity_threshold
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 10 # TODO(clairbee): what is it??? no effect observed!
           - service: /stepper/modbus/set_jog_interval
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 50 # at least 20 commands per second
           - service: /stepper/modbus/set_jog_acc_dec
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 0 # accelerate and decelerate as fast as possible
           - service: /stepper/modbus/set_peak_current
-            type: modbus/srv/ConfiguredHoldingRegisterWrite
+            type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
             value: 20 # 2.0A max at this joint
     brake:
       torque: 0.5

@@ -12,9 +12,9 @@
 
 #include <string>
 
-#include "modbus/srv/configured_holding_register_write.hpp"
 #include "openvmp_hardware_configuration/configuration.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "ros2_modbus/srv/configured_holding_register_write.hpp"
 
 namespace openvmp_hardware_manager {
 

@@ -13,17 +13,17 @@
 #include <memory>
 #include <string>
 
-#include "brake/interface.hpp"
-#include "brake/srv/command.hpp"
 #include "gazebo/physics/Joint.hh"
 #include "openvmp_hardware_configuration/brake.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "remote_brake/interface.hpp"
+#include "remote_brake/srv/command.hpp"
 
 namespace openvmp_hardware_simulation_gazebo {
 
 class Joint;
 
-class Brake : public brake::Interface {
+class Brake : public remote_brake::Interface {
  public:
   Brake(rclcpp::Node *node, std::weak_ptr<Joint> joint,
         std::shared_ptr<openvmp_hardware_configuration::Brake> config);
@@ -33,8 +33,8 @@ class Brake : public brake::Interface {
 
  protected:
   virtual void command_handler_real_(
-      const std::shared_ptr<brake::srv::Command::Request> request,
-      std::shared_ptr<brake::srv::Command::Response> response) override;
+      const std::shared_ptr<remote_brake::srv::Command::Request> request,
+      std::shared_ptr<remote_brake::srv::Command::Response> response) override;
 
   std::weak_ptr<Joint> joint_;
 

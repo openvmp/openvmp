@@ -15,34 +15,34 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
-find_package(modbus_rtu REQUIRED)
-find_package(stepper_driver_em2rs REQUIRED)
-find_package(switch_r413d08 REQUIRED)
-find_package(serial_bus REQUIRED)
-find_package(encoder_amt21 REQUIRED)
+find_package(ros2_modbus_rtu REQUIRED)
+find_package(ros2_em2rs REQUIRED)
+find_package(ros2_r413d08 REQUIRED)
+find_package(ros2_serial_bus REQUIRED)
+find_package(ros2_amt21 REQUIRED)
 find_package(remote_actuator REQUIRED)
 find_package(remote_encoder REQUIRED)
-find_package(brake REQUIRED)
-find_package(switch_interface REQUIRED)
-find_package(brake_switch REQUIRED)
+find_package(remote_brake REQUIRED)
+find_package(remote_switch REQUIRED)
+find_package(ros2_brake_switch REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
 
 
 # Logic shared by all targets
 include_directories(
   include
-  ${modbus_INCLUDE_DIRS}
-  ${modbus_rtu_INCLUDE_DIRS}
-  ${stepper_driver_em2rs_INCLUDE_DIRS}
-  ${stepper_driver_em2rs_native_INCLUDE_DIRS}
-  ${serial_bus_INCLUDE_DIRS}
-  ${encoder_amt21_INCLUDE_DIRS}
-  ${encoder_amt21_native_INCLUDE_DIRS}
+  ${ros2_modbus_INCLUDE_DIRS}
+  ${ros2_modbus_rtu_INCLUDE_DIRS}
+  ${ros2_em2rs_INCLUDE_DIRS}
+  ${ros2_em2rs_native_INCLUDE_DIRS}
+  ${ros2_serial_bus_INCLUDE_DIRS}
+  ${ros2_amt21_INCLUDE_DIRS}
+  ${ros2_amt21_native_INCLUDE_DIRS}
   ${remote_actuator_INCLUDE_DIRS}
   ${remote_encoder_INCLUDE_DIRS}
-  ${brake_INCLUDE_DIRS}
-  ${switch_interface_INCLUDE_DIRS}
-  ${brake_switch_INCLUDE_DIRS}
+  ${remote_brake_INCLUDE_DIRS}
+  ${remote_switch_INCLUDE_DIRS}
+  ${ros2_brake_switch_INCLUDE_DIRS}
   ${openvmp_hardware_configuration_INCLUDE_DIRS}
 )
 
@@ -55,38 +55,37 @@ set(project_SOURCE_FILES
 
 set(project_LIBRARIES
   ${rclcpp_LIBRARIES}
-  ${modbus_LIBRARIES}
-  ${modbus_LIBRARIES}
-  ${modbus_rtu_LIBRARIES}
-  ${modbus_rtu_native_LIBRARIES}
-  ${serial_bus_LIBRARIES}
-  ${serial_bus_native_LIBRARIES}
+  ${ros2_modbus_LIBRARIES}
+  ${ros2_modbus_LIBRARIES}
+  ${ros2_modbus_rtu_LIBRARIES}
+  ${ros2_modbus_rtu_native_LIBRARIES}
+  ${ros2_serial_bus_LIBRARIES}
+  ${ros2_serial_bus_native_LIBRARIES}
   ${remote_actuator_LIBRARIES}
   ${remote_actuator_fake_LIBRARIES}
   ${remote_encoder_LIBRARIES}
   ${remote_encoder_fake_LIBRARIES}
-  ${stepper_driver_em2rs_LIBRARIES}
-  ${stepper_driver_em2rs_native_LIBRARIES}
-  ${brake_fake_LIBRARIES}
-  ${brake_switch_LIBRARIES}
-  ${brake_switch_native_LIBRARIES}
+  ${ros2_em2rs_LIBRARIES}
+  ${ros2_em2rs_native_LIBRARIES}
+  ${remote_brake_fake_LIBRARIES}
+  ${ros2_brake_switch_LIBRARIES}
+  ${ros2_brake_switch_native_LIBRARIES}
   ${openvmp_hardware_configuration_LIBRARIES}
-  ${encoder_amt21_LIBRARIES}
-  ${stepper_driver_em2rs_LIBRARIES}
+  ${ros2_amt21_LIBRARIES}
 )
 
 set(project_DEPENDENCIES
   rclcpp
-  modbus
-  modbus_rtu
-  stepper_driver_em2rs
-  serial_bus
-  encoder_amt21
+  ros2_modbus
+  ros2_modbus_rtu
+  ros2_em2rs
+  ros2_serial_bus
+  ros2_amt21
   remote_encoder
   remote_actuator
-  brake
-  switch_interface
-  brake_switch
+  remote_brake
+  remote_switch
+  ros2_brake_switch
   openvmp_hardware_configuration
 )
 

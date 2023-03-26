@@ -11,17 +11,17 @@
   <depend>rclcpp</depend>
   <depend>yaml-cpp</depend>
   <depend>openvmp_hardware_configuration</depend>
-  <depend>modbus</depend>
-  <depend>modbus_rtu</depend>
-  <depend>stepper_driver_em2rs</depend>
-  <depend>switch_r413d08</depend>
-  <depend>serial_bus</depend>
-  <depend>encoder_amt21</depend>
-  <depend>remote_actuator</depend>
   <depend>remote_encoder</depend>
-  <depend>brake</depend>
-  <depend>switch_interface</depend>
-  <depend>brake_switch</depend>
+  <depend>ros2_serial_bus</depend>
+  <depend>ros2_amt21</depend>
+  <depend>remote_actuator</depend>
+  <depend>ros2_modbus</depend>
+  <depend>ros2_modbus_rtu</depend>
+  <depend>ros2_em2rs</depend>
+  <depend>remote_brake</depend>
+  <depend>remote_switch</depend>
+  <depend>ros2_brake_switch</depend>
+  <depend>ros2_r413d08</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

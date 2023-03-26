@@ -35,7 +35,7 @@
 	path = platform/src/remote_hardware_interface
 	url = ../remote_hardware_interface.git
 [submodule "platform/src/brake"]
-	path = platform/src/brake
+	path = platform/src/remote_brake
 	url = ../brake.git
 [submodule "platform/src/third_party/ros2_usb_camera"]
 	path = platform/src/third_party/ros2_usb_camera

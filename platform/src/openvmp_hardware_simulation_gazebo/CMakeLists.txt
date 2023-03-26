@@ -18,7 +18,7 @@ find_package(gazebo_msgs REQUIRED)
 find_package(gazebo_ros REQUIRED)
 find_package(sdformat9 REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
-find_package(brake REQUIRED)
+find_package(remote_brake REQUIRED)
 find_package(remote_actuator REQUIRED)
 find_package(remote_encoder REQUIRED)
 find_package(yaml-cpp REQUIRED)
@@ -33,7 +33,7 @@ link_directories(
 # Logic shared by all targets
 include_directories(
   include
-  ${brake_INCLUDE_DIRS}
+  ${remote_brake_INCLUDE_DIRS}
   ${remote_actuator_INCLUDE_DIRS}
   ${remote_encoder_INCLUDE_DIRS}
   ${openvmp_hardware_configuration_INCLUDE_DIRS}
@@ -50,7 +50,7 @@ set(project_SOURCE_FILES
 
 set(project_LIBRARIES
   ${rclcpp_LIBRARIES}
-  ${brake_LIBRARIES}
+  ${remote_brake_LIBRARIES}
   ${remote_actuator_LIBRARIES}
   ${remote_encoder_LIBRARIES}
 )
@@ -61,7 +61,7 @@ set(project_DEPENDENCIES
   gazebo_ros
   sdformat9
   openvmp_hardware_configuration
-  brake
+  remote_brake
   remote_actuator
   remote_encoder
 )
