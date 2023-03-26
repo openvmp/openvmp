@@ -1,24 +1,18 @@
 [submodule "platform/src/serial"]
-	path = platform/src/serial
+	path = platform/src/comms_serial
 	url = ../serial.git
 [submodule "platform/src/modbus"]
-	path = platform/src/modbus
+	path = platform/src/comms_modbus
 	url = ../modbus.git
 [submodule "platform/src/modbus_rtu"]
-	path = platform/src/modbus_rtu
+	path = platform/src/comms_modbus_rtu
 	url = ../modbus_rtu.git
-[submodule "platform/src/modbus_tcp"]
-	path = platform/src/modbus_tcp
-	url = ../modbus_tcp.git
 [submodule "platform/src/stepper_driver_em2rs"]
-	path = platform/src/stepper_driver_em2rs
+	path = platform/src/actuator_stepper_driver_em2rs
 	url = ../stepper_driver_em2rs.git
 [submodule "platform/src/stepper_driver"]
-	path = platform/src/stepper_driver
+	path = platform/src/actuator_stepper_driver
 	url = ../stepper_driver.git
-[submodule "platform/src/stepper_driver_terminal"]
-	path = platform/src/stepper_driver_terminal
-	url = ../stepper_driver_terminal.git
 [submodule "platform/src/yaml-cpp"]
 	path = platform/src/third_party/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
@@ -35,7 +29,7 @@
 	path = platform/src/remote_hardware_interface
 	url = ../remote_hardware_interface.git
 [submodule "platform/src/brake"]
-	path = platform/src/remote_brake
+	path = platform/src/brake
 	url = ../brake.git
 [submodule "platform/src/third_party/ros2_usb_camera"]
 	path = platform/src/third_party/ros2_usb_camera
@@ -53,7 +47,7 @@
 	path = platform/src/brake_switch
 	url = ../brake_switch.git
 [submodule "platform/src/serial_bus"]
-	path = platform/src/serial_bus
+	path = platform/src/comms_serial_bus
 	url = ../serial_bus.git
 [submodule "platform/src/encoder"]
 	path = platform/src/encoder
