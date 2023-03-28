@@ -53,6 +53,8 @@
           - i2c-tools
           - python3-pip
           - gpsd-tools
+          - arduino
+          - arduino-mk
         update_cache: true
         state: present
     - name: Installing and updating ROS2

@@ -58,3 +58,6 @@
 [submodule "platform/src/actuator"]
 	path = platform/src/actuator
 	url = ../actuator.git
+[submodule "platform/src/microcontroller"]
+	path = platform/src/microcontroller
+	url = ../microcontroller.git

@@ -1,15 +1,15 @@
 {
     "paths": {
-        "src/serial": {
+        "src/comms_serial": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Wno-unused-result -Werror"]
         },
-        "src/serial_bus": {
+        "src/comms_serial_bus": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
-        "src/modbus": {
+        "src/comms_modbus": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
-        "src/modbus_rtu": {
+        "src/comms_modbus_rtu": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
         "src/switch": {
@@ -45,10 +45,13 @@
         "src/actuator": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
-        "src/stepper_driver": {
+        "src/actuator_stepper_driver": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
-        "src/stepper_driver_em2rs": {
+        "src/actuator_stepper_driver_em2rs": {
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+        },
+        "src/microcontroller": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
         "src/third_party/yaml-cpp": {
