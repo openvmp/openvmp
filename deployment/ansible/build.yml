@@ -35,7 +35,11 @@
       args:
         chdir: openvmp/platform/src/third_party/RTIMULib2/Linux/python
         creates: RTIMULib.egg-info/SOURCES.txt
-    - name: Build the source code
+    - name: Build the main source code
       script: scripts/build_rpi.sh
       args:
         chdir: /root/openvmp/platform
+    - name: Build the microcontroller source code
+      shell: make
+      args:
+        chdir: /root/openvmp/platform/src/microcontroller/microcontrollers/arduino_mega2560

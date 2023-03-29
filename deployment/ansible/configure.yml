@@ -53,8 +53,6 @@
           - i2c-tools
           - python3-pip
           - gpsd-tools
-          - arduino
-          - arduino-mk
         update_cache: true
         state: present
     - name: Installing and updating ROS2
@@ -80,6 +78,25 @@
         content: |
           net.ipv4.ipfrag_time = 3
           net.core.rmem_max = 4194304
+
+    # Arduino environment
+    - name: Installing and updating Arduino packages
+      ansible.builtin.apt:
+        pkg:
+          - arduino
+          - arduino-mk
+        update_cache: true
+        state: present
+    - name: Installing arduino-cli
+      ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+      args:
+        creates: bin/arduino-cli
+      changed_when: False
+    - name: Installing libraries
+      ansible.builtin.shell: /root/bin/arduino-cli lib install Servo
+      args:
+        creates: Arduino/libraries/Servo/lib/Servo.h
+      changed_when: False
 
     # Robot source code
     - name: Creating source code repositories on the targets
