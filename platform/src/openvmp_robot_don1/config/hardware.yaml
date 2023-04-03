@@ -517,4 +517,4 @@ buses:
     driver:
       type: serial_bus
       serial_is_remote: true
-      serial_prefix: /bus/arduino0/rs485/line0
+      serial_prefix: /rs485/line0
