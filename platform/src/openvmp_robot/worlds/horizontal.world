@@ -29,11 +29,11 @@
     <include>
       <uri>model://sun</uri>
     </include>
-    <!-- <include>
+    <include>
       <uri>model://ground_plane</uri>
       <pose>0 0 -1 0 0 0</pose>
-    </include> -->
-    <include>
+    </include>
+    <!-- <include>
       <uri>model://baylands</uri>
       <pose>72 142 -1 0 0 0</pose>
     </include>
@@ -41,7 +41,7 @@
       <uri>model://telephone_pole</uri>
       <pose>-18 25 -1 0 0 0</pose>
     </include>
-    <!-- <include>
+    <include>
       <uri>model://lamp_post</uri>
       <pose>-18 26 -0.5 0 0 0</pose>
     </include>
