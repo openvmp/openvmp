@@ -108,7 +108,7 @@ Driver::Driver(rclcpp::Node *parent,
   // RCLCPP_INFO(parent->get_logger(), "done launching the node %s",
   //             node_name.c_str());
 
-  instance_ = driver_info.factory(node_.get());
+  instance_ = driver_info.factory(node_.get(), exec);
   // RCLCPP_INFO(parent->get_logger(), "created the interface");
 
   // RCLCPP_INFO(parent->get_logger(), "initialization steps: %lu",

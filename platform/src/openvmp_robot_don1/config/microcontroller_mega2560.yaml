@@ -1,0 +1,77 @@
+pwm:
+  - type: simple_pwm
+    name: front_join_male_pwm
+    prefix: /front_join_male
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: front_join_female_pwm
+    prefix: /front_join_female
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: front_right_camera_horizontal_pwm
+    prefix: /front_right_camera_horizontal
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: front_right_camera_vertical_pwm
+    prefix: /front_right_camera_vertical
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: front_left_camera_horizontal_pwm
+    prefix: /front_left_camera_horizontal
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: front_left_camera_vertical_pwm
+    prefix: /front_left_camera_vertical
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_join_male_pwm
+    prefix: /rear_join_male
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_join_female_pwm
+    prefix: /rear_join_female
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_right_camera_horizontal_pwm
+    prefix: /rear_right_camera_horizontal
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_right_camera_vertical_pwm
+    prefix: /rear_right_camera_vertical
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_left_camera_horizontal_pwm
+    prefix: /rear_left_camera_horizontal
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_left_camera_vertical_pwm
+    prefix: /rear_left_camera_vertical
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: front_attachment_pwm
+    prefix: /front_attachment
+    pwm_min: 0
+    pwm_max: 255
+  - type: simple_pwm
+    name: rear_attachment_pwm
+    prefix: /rear_attachment
+    pwm_min: 0
+    pwm_max: 255
+
+uart:
+  - serial: /rs485/line0
+  - serial: /rs485/line1
+  - serial: /rs485/line2
+  - serial: /rs485/line3

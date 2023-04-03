@@ -22,7 +22,10 @@
 namespace openvmp_hardware_manager {
 
 struct DriverInfo {
-  std::function<std::shared_ptr<void>(rclcpp::Node *)> factory;
+  std::function<std::shared_ptr<void>(
+      rclcpp::Node *,
+      std::shared_ptr<rclcpp::executors::MultiThreadedExecutor>)>
+      factory;
   std::vector<std::pair<std::string, YAML::Node>> params;
   std::vector<openvmp_hardware_configuration::DriverInit> init;
 };

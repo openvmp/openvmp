@@ -61,3 +61,6 @@
 [submodule "platform/src/microcontroller"]
 	path = platform/src/microcontroller
 	url = ../microcontroller.git
+[submodule "platform/src/actuator_pwm"]
+	path = platform/src/actuator_pwm
+	url = ../actuator_pwm.git

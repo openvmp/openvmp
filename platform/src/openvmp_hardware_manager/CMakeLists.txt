@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(openvmp_hardware_manager)
 
 # Compiler settings
@@ -13,11 +13,13 @@ endif()
 # Dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
 find_package(ros2_modbus_rtu REQUIRED)
 find_package(ros2_em2rs REQUIRED)
 find_package(ros2_r413d08 REQUIRED)
+find_package(ros2_serial REQUIRED)
 find_package(ros2_serial_bus REQUIRED)
 find_package(ros2_amt21 REQUIRED)
 find_package(remote_actuator REQUIRED)
@@ -25,6 +27,8 @@ find_package(remote_encoder REQUIRED)
 find_package(remote_brake REQUIRED)
 find_package(remote_switch REQUIRED)
 find_package(ros2_brake_switch REQUIRED)
+find_package(remote_microcontroller REQUIRED)
+find_package(actuator_pwm REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
 
 
@@ -35,6 +39,7 @@ include_directories(
   ${ros2_modbus_rtu_INCLUDE_DIRS}
   ${ros2_em2rs_INCLUDE_DIRS}
   ${ros2_em2rs_native_INCLUDE_DIRS}
+  ${ros2_serial_INCLUDE_DIRS}
   ${ros2_serial_bus_INCLUDE_DIRS}
   ${ros2_amt21_INCLUDE_DIRS}
   ${ros2_amt21_native_INCLUDE_DIRS}
@@ -43,6 +48,8 @@ include_directories(
   ${remote_brake_INCLUDE_DIRS}
   ${remote_switch_INCLUDE_DIRS}
   ${ros2_brake_switch_INCLUDE_DIRS}
+  ${remote_microcontroller_INCLUDE_DIRS}
+  ${actuator_pwm_INCLUDE_DIRS}
   ${openvmp_hardware_configuration_INCLUDE_DIRS}
 )
 
@@ -55,10 +62,13 @@ set(project_SOURCE_FILES
 
 set(project_LIBRARIES
   ${rclcpp_LIBRARIES}
+  ${std_msgs_LIBRARIES}
   ${ros2_modbus_LIBRARIES}
   ${ros2_modbus_LIBRARIES}
   ${ros2_modbus_rtu_LIBRARIES}
   ${ros2_modbus_rtu_native_LIBRARIES}
+  ${ros2_serial_LIBRARIES}
+  ${ros2_serial_native_LIBRARIES}
   ${ros2_serial_bus_LIBRARIES}
   ${ros2_serial_bus_native_LIBRARIES}
   ${remote_actuator_LIBRARIES}
@@ -72,13 +82,17 @@ set(project_LIBRARIES
   ${ros2_brake_switch_native_LIBRARIES}
   ${openvmp_hardware_configuration_LIBRARIES}
   ${ros2_amt21_LIBRARIES}
+  ${remote_microcontroller_LIBRARIES}
+  ${actuator_pwm_LIBRARIES}
 )
 
 set(project_DEPENDENCIES
   rclcpp
+  std_msgs
   ros2_modbus
   ros2_modbus_rtu
   ros2_em2rs
+  ros2_serial
   ros2_serial_bus
   ros2_amt21
   remote_encoder
@@ -86,6 +100,8 @@ set(project_DEPENDENCIES
   remote_brake
   remote_switch
   ros2_brake_switch
+  remote_microcontroller
+  actuator_pwm
   openvmp_hardware_configuration
 )
 

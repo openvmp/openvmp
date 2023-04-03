@@ -410,52 +410,97 @@ joints:
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/front_left_camera_horizontal/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: front_left_arm_camera_servo_upper_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/front_left_camera_vertical/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: front_right_arm_camera_servo_lower_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/front_right_camera_horizontal/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: front_right_arm_camera_servo_upper_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/front_right_camera_vertical/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: rear_left_arm_camera_servo_lower_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/rear_left_camera_horizontal/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: rear_left_arm_camera_servo_upper_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/rear_left_camera_vertical/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: rear_right_arm_camera_servo_lower_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/rear_right_camera_horizontal/pwm
+        pwm_type: position
     encoder:
       type: absolute
   - name: rear_right_arm_camera_servo_upper_joint
     actuator:
       type: servo
       torque: 0.1
+      driver:
+        type: pwm
+        pwm_path: /bus/arduino0/rear_right_camera_vertical/pwm
+        pwm_type: position
     encoder:
       type: absolute
 
 buses:
+  - path: /bus/arduino0
+    driver:
+      type: microcontroller
+      microcontroller_config: src/openvmp_robot_don1/config/microcontroller_mega2560.yaml
+      serial_is_remote: false
+      serial_dev_name: /dev/ttyACM0
+      serial_baud_rate: 115200
+      serial_data: 8
+      serial_parity: false
+      serial_stop: 1
+      serial_flow_control: false
+      serial_sw_flow_control: false
+      serial_prefix: /serial/arduino0
   - path: /bus/modbus/rtu0
     driver:
       type: modbus_rtu
@@ -465,16 +510,11 @@ buses:
       serial_data: 8
       serial_parity: false
       serial_stop: 1
-      serial_flow_control: true
+      serial_flow_control: false
+      serial_sw_flow_control: false
       serial_prefix: /serial/modbus_rtu0
   - path: /bus/rs485/line0
     driver:
       type: serial_bus
-      serial_is_remote: false
-      serial_dev_name: /dev/ttyAMA1
-      serial_baud_rate: 115200
-      serial_data: 8
-      serial_parity: false
-      serial_stop: 1
-      serial_flow_control: false
-      serial_prefix: /serial/rs485_line0
+      serial_is_remote: true
+      serial_prefix: /bus/arduino0/rs485/line0
