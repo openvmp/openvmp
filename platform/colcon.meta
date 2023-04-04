@@ -54,6 +54,12 @@
         "src/microcontroller": {
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
         },
+        "src/openvmp_hardware_simulation_gazebo": {
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -DBOOST_NO_CXX98_FUNCTION_BASE"]
+        },
+        "src/openvmp_world_simulation_gazebo": {
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -DBOOST_NO_CXX98_FUNCTION_BASE"]
+        },
         "src/third_party/yaml-cpp": {
             "name": "YAML_CPP",
             "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wno-shadow"]
