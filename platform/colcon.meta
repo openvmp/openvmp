@@ -1,64 +1,64 @@
 {
     "paths": {
         "src/comms_serial": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Wno-unused-result -Werror -Wno-error=c++20-designator"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic -Wno-unused-result"]
         },
         "src/comms_serial_bus": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/comms_modbus": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/comms_modbus_rtu": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/switch": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=c++20-designator"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/switch_r413d08": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/brake": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/brake_switch": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/openvmp_hardware_configuration": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/openvmp_hardware_manager": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/openvmp_control_interactive": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/remote_hardware_interface": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/encoder": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/encoder_amt21": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/actuator": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=c++20-designator"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/actuator_stepper_driver": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/actuator_stepper_driver_em2rs": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/microcontroller": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic"]
         },
         "src/openvmp_hardware_simulation_gazebo": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -DBOOST_NO_CXX98_FUNCTION_BASE"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic -DBOOST_NO_CXX98_FUNCTION_BASE"]
         },
         "src/openvmp_world_simulation_gazebo": {
-            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -DBOOST_NO_CXX98_FUNCTION_BASE"]
+            "cmake-args": ["-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror -Wno-error=pedantic -DBOOST_NO_CXX98_FUNCTION_BASE"]
         },
         "src/third_party/yaml-cpp": {
             "name": "YAML_CPP",
