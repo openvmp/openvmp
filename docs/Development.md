@@ -2,40 +2,64 @@
 
 ## Configuring the development environment
 
-### Prerequisites
+### OS
 
 The following instructions are for Ubuntu 22.04.
-If it's not working for you, please, follow the instructions to install ROS2 Humble for your OS instead.
+If you would like to use another OS for development
+then simply use docker:
 
 ```
-sudo apt update
-sudo apt install -y software-properties-common
-sudo add-apt-repository universe
-sudo apt update
-sudo apt install -y git curl gnupg lsb-release
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+docker run -d -it --mount type=bind,source=$(pwd),target=/openvmp --name openvmp --env ROBOT_ID=DOCK ros:humble /bin/bash
+```
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+### OS Prerequisites
 
+Use the following instructions to prepare the ROS2 environment on a vanilla Ubuntu 22.04 (not a docker container with ROS2 Humble preinstalled):
 
-sudo apt install -y ros-humble-desktop-full python3-colcon-common-extensions
-sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
-sudo apt install -y ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros2-control
-sudo apt install -y ros-humble-camera-calibration-parsers v4l2loopback-utils
-sudo apt install -y ros-humble-topic-tools ros-humble-robot-localization
+```bash
+sudo -s
+apt update
+apt install -y software-properties-common
+add-apt-repository universe
+apt update
+apt install -y git curl gnupg lsb-release
+curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
-# The following packages are required for testing purposes only
-# (during the regular build process though)
-sudo apt install -y ros-humble-ros-testing socat xterm
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+```
 
-# The following packages are required for deployment purposes only
-sudo apt install -y ansible
+The following OS packages are required for development and testing purposes:
+```bash
+apt install -y socat xterm
+
+apt install -y ansible
 ansible-galaxy collection install community.general
+```
+
+### ROS2 package prerequisites
+
+The following packages might be missing from your ROS2 environment and
+need to be installed additionally:
+
+```bash
+sudo -s
+apt update
+apt install -y ros-humble-desktop-full python3-colcon-common-extensions
+apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
+apt install -y ros-humble-gazebo-ros-pkgs ros-humble-gazebo-ros2-control
+apt install -y ros-humble-camera-calibration-parsers v4l2loopback-utils
+apt install -y ros-humble-topic-tools ros-humble-robot-localization
+apt install -y ros-humble-ros-testing
 ```
 
 ### Visual Studio Code
 
-Build the project at least once to have the support files generated.
+Open the top level OpenVMP folder as a workspace in Visual Studio Code.
+
+If you open any C++ file in Visual Studio Code
+then there will be a large number of C++ errors reported.
+The whole platform needs to be built at least once to have the neccessary
+support files generated and to have those error messages go away.
 
 ## Building
 
