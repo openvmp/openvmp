@@ -17,7 +17,7 @@
     # DDS plumbing
     - name: Create the systemd service for the 'drivers' subsystem
       ansible.builtin.copy:
-        src: files/systemd/dds.service
+        src: ../shared/files/systemd/dds.service
         dest: /lib/systemd/system/openvmp-dds.service
     - name: Launch the dds plumbing
       systemd:
@@ -28,7 +28,7 @@
     # Drivers
     - name: Create the systemd service for the 'drivers' subsystem
       template:
-        src: templates/subsystem.service
+        src: ../shared/templates/subsystem.service
         dest: /lib/systemd/system/openvmp-drivers.service
       vars:
         subsystem_name: drivers
@@ -43,7 +43,7 @@
     # Motion control
     - name: Create the systemd service for the 'motion_control' subsystem
       template:
-        src: templates/subsystem.service
+        src: ../shared/templates/subsystem.service
         dest: /lib/systemd/system/openvmp-motion-control.service
       vars:
         subsystem_name: motion_control
@@ -58,7 +58,7 @@
     # Reflection
     - name: Create the systemd service for the 'reflection' subsystem
       template:
-        src: templates/subsystem.service
+        src: ../shared/templates/subsystem.service
         dest: /lib/systemd/system/openvmp-reflection.service
       vars:
         subsystem_name: reflection

@@ -6,13 +6,9 @@
 
 The following instructions are for Ubuntu 22.04.
 If you would like to use another OS for development
-then simply use docker:
+then simply [use docker](../docker/dev/README.md).
 
-```
-docker run -d -it --mount type=bind,source=$(pwd),target=/openvmp --name openvmp --env ROBOT_ID=DOCK ros:humble /bin/bash
-```
-
-### OS Prerequisites
+### OS prerequisites
 
 Use the following instructions to prepare the ROS2 environment on a vanilla Ubuntu 22.04 (not a docker container with ROS2 Humble preinstalled):
 

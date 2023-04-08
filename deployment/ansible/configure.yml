@@ -156,24 +156,18 @@
         force: false
     - name: DDS configuration file for the discovery server
       ansible.builtin.copy:
-        src: files/config/fastdds_server.xml
+        src: ../shared/files/config/fastdds_server.xml
         dest: /root/.openvmp/fastdds_server.xml
         mode: 0755
     - name: DDS configuration file for clients
       ansible.builtin.copy:
-        src: files/config/fastdds_client.xml
+        src: ../shared/files/config/fastdds_client.xml
         dest: /root/.openvmp/fastdds_client.xml
         mode: 0755
     - name: Helper script to set the environment variables
       ansible.builtin.copy:
         dest: /root/.openvmp/env.sh
-        content: |
-          source /opt/ros/humble/setup.bash
-          source /root/openvmp/platform/install/local_setup.bash
-          export FASTRTPS_DEFAULT_PROFILES_FILE=/root/.openvmp/fastdds_client.xml
-          export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-          export ROS_DISCOVERY_SERVER=127.0.0.1:11811
-          export ROBOT_ID=$(cat /root/.openvmp/id)
+        src: ../shared/files/env.sh
         mode: 0755
     - name: Set the environment variables on each login session
       ansible.builtin.lineinfile:
