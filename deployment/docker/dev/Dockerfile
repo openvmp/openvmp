@@ -26,22 +26,29 @@ RUN apt update && \
   mkdir -p /root/.openvmp && \
   echo DOCK > /root/.openvmp/id
 
+COPY deployment/shared/files/config/fastdds_client.xml /root/.openvmp/fastdds_client.xml
 COPY deployment/shared/files/env.sh /root/.openvmp/env.sh
+
+RUN \
+  GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
+  git clone --recursive https://github.com/openvmp/openvmp.git /root/openvmp
+
+RUN \
+  source /opt/ros/humble/setup.bash &&  \
+  cd /root/openvmp/platform && \
+  COLCON_HOME=$(pwd) colcon build || true
 
 ENV HOSTNAME=openvmp-docker-dev
 ENV DISPLAY=:0
-
 EXPOSE 5900/tcp
 
 SHELL ["/bin/bash", "-c"]
-RUN \
-  GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
-  git clone --recursive https://github.com/openvmp/openvmp.git && \
-  \
+ENTRYPOINT \
   source /root/.openvmp/env.sh && \
   \
-  (Xvfb $DISPLAY -screen 0 1024x768x16 &) && \
-  (fluxbox &) && \
-  (x11vnc -display $DISPLAY -bg -forever -nopw -quiet -listen localhost -xkb &) && \
+  (/usr/bin/Xvfb $DISPLAY -screen 0 1024x768x16 &) && \
+  (sleep 1 && /usr/bin/fluxbox &) && \
+  sleep 2 && /usr/bin/x11vnc -display $DISPLAY -bg -forever -nopw -quiet -listen 0.0.0.0 -xkb && \
   \
+  cd /root/openvmp/platform && \
   bash
