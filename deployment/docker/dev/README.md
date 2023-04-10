@@ -21,3 +21,10 @@ Terminal access to the container from the host:
 ```bash
 docker attach openvmp
 ```
+
+At this point OpenVMP should be ready to launch.
+For example, try:
+
+```bash
+ros2 launch openvmp_robot robot.launch.py use_fake_hardware:=true
+```

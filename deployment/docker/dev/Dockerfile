@@ -43,12 +43,14 @@ ENV DISPLAY=:0
 EXPOSE 5900/tcp
 
 SHELL ["/bin/bash", "-c"]
-ENTRYPOINT \
+RUN \
   source /root/.openvmp/env.sh && \
   \
   (/usr/bin/Xvfb $DISPLAY -screen 0 1024x768x16 &) && \
   (sleep 1 && /usr/bin/fluxbox &) && \
-  sleep 2 && /usr/bin/x11vnc -display $DISPLAY -bg -forever -nopw -quiet -listen 0.0.0.0 -xkb && \
-  \
+  sleep 2 && /usr/bin/x11vnc -display $DISPLAY -bg -forever -nopw -quiet -listen 0.0.0.0 -xkb
+
+ENTRYPOINT \
   cd /root/openvmp/platform && \
+  . ./install/local_setup.bash && \
   bash
