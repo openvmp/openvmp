@@ -57,7 +57,8 @@ joints:
       #  type: amt21
       #  encoder_model: AMT212E
       #  encoder_amt21_addr: 0x04
-      #  encoder_readings_per_second: 10.0
+      #  encoder_readings_per_second: 20.0
+      #  serial_bus_is_remote: true
       #  serial_bus_prefix: /bus/rs485/line0
   - name: front_body_joint
     gearbox:

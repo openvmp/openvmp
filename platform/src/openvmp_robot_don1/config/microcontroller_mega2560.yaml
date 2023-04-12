@@ -5,6 +5,15 @@ gpio:
     # This switch module will cover 2 channels starting with 13
     switch_channels: 2
 
+pul:
+  - channel: 10
+    dir_channel: 11
+    prefix: /puldir0
+    name: driver_puldir0
+    actuator_velocity_min: -3.14
+    actuator_velocity_max: 3.14
+    ppr: 1200
+
 pwm:
   - type: simple_pwm
     name: front_join_male_pwm
@@ -76,15 +85,6 @@ pwm:
     prefix: /rear_attachment
     pwm_min: 0
     pwm_max: 255
-
-pul:
-  - channel: 10
-    dir_channel: 11
-    prefix: /puldir0
-    name: driver_puldir0
-    actuator_velocity_min: -3.14
-    actuator_velocity_max: 3.14
-    ppr: 1200
 
 uart:
   - prefix: /rs485/line0
