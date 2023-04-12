@@ -11,6 +11,12 @@ RUN apt update && \
   ros-humble-topic-tools ros-humble-robot-localization \
   ros-humble-ros-testing && \
   \
+  # Prepare Arduino tools \
+  apt install -y arduino-mk && \
+  cd /usr/local && \
+  (curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh) && \
+  /usr/local/bin/arduino-cli lib install Servo && \
+  \
   # Prepare X11 environment for remote access \
   apt install -y x11vnc xvfb fluxbox && \
   \
@@ -52,5 +58,5 @@ RUN \
 
 ENTRYPOINT \
   cd /root/openvmp/platform && \
-  . ./install/local_setup.bash && \
+  . /root/.openvmp/env.sh && \
   bash

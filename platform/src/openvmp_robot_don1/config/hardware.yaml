@@ -414,6 +414,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/front_left_camera_horizontal/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: front_left_arm_camera_servo_upper_joint
@@ -424,6 +426,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/front_left_camera_vertical/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: front_right_arm_camera_servo_lower_joint
@@ -434,6 +438,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/front_right_camera_horizontal/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: front_right_arm_camera_servo_upper_joint
@@ -444,6 +450,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/front_right_camera_vertical/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: rear_left_arm_camera_servo_lower_joint
@@ -454,6 +462,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/rear_left_camera_horizontal/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: rear_left_arm_camera_servo_upper_joint
@@ -464,6 +474,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/rear_left_camera_vertical/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: rear_right_arm_camera_servo_lower_joint
@@ -474,6 +486,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/rear_right_camera_horizontal/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
   - name: rear_right_arm_camera_servo_upper_joint
@@ -484,6 +498,8 @@ joints:
         type: pwm
         pwm_path: /bus/arduino0/rear_right_camera_vertical/pwm
         pwm_type: position
+        actuator_position_min: -3.14
+        actuator_position_max: 3.14
     encoder:
       type: absolute
 

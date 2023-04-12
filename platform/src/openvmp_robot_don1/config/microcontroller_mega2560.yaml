@@ -1,3 +1,10 @@
+gpio:
+  - prefix: /gpio
+    name: driver_gpio0
+    channel: 13
+    # This switch module will cover 2 channels starting with 13
+    switch_channels: 2
+
 pwm:
   - type: simple_pwm
     name: front_join_male_pwm
@@ -70,8 +77,17 @@ pwm:
     pwm_min: 0
     pwm_max: 255
 
+pul:
+  - channel: 10
+    dir_channel: 11
+    prefix: /puldir0
+    name: driver_puldir0
+    actuator_velocity_min: -3.14
+    actuator_velocity_max: 3.14
+    ppr: 1200
+
 uart:
-  - serial: /rs485/line0
-  - serial: /rs485/line1
-  - serial: /rs485/line2
-  - serial: /rs485/line3
+  - prefix: /rs485/line0
+  - prefix: /rs485/line1
+  - prefix: /rs485/line2
+  - prefix: /rs485/line3
