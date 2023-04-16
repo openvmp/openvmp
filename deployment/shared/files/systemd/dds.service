@@ -9,6 +9,7 @@ Environment=FASTRTPS_DEFAULT_PROFILES_FILE=/root/.openvmp/fastdds_server.xml
 Type=simple
 User=root
 ExecStart=/bin/bash -c "source /root/.openvmp/env.sh; export FASTRTPS_DEFAULT_PROFILES_FILE=/root/.openvmp/fastdds_server.xml; cd /root/openvmp/platform && bash /opt/ros/humble/bin/fastdds discovery --server-id 0"
+ExecStartPost=/bin/sleep 3
 Restart=always
 LimitNOFILE=65536
 

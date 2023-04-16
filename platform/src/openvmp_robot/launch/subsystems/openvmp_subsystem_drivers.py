@@ -48,6 +48,7 @@ def launch_desc(context):
                 #     "--log-level",
                 #     "debug",
                 # ],
+                # prefix=["xterm -e gdb -ex run --args"],
             )
         )
 

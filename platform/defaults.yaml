@@ -2,7 +2,7 @@ build:
   symlink-install: true
   cmake-args:
     - "-DCMAKE_BUILD_TYPE=Release"
-    - "-DCMAKE_CXX_FLAGS_DEBUG=-g"
+    - "-DCMAKE_CXX_FLAGS_DEBUG=-g -fstack-protector-all -D_FORTIFY_SOURCE=3 -O0"
     - "-DCMAKE_CXX_FLAGS_RELEASE=-O3"
     - "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
     - "--no-warn-unused-cli"

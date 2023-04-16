@@ -53,13 +53,13 @@ joints:
       #  channel: 0
     encoder:
       type: absolute
-      #driver:
-      #  type: amt21
-      #  encoder_model: AMT212E
-      #  encoder_amt21_addr: 0x04
-      #  encoder_readings_per_second: 20.0
-      #  serial_bus_is_remote: true
-      #  serial_bus_prefix: /bus/rs485/line0
+      driver:
+        type: amt21
+        encoder_model: AMT212E
+        encoder_amt21_addr: 0x04
+        encoder_readings_per_second: 20.0
+        serial_bus_is_remote: true
+        serial_bus_prefix: /bus/rs485/line0
   - name: front_body_joint
     gearbox:
       ratio: 10
@@ -107,12 +107,13 @@ joints:
       #  channel: 1
     encoder:
       type: absolute
-      #driver:
-      #  type: amt21
-      #  encoder_model: AMT212E
-      #  encoder_amt21_addr: 0x50
-      #  encoder_readings_per_second: 10.0
-      #  serial_bus_prefix: /bus/rs485/line0
+      driver:
+        type: amt21
+        encoder_model: AMT212E
+        encoder_amt21_addr: 0x50
+        encoder_readings_per_second: 20.0
+        serial_bus_is_remote: true
+        serial_bus_prefix: /bus/rs485/line0
   - name: front_left_arm_joint
     gearbox:
       ratio: 10
