@@ -21,7 +21,7 @@ Encoder::Encoder(
 
   // type_ = config->get_type();
 
-  init_encoder();
+  init_encoder_();
 }
 
 void Encoder::position_get_real_() {

@@ -93,5 +93,3 @@ uart:
     serial_baud_rate: 115200
   - prefix: /rs485/line2
     serial_baud_rate: 115200
-  - prefix: /rs485/line3
-    serial_baud_rate: 115200
