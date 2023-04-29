@@ -64,3 +64,6 @@
 [submodule "platform/src/actuator_pwm"]
 	path = platform/src/actuator_pwm
 	url = ../actuator_pwm.git
+[submodule "platform/src/ros2_patched/gazebo_ros2_control"]
+	path = platform/src/ros2_patched/gazebo_ros2_control
+	url = git@github.com:openvmp/gazebo_ros2_control.git
