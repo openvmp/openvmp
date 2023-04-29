@@ -13,6 +13,7 @@
   <!-- ****************** COMMAND LINE PARAMETERS *******************************  -->
   <!-- Generate the model suitable for simulation in Gazebo -->
   <xacro:arg name="simulate" default="false" />
+  <xacro:arg name="simulate_remote" default="false" />
   <xacro:arg name="fake_hardware" default="false" />
   <xacro:arg name="namespace" default="" />
   <xacro:arg name="controllers_yaml_path"
@@ -847,10 +848,14 @@
   </xacro:if>
   <ros2_control name="MotionHardwareSystem" type="system">
     <hardware>
-      <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
-      <param name="namespace">$(arg namespace)</param>
-      <!-- <xacro:if value="$(arg simulate)">
-        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <xacro:if value="$(arg simulate)">
+        <xacro:if value="$(arg simulate_remote)">
+          <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
+          <param name="namespace">$(arg namespace)</param>
+        </xacro:if>
+        <xacro:unless value="$(arg simulate_remote)">
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </xacro:unless>
       </xacro:if>
       <xacro:if value="$(arg fake_hardware)">
         <plugin>fake_components/GenericSystem</plugin>
@@ -860,7 +865,7 @@
           <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
           <param name="namespace">$(arg namespace)</param>
         </xacro:unless>
-      </xacro:unless> -->
+      </xacro:unless>
     </hardware>
     <xacro:r2c_half prefix="front" />
     <xacro:r2c_half prefix="rear" />
@@ -928,23 +933,21 @@
   <xacro:trans_pos name="rear_right_arm_camera_servo_upper_joint" red="1" />
 
   <gazebo>
-    <!--  No need for gazebo_ro2_control since we are using a separate control
-          node that hooks up to gazebo via openvmp_hardware_simulation_gazebo
-          using remote_actuator and alike.
-          Keep it here as an alternative to be used for troubleshooting.
-
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.${plugin_extension}">
-      <ros>
-        <namespace>$(arg namespace)</namespace>
-      </ros>
-      <parameters>$(arg controllers_yaml_path)</parameters>
-    </plugin>
-    -->
-    <plugin name="openvmp_hardware_simulation_gazebo"
-      filename="libopenvmp_hardware_simulation_gazebo.${plugin_extension}">
-      <ns>$(arg namespace)</ns>
-      <hardware_configuration>$(find openvmp_robot_don1)/config/hardware.yaml</hardware_configuration>
-    </plugin>
+    <xacro:unless value="$(arg simulate_remote)">
+      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.${plugin_extension}">
+        <ros>
+          <namespace>$(arg namespace)</namespace>
+        </ros>
+        <parameters>$(arg controllers_yaml_path)</parameters>
+      </plugin>
+    </xacro:unless>
+    <xacro:if value="$(arg simulate_remote)">
+      <plugin name="openvmp_hardware_simulation_gazebo"
+        filename="libopenvmp_hardware_simulation_gazebo.${plugin_extension}">
+        <ns>$(arg namespace)</ns>
+        <hardware_configuration>$(find openvmp_robot_don1)/config/hardware.yaml</hardware_configuration>
+      </plugin>
+    </xacro:if>
   </gazebo>
 
 </robot>

@@ -58,6 +58,7 @@ def include_unit_launch_descriptions(context):
                                         "kind": context.launch_configurations["kind"],
                                         "id": robot_id,
                                         "is_simulation": "true",
+                                        "simulate_remote_hardware_interface": context.launch_configurations["simulate_remote_hardware_interface"],
                                         "pos": str(pos_to_pass),
                                     }.items(),
                                 ),
@@ -83,9 +84,17 @@ def generate_launch_description():
         description="The number of the robots to spawn",
     )
 
+    # simulate_remote_hardware_interface = LaunchConfiguration("simulate_remote_hardware_interface")
+    declare_simulate_remote_hardware_interface_cmd = DeclareLaunchArgument(
+        name="simulate_remote_hardware_interface",
+        default_value="false",
+        description="Do not use Gazebo plugin for ros2_control. Use the same hardware interface as the real robots.",
+    )
+
     launch_desc = [
         declare_kind_cmd,
         declare_num_cmd,
+        declare_simulate_remote_hardware_interface_cmd,
         OpaqueFunction(function=openvmp_worlds.launch_desc),
         OpaqueFunction(function=openvmp_models.launch_desc_deploy),
         TimerAction(

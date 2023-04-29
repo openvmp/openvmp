@@ -43,6 +43,13 @@ def generate_launch_description_real():
         description="Apply tweaks required to operate in a simulated environment",
     )
 
+    # simulate_remote_hardware_interface = LaunchConfiguration("simulate_remote_hardware_interface")
+    declare_simulate_remote_hardware_interface_cmd = DeclareLaunchArgument(
+        name="simulate_remote_hardware_interface",
+        default_value="false",
+        description="Do not use Gazebo plugin for ros2_control. Use the same hardware interface as the real robots.",
+    )
+
     # TODO(clairbee): add support for simulated hardware
     # use_hardware: "real", "fake", "simulated"
 
@@ -65,6 +72,7 @@ def generate_launch_description_real():
         declare_id_cmd,
         declare_subsystem_cmd,
         declare_is_simulation_cmd,
+        declare_simulate_remote_hardware_interface_cmd,
         declare_use_fake_hardware_cmd,
         declare_pos_cmd,
         OpaqueFunction(function=openvmp_subsystem_drivers.launch_desc),

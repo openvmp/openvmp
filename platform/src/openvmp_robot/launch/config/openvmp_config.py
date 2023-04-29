@@ -51,6 +51,12 @@ def get_xacro_params(context, robot_id):
         xacro_params.append(
             " extra_parameters_file:='$(find openvmp_robot)/config/simulation.yaml' "
         )
+        # Simulate remote_hardware_interface
+        if (
+            "simulate_remote_hardware_interface" in context.launch_configurations
+            and context.launch_configurations["simulate_remote_hardware_interface"] == "true"
+        ):
+            xacro_params.append(" simulate_remote:=true ")
 
     # Fake hardware params
     if (

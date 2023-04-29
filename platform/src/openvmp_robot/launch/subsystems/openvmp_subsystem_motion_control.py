@@ -22,6 +22,7 @@ def launch_desc(context):
     namespace = openvmp_config.get_namespace(context)
 
     controller_manager_cmd = Node(
+        condition=UnlessCondition(is_simulation),
         package="controller_manager",
         executable="ros2_control_node",
         output="screen",
