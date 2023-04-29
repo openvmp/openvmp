@@ -18,6 +18,7 @@
 #include "gazebo/physics/Model.hh"
 #include "gazebo/physics/World.hh"
 #include "openvmp_hardware_configuration/configuration.hpp"
+#include "openvmp_hardware_simulation_gazebo/control.hpp"
 #include "openvmp_hardware_simulation_gazebo/joint.hpp"
 #include "openvmp_hardware_simulation_gazebo/node.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -36,15 +37,19 @@ class OpenVMPSimulationPlugin : public gazebo::ModelPlugin {
   void addSubNode(rclcpp::Node::SharedPtr sub_node_);
 
  private:
-  rclcpp::executors::MultiThreadedExecutor exec_;
+  std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exec_;
   std::shared_ptr<Node> node_;
   std::vector<std::shared_ptr<rclcpp::Node>> sub_nodes_;
   std::shared_ptr<std::thread> node_spinner_;
+  volatile bool do_stop_ = false;
 
   std::string namespace_;
   std::shared_ptr<openvmp_hardware_configuration::Configuration> configuration_;
 
   std::map<std::string, std::shared_ptr<Joint>> joints_;
+  std::shared_ptr<Control> control_;
+
+  void spin_();
 };
 
 }  // namespace openvmp_hardware_simulation_gazebo

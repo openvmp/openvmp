@@ -22,17 +22,29 @@ OpenVMPSimulationPlugin::OpenVMPSimulationPlugin() {
 
 OpenVMPSimulationPlugin::~OpenVMPSimulationPlugin() {
   if (node_) {
+    do_stop_ = true;
+
     joints_.clear();
+    control_.reset();
 
     // All objects dependent on 'node_' must be destroyed before this.
-    exec_.cancel();
+    exec_->cancel();
     node_spinner_->join();
     node_spinner_.reset();
   }
 }
 
+void OpenVMPSimulationPlugin::spin_() {
+  while (rclcpp::ok() && !do_stop_) {
+    exec_->spin_once();
+  }
+}
+
 void OpenVMPSimulationPlugin::Load(gazebo::physics::ModelPtr model,
                                    sdf::ElementPtr plugin_config) {
+  if (!rclcpp::ok()) {
+    rclcpp::init(0, nullptr);
+  }
   auto logger = rclcpp::get_logger("OpenVMPSimulationPlugin");
   RCLCPP_DEBUG(logger, "Initializing...");
 
@@ -46,9 +58,10 @@ void OpenVMPSimulationPlugin::Load(gazebo::physics::ModelPtr model,
   try {
     // Delayed initialization starts
     node_ = std::make_shared<Node>(namespace_);
-    exec_.add_node(node_);
+    exec_ = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
+    exec_->add_node(node_);
     node_spinner_ = std::make_shared<std::thread>(
-        std::bind(&rclcpp::executors::MultiThreadedExecutor::spin, &exec_));
+        std::bind(&OpenVMPSimulationPlugin::spin_, this));
     // Delayed initialization ends
     std::this_thread::sleep_for(std::chrono::milliseconds(
         1000));  // Give the node a chance to initialize
@@ -105,11 +118,13 @@ void OpenVMPSimulationPlugin::Load(gazebo::physics::ModelPtr model,
                    "Exception while preparing the joint: %s", e.what());
     }
   }
+
+  control_ = std::make_shared<Control>(node_.get(), exec_, model);
 }
 
 void OpenVMPSimulationPlugin::addSubNode(rclcpp::Node::SharedPtr sub_node) {
   sub_nodes_.push_back(sub_node);
-  exec_.add_node(sub_node);
+  exec_->add_node(sub_node);
 }
 
 GZ_REGISTER_MODEL_PLUGIN(OpenVMPSimulationPlugin)

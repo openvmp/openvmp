@@ -9,6 +9,11 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclcpp</depend>
+  <depend>pluginlib</depend>
+  <depend>controller_interface</depend>
+  <depend>controller_manager</depend>
+  <depend>hardware_interface</depend>
+  <depend>remote_hardware_interface</depend>
   <depend>remote_brake</depend>
   <depend>remote_actuator</depend>
   <depend>remote_encoder</depend>

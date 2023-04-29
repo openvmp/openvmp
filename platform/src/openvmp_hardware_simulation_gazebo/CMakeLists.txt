@@ -13,11 +13,16 @@ endif()
 # Dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(pluginlib REQUIRED)
 find_package(gazebo_dev REQUIRED)
 find_package(gazebo_msgs REQUIRED)
 find_package(gazebo_ros REQUIRED)
 find_package(sdformat9 REQUIRED)
 find_package(openvmp_hardware_configuration REQUIRED)
+find_package(controller_interface REQUIRED)
+find_package(controller_manager REQUIRED)
+find_package(hardware_interface REQUIRED)
+find_package(remote_hardware_interface REQUIRED)
 find_package(remote_brake REQUIRED)
 find_package(remote_actuator REQUIRED)
 find_package(remote_encoder REQUIRED)
@@ -33,6 +38,7 @@ link_directories(
 # Logic shared by all targets
 include_directories(
   include
+  ${remote_hardware_interface_INCLUDE_DIRS}
   ${remote_brake_INCLUDE_DIRS}
   ${remote_actuator_INCLUDE_DIRS}
   ${remote_encoder_INCLUDE_DIRS}
@@ -41,6 +47,7 @@ include_directories(
 
 set(project_SOURCE_FILES
   src/plugin.cpp
+  src/control.cpp
   src/node.cpp
   src/joint.cpp
   src/actuator.cpp
@@ -57,10 +64,15 @@ set(project_LIBRARIES
 
 set(project_DEPENDENCIES
   rclcpp
+  pluginlib
   gazebo_dev
   gazebo_ros
   sdformat9
   openvmp_hardware_configuration
+  controller_interface
+  controller_manager
+  hardware_interface
+  remote_hardware_interface
   remote_brake
   remote_actuator
   remote_encoder
