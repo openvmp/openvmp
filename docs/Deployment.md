@@ -11,7 +11,7 @@
   - `/etc/ssh/sshd_config` has `PermitRootLogin` uncommented
   - Your favorite flavor of ROS2 installed
 - Local Ansible setup
-  - `/etc/ansible/hosts` containing
+  - `deployment/ansible/inventory/hosts` containing
 
     ```ini
     [openvmp-pi-unconfigured]
@@ -24,7 +24,7 @@ Use the following commands to start the deployment:
 
 ```sh
 cd deployment/ansible
-ansible-playbook ./setup.yml
+ansible-playbook -i inventory ./setup.yml
 ```
 
 ### Post-setup
@@ -55,7 +55,7 @@ Use the following commands if you need to:
 
 ```sh
 cd deployment/ansible
-ansible-playbook ./configure.yml
+ansible-playbook -i inventory ./configure.yml
 ```
 
 ### Building software on the target
@@ -66,7 +66,7 @@ and to build all the packages:
 
 ```sh
 cd deployment/ansible
-ansible-playbook ./build.yml
+ansible-playbook -i inventory ./build.yml
 ```
 
 ### Launching the minimal set of services
@@ -76,7 +76,7 @@ software on the target boards:
 
 ```sh
 cd deployment/ansible
-ansible-playbook ./run-minimal.yml
+ansible-playbook -i inventory ./run-minimal.yml
 ```
 
 ### Launching the full set of services
@@ -86,7 +86,7 @@ on the target boards:
 
 ```sh
 cd deployment/ansible
-ansible-playbook ./run-full.yml
+ansible-playbook -i inventory ./run-full.yml
 ```
 
 ### Testing connectivity with development machines
