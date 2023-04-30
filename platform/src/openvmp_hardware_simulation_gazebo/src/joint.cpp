@@ -58,11 +58,12 @@ void Joint::init(OpenVMPSimulationPlugin *plugin,
         shared_this, encoder_config,
         std::vector<rclcpp::Parameter>{
             rclcpp::Parameter("encoder_prefix", encoder_config->get_prefix()),
-            rclcpp::Parameter("encoder_readings_per_second", 50.0),
         });
     plugin->addSubNode(encoder_);
   }
-  RCLCPP_DEBUG(node_->get_logger(), "Successfuly initialized the actuator");
+  RCLCPP_DEBUG(node_->get_logger(), "Successfuly initialized the joint");
+
+  initialized_ = true;
 
   updateFriction();
 
@@ -96,20 +97,42 @@ void Joint::updateFriction() {
   joint_->SetParam("friction", 0, friction);
 }
 
-void Joint::setPosition(double position) { joint_->SetPosition(0, position); }
-
-void Joint::setVelocity(double velocity) {
-  if (brake_) {
-    brake_->device->set_engaged(::abs(velocity) < 0.00001);
+void Joint::setPosition(double position) {
+  if (!initialized_) {
+    return;
   }
 
-  joint_->SetParam("fmax", 0, 200000000.0);
+  joint_->SetPosition(0, position);
+}
+
+void Joint::setVelocity(double velocity) {
+  if (!initialized_) {
+    return;
+  }
+
+  if (brake_) {
+    brake_->device->set_engaged(std::fabs(velocity) < 0.00001);
+  }
+
+  joint_->SetParam("fmax", 0, 20000.0);
   joint_->SetParam("vel", 0, velocity);
   // joint_->SetVelocity(0, velocity);
 }
 
-double Joint::getPosition() { return joint_->Position(0); }
+double Joint::getPosition() {
+  if (!initialized_) {
+    return std::numeric_limits<double>::quiet_NaN();
+  }
 
-double Joint::getVelocity() { return joint_->GetVelocity(0); }
+  return joint_->Position(0);
+}
+
+double Joint::getVelocity() {
+  if (!initialized_) {
+    return std::numeric_limits<double>::quiet_NaN();
+  }
+
+  return joint_->GetVelocity(0);
+}
 
 }  // namespace openvmp_hardware_simulation_gazebo

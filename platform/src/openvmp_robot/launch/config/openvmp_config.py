@@ -1,5 +1,6 @@
 import os
 
+from launch.actions import SetEnvironmentVariable
 from launch_ros.substitutions import FindPackageShare
 
 from openvmp_robot.launch.utils import openvmp_utils
@@ -13,6 +14,14 @@ def get_kind(context):
 def get_robot_id(context):
     robot_id = context.launch_configurations["id"]
     return robot_id
+
+
+def get_robot_ip(context):
+    if "ip" in context.launch_configurations:
+        robot_ip = context.launch_configurations["ip"]
+    else:
+        robot_ip = "127.0.0.1"
+    return robot_ip
 
 
 def get_package(context):

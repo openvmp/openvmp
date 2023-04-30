@@ -25,6 +25,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 ```
 
 The following OS packages are required for development and testing purposes:
+
 ```bash
 apt install -y socat xterm
 
@@ -61,7 +62,7 @@ support files generated and to have those error messages go away.
 
 In order to build and use all OpenVMP ROS2 packages, use the following commands:
 
-```
+```bash
 source /opt/ros/humble/setup.bash  # or .zsh instead of .bash
 git clone --recurse-submodules git://github.com/openvmp/openvmp.git
 cd openvmp/platform
@@ -74,10 +75,7 @@ source ./install/local_setup.bash  # or .zsh instead of .bash
 In order to see how most of the software modules play together,
 use the following command:
 
-```
-sudo usermod -a -G video `whoami`  # Run this only once, may require re-login
-
-./src/openvmp_robot_don1/scripts/fake_hardware_setup.sh
+```bash
 ros2 launch openvmp_robot robot.launch.py use_fake_hardware:=true
 ```
 

@@ -14,16 +14,16 @@
           [Service]
           ExecStart=true
 
-    # DDS plumbing
-    - name: Create the systemd service for the 'drivers' subsystem
-      ansible.builtin.copy:
-        src: ../shared/files/systemd/dds.service
-        dest: /lib/systemd/system/openvmp-dds.service
-    - name: Launch the dds plumbing
-      systemd:
-        name: openvmp-dds
-        state: restarted
-        enabled: true
+    # # DDS plumbing
+    # - name: Create the systemd service for the 'drivers' subsystem
+    #   ansible.builtin.copy:
+    #     src: ../shared/files/systemd/dds.service
+    #     dest: /lib/systemd/system/openvmp-dds.service
+    # - name: Launch the dds plumbing
+    #   systemd:
+    #     name: openvmp-dds
+    #     state: restarted
+    #     enabled: true
 
     # Drivers
     - name: Create the systemd service for the 'drivers' subsystem

@@ -64,6 +64,9 @@ height=2160
                 ),
                 launch_arguments={
                     "world": ["src/openvmp_robot/worlds/", world, ".world"],
+                    "verbose": "true",
+                    "lockstep": "true",
+                    # "gdb": "true",
                 }.items(),
             ),
         ]

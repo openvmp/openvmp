@@ -7,9 +7,12 @@ from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     OpaqueFunction,
+    SetEnvironmentVariable,
+    TimerAction,
 )
 from launch.substitutions import LaunchConfiguration
 
+from openvmp_robot.launch.config import files
 from openvmp_robot.launch.utils import openvmp_utils
 from openvmp_robot.launch.subsystems import *
 
@@ -27,6 +30,13 @@ def generate_launch_description_real():
         name="id",
         default_value=openvmp_utils.generate_id(),
         description="The id of the robot",
+    )
+
+    # ip = LaunchConfiguration("ip")
+    declare_ip_cmd = DeclareLaunchArgument(
+        name="ip",
+        default_value="127.0.0.1",
+        description="The IP of the robot",
     )
 
     # subsystem = LaunchConfiguration("subsystem")
@@ -70,11 +80,13 @@ def generate_launch_description_real():
     launch_desc = [
         declare_kind_cmd,
         declare_id_cmd,
+        declare_ip_cmd,
         declare_subsystem_cmd,
         declare_is_simulation_cmd,
         declare_simulate_remote_hardware_interface_cmd,
         declare_use_fake_hardware_cmd,
         declare_pos_cmd,
+        OpaqueFunction(function=openvmp_subsystem_dds.launch_desc),
         OpaqueFunction(function=openvmp_subsystem_drivers.launch_desc),
         # TODO(clairbee): subsystem: power_management
         OpaqueFunction(function=openvmp_subsystem_odometry.launch_desc),

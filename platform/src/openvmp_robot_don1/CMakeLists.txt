@@ -50,6 +50,10 @@ install(
   DIRECTORY config launch maps meshes models params worlds
   DESTINATION share/${PROJECT_NAME}
 )
+install(
+  FILES model.config
+  DESTINATION share/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

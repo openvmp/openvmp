@@ -63,6 +63,7 @@ void OpenVMPSimulationPlugin::Load(gazebo::physics::ModelPtr model,
     node_spinner_ = std::make_shared<std::thread>(
         std::bind(&OpenVMPSimulationPlugin::spin_, this));
     // Delayed initialization ends
+    // FIXME(clairbee): delete this delay
     std::this_thread::sleep_for(std::chrono::milliseconds(
         1000));  // Give the node a chance to initialize
   } catch (const std::exception &e) {

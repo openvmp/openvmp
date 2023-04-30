@@ -13,7 +13,7 @@
     80
   ],
   // "editor.renderWhitespace": "all",
-  "clang-format.executable": "/usr/local/bin/clang-format",
+  "clang-format.executable": "",
   "clang-format.style": "Google",
   "files.exclude": {
     ".git/**": true,
@@ -36,7 +36,7 @@
     "models",
     "models/parts/gobilda",
   ],
-  "C_Cpp.clang_format_path": "/usr/local/bin/clang-format",
+  "C_Cpp.clang_format_path": "",
   "files.associations": {
     "*.launch": "python",
     "stdexcept": "cpp",
@@ -104,7 +104,10 @@
     "unordered_map": "cpp",
     "valarray": "cpp"
   },
-  "python.formatting.provider": "black",
+  "python.formatting.provider": "none",
   "cmake.configureOnOpen": true,
   "ros.distro": "humble",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
 }

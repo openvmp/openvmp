@@ -33,10 +33,6 @@
       <uri>model://ground_plane</uri>
       <pose>0 0 -1 0 0 0</pose>
     </include>
-    <!-- <include>
-      <uri>model://baylands</uri>
-      <pose>72 142 -1 0 0 0</pose>
-    </include>
     <include>
       <uri>model://telephone_pole</uri>
       <pose>-18 25 -1 0 0 0</pose>
@@ -60,6 +56,10 @@
     <include>
       <uri>model://tower_crane</uri>
       <pose>-44 94 -0.5 0 0 -0.7</pose>
+    </include>
+    <!-- <include>
+      <uri>model://baylands</uri>
+      <pose>72 142 -1 0 0 0</pose>
     </include>
     <include>
       <uri>model://pickup</uri>

@@ -10,7 +10,7 @@
                 <metatrafficUnicastLocatorList>
                   <locator>
                     <udpv4>
-                      <address>192.168.17.152</address>
+                      <address>%ROBOT_IP%</address>
                       <port>11811</port>
                     </udpv4>
                   </locator>

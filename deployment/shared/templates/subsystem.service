@@ -2,7 +2,7 @@
 Description={{ service_description }}
 Documentation=https://github.com/openvmp/openvmp/blob/main/docs/Deployment.md
 After=network.target
-Requires=openvmp-dds.service
+#Requires=openvmp-dds.service
 Requires={{ service_requires }}
 PartOf=openvmp.service
 

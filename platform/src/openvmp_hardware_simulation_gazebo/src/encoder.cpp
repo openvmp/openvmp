@@ -26,12 +26,16 @@ Encoder::Encoder(
 
 void Encoder::position_get_real_() {
   auto joint_ptr = joint_.lock();
-  position_last_ = joint_ptr->getPosition();
+  if (joint_ptr) {
+    position_last_ = joint_ptr->getPosition();
+  }
 }
 
 void Encoder::velocity_get_real_() {
   auto joint_ptr = joint_.lock();
-  velocity_last_ = joint_ptr->getVelocity();
+  if (joint_ptr) {
+    velocity_last_ = joint_ptr->getVelocity();
+  }
 }
 
 }  // namespace openvmp_hardware_simulation_gazebo

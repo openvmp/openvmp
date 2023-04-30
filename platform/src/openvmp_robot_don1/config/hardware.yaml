@@ -21,8 +21,8 @@ joints:
         modbus_prefix: /bus/modbus/rtu0
         modbus_leaf_id: 2
         modbus_is_remote: true
-        actuator_velocity_min: -1.0
-        actuator_position_max: 1.0
+        #actuator_velocity_min: -1.0
+        #actuator_velocity_max: 1.0
         init:
           - service: /stepper/modbus/set_do1
             type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
@@ -65,7 +65,7 @@ joints:
         type: amt21
         encoder_model: AMT212E
         encoder_amt21_addr: 0x04
-        encoder_readings_per_second: 10.0
+        # encoder_readings_per_second: 10.0
         serial_bus_is_remote: true
         serial_bus_prefix: /bus/rs485/line0
   - name: front_body_joint
@@ -83,8 +83,8 @@ joints:
         modbus_prefix: /bus/modbus/rtu0
         modbus_leaf_id: 3
         modbus_is_remote: true
-        actuator_velocity_min: -1.0
-        actuator_position_max: 1.0
+        #actuator_velocity_min: -1.0
+        #actuator_velocity_max: 1.0
         init:
           - service: /stepper/modbus/set_do1
             type: ros2_modbus/srv/ConfiguredHoldingRegisterWrite
@@ -121,7 +121,7 @@ joints:
         type: amt21
         encoder_model: AMT212E
         encoder_amt21_addr: 0x50
-        encoder_readings_per_second: 10.0
+        # encoder_readings_per_second: 10.0
         serial_bus_is_remote: true
         serial_bus_prefix: /bus/rs485/line2
   - name: front_left_arm_joint

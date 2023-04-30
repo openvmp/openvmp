@@ -53,6 +53,7 @@ class Joint {
   rclcpp::Node *node_;
   gazebo::physics::JointPtr joint_;
   std::shared_ptr<openvmp_hardware_configuration::Joint> config_;
+  bool initialized_ = false;
 
   std::shared_ptr<
       DeviceNode<Actuator, openvmp_hardware_configuration::Actuator>>

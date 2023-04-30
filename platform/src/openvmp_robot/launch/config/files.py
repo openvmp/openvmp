@@ -66,3 +66,29 @@ def get_robot_description_file(context, robot_id=None, extra_xacro_params=[]):
     robot_description_file_path = robot_description_file.name
     robot_description_file.close()
     return robot_description_file_path
+
+
+def get_fastrtps_profile_dir():
+    package_name = "openvmp_robot"
+    pkg_share = FindPackageShare(package=package_name).find(package_name)
+    return os.path.join(pkg_share, "config")
+
+
+def get_fastrtps_profile_server_file():
+    return get_fastrtps_profile_dir() + "/fastdds_server.xml"
+
+
+def get_fastrtps_profile_client_file(context):
+    orig_path = get_fastrtps_profile_dir() + "/fastdds_client.xml"
+    data = ""
+    with open(orig_path, "r") as file:
+        data = file.read()
+
+    data = data.replace("%ROBOT_IP%", openvmp_config.get_robot_ip(context))
+
+    patched_file = tempfile.NamedTemporaryFile(delete=False)
+    patched_file.write(data.encode())
+    patched_path = patched_file.name
+    patched_file.close()
+
+    return patched_path

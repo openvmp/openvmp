@@ -18,6 +18,7 @@ from openvmp_robot.launch.config import openvmp_config
 from openvmp_robot.launch.utils import openvmp_utils
 from openvmp_robot.launch.worlds import openvmp_worlds
 from openvmp_robot.launch.models import openvmp_models
+from openvmp_robot.launch.subsystems import openvmp_subsystem_dds
 
 # TODO:
 # - use src/openvmp_robot/config/simulation.yaml to propagate use_sim_time or delete that file
@@ -58,7 +59,9 @@ def include_unit_launch_descriptions(context):
                                         "kind": context.launch_configurations["kind"],
                                         "id": robot_id,
                                         "is_simulation": "true",
-                                        "simulate_remote_hardware_interface": context.launch_configurations["simulate_remote_hardware_interface"],
+                                        "simulate_remote_hardware_interface": context.launch_configurations[
+                                            "simulate_remote_hardware_interface"
+                                        ],
                                         "pos": str(pos_to_pass),
                                     }.items(),
                                 ),
@@ -95,6 +98,7 @@ def generate_launch_description():
         declare_kind_cmd,
         declare_num_cmd,
         declare_simulate_remote_hardware_interface_cmd,
+        OpaqueFunction(function=openvmp_subsystem_dds.launch_desc),
         OpaqueFunction(function=openvmp_worlds.launch_desc),
         OpaqueFunction(function=openvmp_models.launch_desc_deploy),
         TimerAction(

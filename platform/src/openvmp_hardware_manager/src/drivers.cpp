@@ -104,9 +104,7 @@ std::map<std::string, Drivers> driver_classes = {
                        return remote_encoder::FakeFactory::New(node);
                      },
                  .params = {{"encoder_prefix",
-                             YAML::Node(std::string("$PATH"))},
-                            {"encoder_readings_per_second",
-                             YAML::Node(std::string("50.0"))}},
+                             YAML::Node(std::string("$PATH"))}},
                  .init = {},
              }},
             {"amt21",

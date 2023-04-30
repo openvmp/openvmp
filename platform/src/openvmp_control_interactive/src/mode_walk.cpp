@@ -206,20 +206,22 @@ void WalkMode::next_phase_(
   const double a1 = 0.6;
   const double l0 = 0.7 + lift_,  // the base lift
       l1 = l0 + 0.3, l2 = l0 - 0.5;
+  // clang-format off
   switch (phase_) {
     case 0:
-      point.positions = {0, 0, -a1, l1, a1, l1, 0, 0, 0, l2, 0, l0};
+      point.positions = {0, 0, -a1, l1,  a1, l1,      0, 0,   0, l2,   0, l0};
       break;
     case 1:
-      point.positions = {0, 0, 0, l2, 0, l0, 0, 0, -a1, l1, a1, l1};
+      point.positions = {0, 0,   0, l2,   0, l0,      0, 0, -a1, l1,  a1, l1};
       break;
     case 2:
-      point.positions = {0, 0, a1, l1, -a1, l1, 0, 0, 0, l0, 0, l2};
+      point.positions = {0, 0,  a1, l1, -a1, l1,      0, 0,   0, l0,   0, l2};
       break;
     case 3:
-      point.positions = {0, 0, 0, l0, 0, l2, 0, 0, a1, l1, -a1, l1};
+      point.positions = {0, 0,   0, l0,   0, l2,      0, 0,  a1, l1, -a1, l1};
       break;
   }
+  // clang-format o
 }
 
 void WalkMode::next_phase_animation_(

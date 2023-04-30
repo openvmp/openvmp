@@ -858,7 +858,9 @@
         </xacro:unless>
       </xacro:if>
       <xacro:if value="$(arg fake_hardware)">
-        <plugin>fake_components/GenericSystem</plugin>
+        <!-- <plugin>fake_components/GenericSystem</plugin> -->
+        <plugin>remote_hardware_interface/RemoteSystemInterface</plugin>
+        <param name="namespace">$(arg namespace)</param>
       </xacro:if>
       <xacro:unless value="$(arg simulate)">
         <xacro:unless value="$(arg fake_hardware)">

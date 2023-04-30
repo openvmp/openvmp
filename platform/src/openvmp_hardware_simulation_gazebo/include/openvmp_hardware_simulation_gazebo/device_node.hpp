@@ -25,7 +25,9 @@ class DeviceNode : public rclcpp::Node {
              std::weak_ptr<Joint> joint, std ::shared_ptr<CONFIG_TYPE> config,
              const std::vector<rclcpp::Parameter> &params)
       : rclcpp::Node(node_name, ns,
-                     rclcpp::NodeOptions().parameter_overrides(params)) {
+                     rclcpp::NodeOptions()
+                        .parameter_overrides(params)
+                        .use_intra_process_comms(true)) {
     device = std::make_shared<INTF_TYPE>(this, joint, config);
   }
   virtual ~DeviceNode() {}

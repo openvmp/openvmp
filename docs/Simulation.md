@@ -4,7 +4,7 @@
 
 The list of OpenVMP unit kinds available can be found using the following commands:
 
-```
+```bash
 cd platform/src
 ls openvmp_robot_*`
 ```
@@ -16,7 +16,7 @@ Disclaimer: it's the only robot published at the moment.
 
 The list of worlds available can be found using the following commands:
 
-```
+```bash
 cd platform/src/openvmp_robot/worlds
 ls *.world
 ```
@@ -28,7 +28,7 @@ There recommended world to start with is `horizontal`.
 In order to simulate the chosen robots in the chosen world,
 use the following command:
 
-```
+```bash
 cd platform
 ros2 launch openvmp_robot simulation_world.launch.py \
   world:=<world-name> \
@@ -39,9 +39,19 @@ ros2 launch openvmp_robot simulation_world.launch.py \
 or, to simulate a single robot `don1`
 in the default world `horizontal`, run:
 
-```
+```bash
 cd platform
 ros2 launch openvmp_robot simulation_world.launch.py
+```
+
+Alternatively, use the following command to simulate the motion control stack
+similar to the one used on the real robot
+(instead of `gazebo_ros2_control`, a custom controller manager is created inside
+Gazebo which uses `remote_hardware_interface` and knows how to simulate brakes):
+
+```bash
+cd platform
+ros2 launch openvmp_robot simulation_world.launch.py simulate_remote_hardware_interface
 ```
 
 Please, note, the first simulation run will take a long time to download all

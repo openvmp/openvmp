@@ -41,16 +41,21 @@ double Actuator::get_friction() {
 void Actuator::position_set_real_(double position) {
   auto joint_ptr = joint_.lock();
   joint_ptr->setPosition(position);
+
+  position_did_set_(position);
 }
 
 void Actuator::velocity_set_real_(double velocity) {
-  auto joint_ptr = joint_.lock();
-  if (::abs(velocity) < 0.00001) {
+  if (std::fabs(velocity) < 0.00001) {
     mode_ = DETENT;
   } else {
     mode_ = RUNNING;
   }
+
+  auto joint_ptr = joint_.lock();
   joint_ptr->setVelocity(velocity);
+
+  velocity_did_set_(velocity);
 }
 
 }  // namespace openvmp_hardware_simulation_gazebo
