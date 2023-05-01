@@ -13,18 +13,18 @@
   <depend>yaml-cpp</depend>
   <depend>openvmp_hardware_configuration</depend>
   <depend>remote_encoder</depend>
-  <depend>ros2_serial_bus</depend>
-  <depend>ros2_amt21</depend>
+  <depend>remote_serial_bus</depend>
+  <depend>amt21_driver</depend>
   <depend>remote_actuator</depend>
-  <depend>ros2_modbus</depend>
-  <depend>ros2_modbus_rtu</depend>
-  <depend>ros2_em2rs</depend>
+  <depend>remote_modbus</depend>
+  <depend>remote_modbus_rtu</depend>
+  <depend>em2rs_driver</depend>
   <depend>remote_brake</depend>
   <depend>remote_switch</depend>
-  <depend>ros2_brake_switch</depend>
-  <depend>ros2_r413d08</depend>
+  <depend>remote_brake_switch</depend>
+  <depend>r413d08_driver</depend>
   <depend>remote_microcontroller</depend>
-  <depend>actuator_pwm</depend>
+  <depend>remote_actuator_pwm</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

@@ -115,22 +115,20 @@ Driver::Driver(rclcpp::Node *parent,
   // init.size());
   for (auto &step : init) {
     // RCLCPP_INFO(parent->get_logger(), "initialization step");
-    if (step.type == "ros2_modbus/srv/ConfiguredHoldingRegisterWrite") {
-      rclcpp::Client<ros2_modbus::srv::ConfiguredHoldingRegisterWrite>::
+    if (step.type == "remote_modbus/srv/ConfiguredHoldingRegisterWrite") {
+      rclcpp::Client<remote_modbus::srv::ConfiguredHoldingRegisterWrite>::
           SharedPtr clnt_modbus_chrw;
 
       auto service_path = ns + path + step.service;
       // RCLCPP_INFO(parent->get_logger(), "connecting to the service %s",
       //             service_path.c_str());
 
-      clnt_modbus_chrw =
-          node_
-              ->create_client<ros2_modbus::srv::ConfiguredHoldingRegisterWrite>(
-                  service_path);
+      clnt_modbus_chrw = node_->create_client<
+          remote_modbus::srv::ConfiguredHoldingRegisterWrite>(service_path);
       clnt_modbus_chrw->wait_for_service();
 
       auto request = std::make_shared<
-          ros2_modbus::srv::ConfiguredHoldingRegisterWrite::Request>();
+          remote_modbus::srv::ConfiguredHoldingRegisterWrite::Request>();
       request->value = step.fields["value"].as<int>();
 
       auto f = clnt_modbus_chrw->async_send_request(request);

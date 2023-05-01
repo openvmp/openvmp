@@ -9,16 +9,16 @@
 
 #include "openvmp_hardware_manager/drivers.hpp"
 
-#include "actuator_pwm/factory.hpp"
+#include "amt21_driver/factory.hpp"
+#include "em2rs_driver/factory.hpp"
 #include "remote_actuator/fake_factory.hpp"
+#include "remote_actuator_pwm/factory.hpp"
 #include "remote_brake/fake_factory.hpp"
+#include "remote_brake_switch/factory.hpp"
 #include "remote_encoder/fake_factory.hpp"
 #include "remote_microcontroller/factory.hpp"
-#include "ros2_amt21/factory.hpp"
-#include "ros2_brake_switch/factory.hpp"
-#include "ros2_em2rs/factory.hpp"
-#include "ros2_modbus_rtu/factory.hpp"
-#include "ros2_serial_bus/factory.hpp"
+#include "remote_modbus_rtu/factory.hpp"
+#include "remote_serial_bus/factory.hpp"
 
 namespace openvmp_hardware_manager {
 
@@ -45,7 +45,7 @@ std::map<std::string, Drivers> driver_classes = {
                      [](rclcpp::Node *node,
                         std::shared_ptr<
                             rclcpp::executors::MultiThreadedExecutor>) {
-                       return ros2_modbus_rtu::Factory::New(node);
+                       return remote_modbus_rtu::Factory::New(node);
                      },
                  .params = {{"modbus_prefix",
                              YAML::Node(std::string("$PATH"))}},
@@ -57,7 +57,7 @@ std::map<std::string, Drivers> driver_classes = {
                      [](rclcpp::Node *node,
                         std::shared_ptr<
                             rclcpp::executors::MultiThreadedExecutor>) {
-                       return ros2_serial_bus::Factory::New(node);
+                       return remote_serial_bus::Factory::New(node);
                      },
                  .params = {{"serial_bus_prefix",
                              YAML::Node(std::string("$PATH"))}},
@@ -85,7 +85,7 @@ std::map<std::string, Drivers> driver_classes = {
                      [](rclcpp::Node *node,
                         std::shared_ptr<
                             rclcpp::executors::MultiThreadedExecutor>) {
-                       return ros2_brake_switch::Factory::New(node);
+                       return remote_brake_switch::Factory::New(node);
                      },
                  .params = {{"brake_prefix", YAML::Node(std::string("$PATH"))}},
                  .init = {},
@@ -113,7 +113,7 @@ std::map<std::string, Drivers> driver_classes = {
                      [](rclcpp::Node *node,
                         std::shared_ptr<
                             rclcpp::executors::MultiThreadedExecutor>) {
-                       return ros2_amt21::Factory::New(node);
+                       return amt21_driver::Factory::New(node);
                      },
                  .params = {{"encoder_prefix",
                              YAML::Node(std::string("$PATH"))}},
@@ -142,7 +142,7 @@ std::map<std::string, Drivers> driver_classes = {
                      [](rclcpp::Node *node,
                         std::shared_ptr<
                             rclcpp::executors::MultiThreadedExecutor>) {
-                       return ros2_em2rs::Factory::New(node);
+                       return em2rs_driver::Factory::New(node);
                      },
                  .params = {{"actuator_prefix",
                              YAML::Node(std::string("$PATH"))},
@@ -156,7 +156,7 @@ std::map<std::string, Drivers> driver_classes = {
                      [](rclcpp::Node *node,
                         std::shared_ptr<
                             rclcpp::executors::MultiThreadedExecutor>) {
-                       return actuator_pwm::Factory::New(node);
+                       return remote_actuator_pwm::Factory::New(node);
                      },
                  .params = {{"actuator_prefix",
                              YAML::Node(std::string("$PATH"))}},

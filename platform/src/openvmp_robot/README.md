@@ -1,6 +1,6 @@
 # OpenVMP
 
-[![License](./license.svg)](./LICENSE.txt)
+[![License](./apache20.svg)](./LICENSE.txt)
 
 ## Generic OpenVMP robot package
 
