@@ -29,70 +29,29 @@ outside of OpenVMP
 (unless the name of the package starts with `openvmp_`).
 
 ## Key features
+### Multi-Modal Mobility
+OpenVMP provides support for robots with different modes of transportation, including:
 
-### Multi-modal mobility
+Driving on or off-road using wheels
+Walking or crawling on four legs
+Climbing trees, poles, pipes, ropes, cables, and other near-cylindrical objects
+Climbing and driving inside pipes and tunnels
+Climbing warehouse shelving units
+### Individual Performance
+OpenVMP robots can use the same limbs to perform various mechanical tasks, and their true power lies in the use of extension modules (see 'Modularity' below). Single OpenVMP units can operate independently for extended periods, with software support for minimizing power usage while idle. A key use case is individual OpenVMP units temporarily leaving the collective to perform ad-hoc tasks such as reconnaissance, communication, supply, and delivery.
 
-OpenVMP provides support for robots that can use different modes of transportation:
+### Collective Performance
+Multiple OpenVMP units can share resources for computation and communication, as well as mechanically join together for improved mobility. The collective performance of versatile mobility units is evident in scenarios such as:
 
-- driving on or off road using wheels
-- walking are crawling on four legs
-- climbing trees, poles, pipes, ropes, cables and other near-cylindrical objects
-- climbing and driving inside pipes and tunnels
-- climbing warehouse shelving units
-
-### Individual performance
-
-OpenVMP can use the same limbs to perform various mechanical tasks.
-But its true power lays in the use of extension modules (see 'Modularity' below).
-
-Single OpenVMP units can perform these tasks by themselves over an extended
-period of time.
-OpenVMP software provides support for keeping power usage at a minimum while idle.
-
-However the most important use case for individual performance is individual
-OpenVMP units leaving the collective temporarily to perform an ad-hoc task
-(recon, comms, supply, delivery etc).
-
-### Collective performance
-
-Multiple OpenVMP units can not only share their resources to achieve computation
-and communication goals, but also join their bodies mechanically to achieve
-a better mobility performance. The collective performance for units
-with versatile mobility capabilities can be best seen in the following cases:
-
-- climbing artificial structures
-  - buildings or industrial complexes
-  - pipes and tubes of complex geometries
-  - poles of all kinds
-  - fences and barricades
-- passing natural barriers
-  - trees
-  - ravines
-  - small cliffs
-
+Climbing artificial structures (e.g., buildings, industrial complexes, complex pipes and tubes, poles, fences, barricades)
+Overcoming natural barriers (e.g., trees, ravines, small cliffs)
 ### Modularity
+Each OpenVMP unit may have one or more payload modules, typically including:
 
-Each OpenVMP unit may have one or more payload modules.
+Front and rear (interchangeable) modules: Enables functional tasks with multipurpose or specialized tools (e.g., mechanical tools, inspection tools, liquid dispensers, defense mechanisms). These modules are hot-swappable.
+One top module: Enhances swarm capabilities (e.g., advanced computing units, large robotic arms, extra power supplies). This module is hardwired and not hot-swappable.
 
-Most OpenVMP units are expected to carry 3 payloads:
 
-- front and rear (interchangeable) modules
-  - each robot is expected to carry them
-  - enables the robot to perform functional tasks
-    - multipurpose or specialized mechanical tools
-    - optical, electromagnetic (including wireless comms) and ultrasonic inspection tools
-    - liquid/paint dispensers
-    - defense mechanisms
-    - etc
-  - can be connected/disconnected by the robot itself (hot swappable)
-- one top module
-  - most likely, not more than one module of each kind per swarm
-  - preferably, enhances capabilities of the entire swarm
-    - advanced computing units
-    - large robotic arms
-    - extra power supplies
-    - etc
-  - hardwired permanently (not hot swappable)
 
 ## What's included
 
