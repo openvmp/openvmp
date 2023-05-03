@@ -18,12 +18,16 @@ sudo apt install -y git gnupg lsb-release
 sudo apt install -y socat xterm
 sudo apt install -y ansible
 ansible-galaxy collection install community.general
+sudo apt install v4l2loopback-utils
+sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
+sudo apt install -y ros-humble-camera-calibration-parsers ros-humble-camera-info-manager
+sudo apt install -y ros-humble-gazebo-dev ros-humble-gazebo-ros
 ```
 
 4. Clone OpenVMP:
 
 ```bash
-git clone --recurse-submodules git://github.com/openvmp/openvmp.git
+git clone --recurse-submodules https://github.com/openvmp/openvmp.git
 ```
 
 ## Building
