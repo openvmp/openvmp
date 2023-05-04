@@ -73,4 +73,3 @@ See the following documents for more info:
 - [Roadmap](docs/Roadmap.md)
 - [License](docs/License.md)
 
-![ROS/ROS2 hybrid mobility versatile mobility robot: OpenVMP](https://www.google-analytics.com/collect?v=1&tid=UA-242596187-2&cid=555&aip=1&t=event&ec=github&ea=md&dp=%2FREADME.md&dt=OpenVMP%20Documentation)
