@@ -1,6 +1,8 @@
 ---
 - name: Build OpenVMP on the target boards
-  hosts: openvmp-pi
+  hosts:
+    - openvmp-pi
+    - openvmp-nuc
 
   tasks:
     - name: Temporary move to another branch
@@ -36,11 +38,6 @@
         chdir: openvmp/platform/src/third_party/RTIMULib2/Linux/python
         creates: RTIMULib.egg-info/SOURCES.txt
     - name: Build the main source code
-      script: ../shared/files/scripts/build_rpi.sh
+      script: ../shared/files/scripts/build_nuc.sh
       args:
         chdir: /root/openvmp/platform
-
-    - name: Build the microcontroller source code
-      shell: make
-      args:
-        chdir: /root/openvmp/platform/src/microcontroller/microcontrollers/arduino_mega2560

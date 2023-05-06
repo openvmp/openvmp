@@ -4,19 +4,33 @@
 
 ### Prerequisites
 
-- Raspberry PI 4
-- SD Card with Ubuntu 22.04 or higher (64bit arm)
-  - `/root/.ssh/authorized` contains your public key
-    (use `ssh-keygen` on the dev host to get one)
-  - `/etc/ssh/sshd_config` has `PermitRootLogin` uncommented
-  - Your favorite flavor of ROS2 installed
-- Local Ansible setup
-  - `deployment/ansible/inventory/hosts` containing
+- For the spinal function:
+  - Raspberry PI 4 4GB+
+  - SD Card with Ubuntu 22.04 or higher (64bit arm)
+    - `/root/.ssh/authorized` contains your public key
+      (use `ssh-keygen` on the dev host to get one)
+    - `/etc/ssh/sshd_config` has `PermitRootLogin` uncommented
+    - Your favorite flavor of ROS2 installed
 
-    ```ini
-    [openvmp-pi-unconfigured]
-    root@<<<put your Raspberry PI Ethernet IP here>>>
-    ```
+- For the cerebral function:
+  - 1 or 2 Intel NUC 16GB+
+    - with at least 1 Thunderbolt port
+    - with a free m2 22x42 PCIe slot
+      - may have been used by the WiFi adapter
+  - 1 or 2 Coral AI Edge TPU Accelerator (m2 22x42)
+  - Thunderbolt host-to-host cable (if there are 2 NUCs)
+
+- On the development machine:
+  - Local Ansible setup
+    - `deployment/ansible/inventory/hosts` containing
+
+      ```ini
+      [openvmp-pi-unconfigured]
+      root@<<<put your Raspberry PI Ethernet IP here>>>
+      [openvmp-nuc-unconfigured]
+      root@<<<put your 1st Intel NUC IP here>>> index=1
+      root@<<<put your 2nd Intel NUC IP here>>> index=2
+      ```
 
 ### Initial setup
 
@@ -25,18 +39,23 @@ Use the following commands to start the deployment:
 ```sh
 cd deployment/ansible
 ansible-playbook -i inventory ./setup.yml
+ansible-playbook -i inventory ./cerebral-setup.yml
 ```
 
 ### Post-setup
 
-Once the setup is finished,
-create new entries in the Ansible inventory using the WiFi IP addresses
-in the `openvmp-pi` section.
-That's the inventory section used by all other OpenVMP Ansible playbooks.
+Once the setup is complete,
+update the Ansible inventory file by moving entries into other sections
+and replacing all IP addresses with the WiFi IP address of Raspberry Pi. You may want con configure your WiFi router to use a permanent (static) IP lease.
+
+That's the inventory section used by all OpenVMP Ansible playbooks other than the '*setup.yml' ones.
 
 ```ini
 [openvmp-pi]
 root@<<<put your Raspberry PI WiFi IP here>>> robot_kind=don1
+[openvmp-nuc]
+root@<<<put your Raspberry Pi WiFi IP here>>>:8021 index=1 robot_kind=don1
+root@<<<put your Raspberry Pi WiFi IP here>>>:8022 index=2 robot_kind=don1
 ```
 
 Please, note, `don1` is the only `robot_kind` supported by OpenVMP
@@ -56,6 +75,7 @@ Use the following commands if you need to:
 ```sh
 cd deployment/ansible
 ansible-playbook -i inventory ./configure.yml
+ansible-playbook -i inventory ./cerebral-configure.yml
 ```
 
 ### Building software on the target
@@ -67,6 +87,7 @@ and to build all the packages:
 ```sh
 cd deployment/ansible
 ansible-playbook -i inventory ./build.yml
+ansible-playbook -i inventory ./cerebral-build.yml
 ```
 
 ### Launching the minimal set of services

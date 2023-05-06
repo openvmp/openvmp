@@ -1,0 +1,4 @@
+
+# Every minute ensure that thunderbolt is up and running
+# TODO(clairbee): make NetworkManager take care of that
+* * * * * root  ifconfig thunderbolt0 10.0.0.{{ index }}/24 up >/dev/null 2>&1

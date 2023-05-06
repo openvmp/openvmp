@@ -1,0 +1,34 @@
+---
+- name: Setup new NUC for OpenVMP
+  hosts: openvmp-nuc-unconfigured
+  gather_facts: yes
+
+  tasks:
+    # Setup intra-cerebral networking
+    - name: Installing NetworkManager
+      ansible.builtin.apt:
+        pkg:
+          - network-manager
+        update_cache: false
+        state: present
+    - name: Make Thunderbolt networking driver load on boot
+      ansible.builtin.copy:
+        dest: /etc/modules-load.d/openvmp.conf
+        content: "thunderbolt-net"
+        force: false
+    - name: Add Thunderbolt networking
+      community.general.modprobe:
+        name: thunderbolt-net
+        state: present
+    - name: Configure Thunderbolt network interface
+      community.general.nmcli:
+        conn_name: eth-thunderbolt0
+        ifname: thunderbolt0
+        type: ethernet
+        ip4: 10.0.0.{{ index }}/24
+        state: present
+        autoconnect: true
+    - name: Make Thunderbolt interface go up regularly
+      template:
+        dest: /etc/cron.d/openvmp
+        src: ../shared/templates/cron.d/cerebral

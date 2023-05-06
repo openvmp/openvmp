@@ -12,4 +12,4 @@ source /opt/ros/humble/setup.bash
 # --packages-skip openvmp_hardware_simulation_gazebo: no gazebo dependencies
 COLCON_HOME=$(pwd) colcon build \
   --parallel-workers 2 \
-  --packages-skip openvmp_hardware_simulation_gazebo
+  --packages-skip openvmp_hardware_simulation_gazebo gazebo_ros2_control

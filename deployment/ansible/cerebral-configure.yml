@@ -1,6 +1,7 @@
 ---
-- name: Configure Raspberry PI for OpenVMP
-  hosts: openvmp-pi
+- name: Configure NUC for OpenVMP
+  hosts: openvmp-nuc
+  gather_facts: yes
 
   tasks:
     # OS configuration
@@ -9,39 +10,6 @@
         path: /root/.bashrc
         line: "echo 'Welcome to OpenVMP. Use Ansible for any mutable changes.'"
         create: true
-    - name: Disable console to free the UART port
-      replace:
-        dest: /boot/firmware/cmdline.txt
-        regexp: "console=[A-Za-z]*0,[0-9]* "
-        replace: ""
-    - name: Disable Bluetooth to free the UART port - part 1
-      ansible.builtin.lineinfile:
-        path: /boot/firmware/config.txt
-        line: "dtoverlay=disable-bt"
-        create: false
-    - name: Disable Bluetooth to free the UART port - part 2
-      ansible.builtin.systemd:
-        name: hciuart
-        state: stopped
-    - name: Disable Bluetooth to free the UART port - part 3
-      ansible.builtin.systemd:
-        name: bluetooth
-        state: stopped
-    #- name: Setup RaspberryPI RS485 CAN HAT - part 1
-    #  ansible.builtin.lineinfile:
-    #    path: /boot/firmware/config.txt
-    #    line: "dtparam=spi=on"
-    #    create: false
-    #- name: Setup RaspberryPI RS485 CAN HAT - part 2
-    #  ansible.builtin.lineinfile:
-    #    path: /boot/firmware/config.txt
-    #    line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
-    #    create: false
-    - name: Setup RaspberryPI UART4 for RS485
-      ansible.builtin.lineinfile:
-        path: /boot/firmware/config.txt
-        line: "dtoverlay=uart4"
-        create: false
     - name: Limit journald total disk use
       ansible.builtin.lineinfile:
         path: /etc/systemd/journald.conf
@@ -57,11 +25,6 @@
         path: /etc/systemd/journald.conf
         line: "MaxLevelStore=notice"
         create: false
-    - name: Setup RaspberryPI UART5 for RS485
-      ansible.builtin.lineinfile:
-        path: /boot/firmware/config.txt
-        line: "dtoverlay=uart5"
-        create: false
     - name: Disable unattended upgrades to be in control
       ansible.builtin.apt:
         pkg:
@@ -70,15 +33,44 @@
     - name: Installing and updating system packages
       ansible.builtin.apt:
         pkg:
+          - net-tools
+          - curl
+          - socat
           - git
           - gnupg
           - lsb-release
-          - i2c-tools
-          - python3-pip
-          - gpsd-tools
         update_cache: true
         state: present
-    - name: Installing and updating ROS2
+    - name: Global sysctl configuration
+      ansible.builtin.copy:
+        dest: /etc/sysctl.d/999-openvmp.conf
+        content: |
+          net.ipv4.ipfrag_time = 3
+          net.core.rmem_max = 4194304
+    - name: Disable Avahi daemon to reduce noise
+      ansible.builtin.systemd:
+        name: avahi-daemon
+        state: stopped
+        enabled: false
+
+    # Install ROS2
+    - name: Installing and updating system packages for ROS2
+      ansible.builtin.apt:
+        pkg:
+          - software-properties-common
+        update_cache: false
+        state: present
+    - name: Add repository universe
+      shell: add-apt-repository universe -y
+    - name: Add ROS2 repo key
+      ansible.builtin.apt_key:
+        url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
+        state: present
+    - name: Add ROS2 repo
+      ansible.builtin.apt_repository:
+        repo: deb http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main
+        state: present
+    - name: Installing and updating ROS2 packages
       ansible.builtin.apt:
         pkg:
           - ros-humble-desktop-full
@@ -88,38 +80,59 @@
           - ros-humble-camera-calibration-parsers
           - v4l2loopback-utils
           - ros-humble-robot-localization
-        update_cache: true
-        state: present
-    - name: Install socat
-      ansible.builtin.apt:
-        name: socat
         update_cache: false
         state: present
-    - name: Global sysctl configuration
-      ansible.builtin.copy:
-        dest: /etc/sysctl.d/999-openvmp.conf
-        content: |
-          net.ipv4.ipfrag_time = 3
-          net.core.rmem_max = 4194304
 
-    # Arduino environment
-    - name: Installing and updating Arduino packages
+    # Install Coral AI
+    - name: Add Coral AI repo key
+      ansible.builtin.apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+    - name: Add Coral AI repo
+      ansible.builtin.apt_repository:
+        repo: deb https://packages.cloud.google.com/apt coral-edgetpu-stable main
+        state: present
+    - name: Downloading pycoral for Python 3.10
+      ansible.builtin.get_url:
+        url: https://github.com/hjonnala/snippets/raw/main/wheels/python3.10/pycoral-2.0.0-cp310-cp310-linux_x86_64.whl
+        dest: /tmp
+    - name: Downloading tflite_runtime for Python 3.10
+      ansible.builtin.get_url:
+        url: https://github.com/hjonnala/snippets/raw/main/wheels/python3.10/tflite_runtime-2.5.0.post1-cp310-cp310-linux_x86_64.whl
+        dest: /tmp
+    - name: Install the downloaded Python packages for Coral AI
+      ansible.builtin.pip:
+        name:
+          - file:///tmp/pycoral-2.0.0-cp310-cp310-linux_x86_64.whl
+          - file:///tmp/tflite_runtime-2.5.0.post1-cp310-cp310-linux_x86_64.whl
+    - name: Installing and updating Coral AI packages
       ansible.builtin.apt:
         pkg:
-          - arduino
-          - arduino-mk
-        update_cache: true
+          - libedgetpu1-std
+          - libtorch-dev
+          - python3-torch
+          - edgetpu-compiler
+          - libedgetpu-dev
+          - gasket-dkms # TODO(clarbee): add logic to set secureboot password
+        update_cache: false
         state: present
-    - name: Installing arduino-cli
-      ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
-      args:
-        creates: bin/arduino-cli
-      changed_when: False
-    - name: Installing libraries
-      ansible.builtin.shell: /root/bin/arduino-cli lib install Servo
-      args:
-        creates: Arduino/libraries/Servo/lib/Servo.h
-      changed_when: False
+    - name: Add the gasket module
+      community.general.modprobe:
+        name: gasket
+        state: present
+    - name: Add the apex module
+      community.general.modprobe:
+        name: apex
+        state: present
+    - name: Make TPU drivers load on boot
+      ansible.builtin.copy:
+        dest: /etc/modules-load.d/openvmp-tpu.conf
+        content: >
+          gasket
+          apex
+        force: false
+
+    # FIXME(clairbee): remove duplication of the config to setup the source code tree
 
     # Robot source code
     - name: Creating source code repositories on the targets
@@ -153,8 +166,8 @@
       become: no
       changed_when: False
       delegate_to: localhost
-    - name: Checking out the main branch
-      shell: "git checkout main && git branch -d tmp"
+    - name: Delete the temporary branch
+      shell: git checkout main && git branch -d tmp
       args:
         chdir: openvmp
         removes: .git/refs/heads/tmp
