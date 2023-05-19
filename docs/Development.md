@@ -22,6 +22,7 @@ sudo apt install v4l2loopback-utils
 sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
 sudo apt install -y ros-humble-camera-calibration-parsers ros-humble-camera-info-manager
 sudo apt install -y ros-humble-gazebo-dev ros-humble-gazebo-ros
+sudo apt install -y ros-humble-topic-tools
 ```
 
 4. Clone OpenVMP:
