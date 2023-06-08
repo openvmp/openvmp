@@ -2,14 +2,15 @@
 
 Below you can see some draft ideas that you can work on as a contributor.
 
-Reach out to opevmp@proton.me and/or submit your pull request.
+Reach out to opevmp@proton.me to discuss more details and/or submit your pull request.
 
 ## Short term tactical needs
 
-- fix the URDF model to get rid of vibration during simulation
-- fix Gazebo world physics to prevent the model from "flying away"
-- specialized ros2\_control controller for walking
+- rewrite the existing FreeCAD design using CadQuery
+- sensor filter in 'remote_encoder' to ignore faulty readings
+- add support for joint brakes to the joint trajectory controller
 - add odometry components
+- add vision components
 - add SLAM components
 
 ## Long term strategic goals
@@ -23,7 +24,7 @@ Reach out to opevmp@proton.me and/or submit your pull request.
   - Satellite data module
   - 5G module
 - Audio module (optional)
-- NUC extension (optional)
+- NUC management extension (optional)
 - Contactless charging from power lines (optional)
   - City power lines
   - Intra-city power lines
@@ -40,11 +41,8 @@ Reach out to opevmp@proton.me and/or submit your pull request.
   - Audio recording
   - Voice recognition (command match)
   - Voice recognition (person match)
-- NUC extension (requires hardware)
+- NUC management extension (requires hardware)
   - Module on Raspberry PI to bring NUC up and down gracefully
-  - Image for NUC to host computation hungry modules
-    - Module for building point clouds using stereo cameras
-    - Module for building a world model using point clouds
   - Module on Raspberry PI to program NUC
     - on first boot / firmware upgrade
     - OTA update from Cloud
@@ -75,4 +73,3 @@ Reach out to opevmp@proton.me and/or submit your pull request.
 
 - Extensions for RViz interactive markers
   - to display play/pause symbols for each joint (in the center of the same plane where the other markers are displayed now) to be used for pausing movement routines or for engaging/disengaging joint brakes
-

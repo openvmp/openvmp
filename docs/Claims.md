@@ -8,7 +8,7 @@ All materials in all OpenVMP repositories are published using the Apache 2.0 ope
 
 To prevent patent trolls from making claims for minor improvements on top of the information published by OpenVMP, the following claims are made about the features and inventions that have already been considered and planned by OpenVMP contributors.
 
-**`ATTENTION!!! Do not hesitate to make a pull request with nothing else but just more claims (or corrections to the existing ones) to protect the project from patent trolls.`**
+**`ATTENTION!!! Do not hesitate to make a pull request with nothing else but just more claims (or corrections to the existing ones) to publish your ideas and to prevent the patent trolls from slowing down the progress.`**
 
 - OpenVMP units will communicate with each other, other devices (either human operated or not, either mobile or static infrastructure), networking backends, cloud services, API endpoints. The peers and corresponding communication protocols can be standardized for all OpenVMP units, for specific types of OpenVMP units, or customized for individual robots, fleets, tasks or locations.
 - OpenVMP units will use various communication protocols (datagram, stream or mixed), wired or wireless (to ground base stations or satellites), with or without security (confidentiality, integrity and/or privacy), tunneling and obfuscation techniques, WAN or LAN optimization techniques.
@@ -24,3 +24,4 @@ To prevent patent trolls from making claims for minor improvements on top of the
 - OpenVMP units will feature all publicly available algorithms for odometry, perception, navigation, motion planning and motion control.
 - OpenVMP units will use a custom motion control algorithm that takes the specific robot configuration into account to optimize movements and prevent collisions. The acceptable joint position range will depend on the current position and velocity of all other joints at the time.
 - OpenvMP units will use distributed computing algorithms that would allow them to combine or share computational resources, storage (including memory) resources,  sensor data and other resources. If a connectivity between cooperating units is temporarily lost, each unit will be self-sufficient. However the discrepancy in computation results (if any) will be reconciled once the connectivity is restored so that the units may resume sharing the data processing load further.
+- OpenVMP units will be able to connect arms underneath itself in a way that the wheels will be touching the ground while the arms provide a bond like an axle thus enable one more driving mode.

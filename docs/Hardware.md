@@ -1,13 +1,14 @@
 # OpenVMP
 
-## How to build your own OpenVMP robot
+## How to build your own robot
 
 The instructions to build OpenVMP robots are starting to take shape in the
-[models](../models/REAME.md) module. Please, reach out to us if you are ready to
+[models](https://github.com/openvmp/openvmp-models/) repository. Please, [reach out to us](openvmp@proton.me) if you are ready to
 offer your CadQuery skills for publishing the rest of the blueprints.
 
-Once the entire set of blueprints is published, anyone would be able to build them
-given necessary metal cutting and 3D printing tools.
+Once the entire set of blueprints is published, anyone will be able
+to build their own robot given the necessary parts are purchased,
+and the necessary metal cutting and 3D printing tools are available.
 An effort is made to restrict the choice of parts
 to a limited set of components available on the market
 at an affordable price.

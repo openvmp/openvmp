@@ -2,15 +2,16 @@
 
 ## Select the robot to simulate
 
-The list of OpenVMP unit kinds available can be found using the following commands:
+The list of OpenVMP robot "kinds" available can be found using the following commands:
 
 ```bash
 cd platform/src
-ls openvmp_robot_*`
+ls -d openvmp_robot_*`
 ```
 
-There recommended robot kind to start with is `don1`.
-Disclaimer: it's the only robot published at the moment.
+The recommended robot kind to start with is `don1`.
+
+Disclaimer: it's the only robot kind published at the moment anyway.
 
 ## Select the world to simulate
 
@@ -51,7 +52,7 @@ Gazebo which uses `remote_hardware_interface` and knows how to simulate brakes):
 
 ```bash
 cd platform
-ros2 launch openvmp_robot simulation_world.launch.py simulate_remote_hardware_interface
+ros2 launch openvmp_robot simulation_world.launch.py simulate_remote_hardware_interface:=true
 ```
 
 Please, note, the first simulation run will take a long time to download all
