@@ -1,0 +1,33 @@
+---
+- name: Deploy and start generic services on the target SBCs
+  hosts:
+    - sbc-configured
+  gather_facts: yes
+
+  tasks:
+    # Meta service
+    - name: Create the meta service
+      ansible.builtin.copy:
+        dest: /lib/systemd/system/openvmp.service
+        content: |
+          [Unit]
+          Description=Stopping this service makes all OpenVMP services stop
+          After=rsyslog.service
+          [Service]
+          ExecStart=true
+
+    # # DDS plumbing
+    # - name: Create the systemd service for the 'drivers' subsystem
+    #   ansible.builtin.copy:
+    #     src: ../shared/files/systemd/dds.service
+    #     dest: /lib/systemd/system/openvmp-dds.service
+    # - name: Launch the dds plumbing
+    #   systemd:
+    #     name: openvmp-dds
+    #     state: restarted
+    #     enabled: true
+
+- name: Deploy and start spinal services on the target spinal SBCs
+  import_playbook: run-spinal.yaml
+- name: Deploy and start cerebral services on the target cerebral SBCs
+  import_playbook: run-cerebral.yaml

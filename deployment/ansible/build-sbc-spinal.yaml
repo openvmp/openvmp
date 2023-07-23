@@ -1,0 +1,15 @@
+---
+- name: Build spinal services on the target spinal SBCs
+  hosts:
+    - sbc-spinal
+  gather_facts: yes
+
+  tasks:
+    - name: Build the microcontroller source code
+      shell: make
+      args:
+        chdir: /root/openvmp/platform/src/microcontroller/microcontrollers/arduino_mega2560
+    - name: Deploy the microcontroller firmware
+      shell: make deploy
+      args:
+        chdir: /root/openvmp/platform/src/microcontroller/microcontrollers/arduino_mega2560

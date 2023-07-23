@@ -1,10 +1,12 @@
 ---
-- name: Setup new Raspberry PI for OpenVMP
-  hosts: openvmp-pi-unconfigured
-  gather_facts: yes
+- name: Setup spinal SBCs
+  hosts:
+    - sbc-unconfigured-pi4b
+    - sbc-unconfigured-rock5b
   vars_files:
     - vars/networking.yml
     - vars/vault.yml
+  gather_facts: yes
   roles:
     - ansible-ubuntu-wifi
 

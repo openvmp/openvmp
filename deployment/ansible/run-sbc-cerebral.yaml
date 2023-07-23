@@ -1,0 +1,16 @@
+---
+- name: Run OpenVMP services the cerebral target SBCs
+  hosts:
+    - sbc-cerebral
+  gather_facts: yes
+
+  tasks:
+    # 'cerebral' target
+    - name: Create the systemd target for cerebral services
+      ansible.builtin.copy:
+        dest: /lib/systemd/system/openvmp-cerebral.target
+        content: |
+          [Unit]
+          Description=Starting this target starts cerebral services
+          # Requires=openvmp-reflection.service
+          # After=openvmp-reflection.service

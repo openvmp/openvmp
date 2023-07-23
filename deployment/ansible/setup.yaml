@@ -1,0 +1,5 @@
+---
+- name: Setting up the worstations
+  import_playbook: setup-workstation.yaml
+- name: Setting up the target SBCs
+  import_playbook: setup-sbc.yaml

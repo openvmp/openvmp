@@ -1,7 +1,0 @@
-[openvmp-pi-unconfigured]
-# Pre-configured Pi boards go here:
-# root@<192.168.16.2>
-
-[openvmp-pi]
-# Place your configured Pi boards here:
-# root@<192.168.16.2> robot_kind=don1

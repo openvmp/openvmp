@@ -1,0 +1,10 @@
+# OpenVMP custom variables
+robot_kind: "don1"
+platform_root: "/root/openvmp/platform"
+extra_build_params: >
+  {% if 'uses_slow_storage' %}
+  --parallel-workers 2
+  {% endif %}
+
+# Ansible standard variables
+remote_user: "root"

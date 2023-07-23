@@ -1,0 +1,8 @@
+---
+- name: Configure spinal Rock 5 Model B SBCs for OpenVMP
+  hosts:
+    - sbc-spinal-rock5b
+  gather_facts: yes
+
+  tasks:
+    - import_tasks: configure-spinal.yaml

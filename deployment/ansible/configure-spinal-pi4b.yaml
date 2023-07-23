@@ -1,0 +1,47 @@
+---
+- name: Configure spinal Raspberry PI Model B SBCs for OpenVMP
+  hosts:
+    - sbc-spinal-pi4b
+  gather_facts: yes
+
+  tasks:
+    - import_tasks: configure-spinal.yaml
+
+    - name: Disable console to free the UART port
+      replace:
+        dest: /boot/firmware/cmdline.txt
+        regexp: "console=[A-Za-z]*0,[0-9]* "
+        replace: ""
+    - name: Disable Bluetooth to free the UART port - part 1
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtoverlay=disable-bt"
+        create: false
+    - name: Disable Bluetooth to free the UART port - part 2
+      ansible.builtin.systemd:
+        name: hciuart
+        state: stopped
+    - name: Disable Bluetooth to free the UART port - part 3
+      ansible.builtin.systemd:
+        name: bluetooth
+        state: stopped
+    #- name: Setup RaspberryPI RS485 CAN HAT - part 1
+    #  ansible.builtin.lineinfile:
+    #    path: /boot/firmware/config.txt
+    #    line: "dtparam=spi=on"
+    #    create: false
+    #- name: Setup RaspberryPI RS485 CAN HAT - part 2
+    #  ansible.builtin.lineinfile:
+    #    path: /boot/firmware/config.txt
+    #    line: "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000"
+    #    create: false
+    - name: Setup RaspberryPI UART4 for RS485
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtoverlay=uart4"
+        create: false
+    - name: Setup RaspberryPI UART5 for RS485
+      ansible.builtin.lineinfile:
+        path: /boot/firmware/config.txt
+        line: "dtoverlay=uart5"
+        create: false

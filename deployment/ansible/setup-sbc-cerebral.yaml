@@ -1,6 +1,7 @@
 ---
-- name: Setup new NUC for OpenVMP
-  hosts: openvmp-nuc-unconfigured
+- name: Setup cerebral SBCs
+  hosts:
+    - sbc-unconfigured-nuc
   gather_facts: yes
 
   tasks:

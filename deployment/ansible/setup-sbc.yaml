@@ -1,0 +1,22 @@
+---
+- name: Setup SBCs
+  hosts:
+    - sbc-unconfigured
+  gather_facts: yes
+
+  tasks:
+    - name: Add the current user to the list of authorized SSH keys
+      ansible.posix.authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', filename) }}"
+      vars:
+        filename: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
+    - name: Allow root login over SSH
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#\s*PermitRootLogin.*$'
+        line: "PermitRootLogin prohibit-password"
+
+- import_playbook: setup-sbc-spinal.yaml
+- import_playbook: setup-sbc-cerebral.yaml

@@ -1,0 +1,87 @@
+---
+- name: Configure cerebral SBCs for OpenVMP
+  hosts:
+    - sbc-cerebral
+  vars_files:
+    - vars/ssh.yml
+  gather_facts: yes
+
+  tasks:
+    # OS configuration
+    - name: Installing and updating system packages
+      ansible.builtin.apt:
+        pkg:
+          - curl
+          - software-properties-common
+        update_cache: false
+        state: present
+
+    # Install ROS2
+    - name: Installing and updating ROS2 packages
+      ansible.builtin.apt:
+        pkg:
+          - ros-humble-camera-calibration-parsers
+          - v4l2loopback-utils
+        update_cache: false
+        state: present
+
+    # Robot configuration
+    - name: Sync robot configuration with the spinal node
+      tags: sync-push
+      synchronize:
+        src: "{{ item }}"
+        dest: "{{ item }}"
+        mode: push
+      delegate_to: "{{ spinal_sbc }}"
+      register: syncfile
+      with_items:
+        - "/root/.openvmp/id"
+
+    # Install Coral AI
+    - name: Add Coral AI repo key
+      ansible.builtin.apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+    - name: Add Coral AI repo
+      ansible.builtin.apt_repository:
+        repo: deb https://packages.cloud.google.com/apt coral-edgetpu-stable main
+        state: present
+    - name: Downloading pycoral for Python 3.10
+      ansible.builtin.get_url:
+        url: https://github.com/hjonnala/snippets/raw/main/wheels/python3.10/pycoral-2.0.0-cp310-cp310-linux_x86_64.whl
+        dest: /tmp
+    - name: Downloading tflite_runtime for Python 3.10
+      ansible.builtin.get_url:
+        url: https://github.com/hjonnala/snippets/raw/main/wheels/python3.10/tflite_runtime-2.5.0.post1-cp310-cp310-linux_x86_64.whl
+        dest: /tmp
+    - name: Install the downloaded Python packages for Coral AI
+      ansible.builtin.pip:
+        name:
+          - file:///tmp/pycoral-2.0.0-cp310-cp310-linux_x86_64.whl
+          - file:///tmp/tflite_runtime-2.5.0.post1-cp310-cp310-linux_x86_64.whl
+    - name: Installing and updating Coral AI packages
+      ansible.builtin.apt:
+        pkg:
+          - libedgetpu1-std
+          - libtorch-dev
+          - python3-torch
+          - edgetpu-compiler
+          - libedgetpu-dev
+          - gasket-dkms # TODO(clarbee): add logic to set secureboot password
+        update_cache: false
+        state: present
+    - name: Add the gasket module
+      community.general.modprobe:
+        name: gasket
+        state: present
+    - name: Add the apex module
+      community.general.modprobe:
+        name: apex
+        state: present
+    - name: Make TPU drivers load on boot
+      ansible.builtin.copy:
+        dest: /etc/modules-load.d/openvmp-tpu.conf
+        content: >
+          gasket
+          apex
+        force: false

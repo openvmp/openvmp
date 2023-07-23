@@ -1,0 +1,15 @@
+---
+- name: Build specific packages on the workstations
+  hosts:
+    - workstation
+  gather_facts: yes
+
+  tasks:
+    - name: Build simulation packages on the workstations
+      shell: >
+        source /opt/ros/humble/setup.bash && \
+        COLCON_HOME="{{ platform_root }}" colcon build \
+        {{ extra_build_params }} \
+        --packages-select openvmp_hardware_simulation_gazebo gazebo_ros2_control
+      args:
+        chdir: "{{ platform_root }}"

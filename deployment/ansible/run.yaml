@@ -1,0 +1,5 @@
+---
+- name: Deploy and start services on the target SBCs
+  import_playbook: run-sbc.yaml
+- name: Start teleoperation services on the workstation
+  import_playbook: run-workstation.yaml

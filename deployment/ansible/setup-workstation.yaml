@@ -1,0 +1,9 @@
+---
+hosts:
+  - workstation
+gather_facts: yes
+
+tasks:
+  - name: Generate an OpenSSH keypair if none exists
+    community.crypto.openssh_keypair:
+      path: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"

@@ -2,70 +2,135 @@
 
 ## Deployment
 
-### Prerequisites
+To deploy OpenVMP software to robot hardware, you'll need a Linux or MacOS workstation. This will allow you to install and configure the necessary software components, as well as keep your robots up-to-date with the latest features and bug fixes.
 
-- For the spinal function:
-  - Raspberry PI 4 4GB+
-  - SD Card with Ubuntu 22.04 or higher (64bit arm)
-    - `/root/.ssh/authorized` contains your public key
-      (use `ssh-keygen` on the dev host to get one)
-    - `/etc/ssh/sshd_config` has `PermitRootLogin` uncommented
-    - Your favorite flavor of ROS2 installed
+### Workstation Prerequisites
 
-- For the cerebral function:
-  - 1 or 2 Intel NUC 16GB+
-    - with at least 1 Thunderbolt port
-    - with a free m2 22x42 PCIe slot
-      - may have been used by the WiFi adapter
-  - 1 or 2 Coral AI Edge TPU Accelerator (m2 22x42)
-  - Thunderbolt host-to-host cable (if there are 2 NUCs)
+The requirements must to be met:
 
-- On the development machine:
-  - Local Ansible setup
-    - `deployment/ansible/inventory/hosts` containing
+- [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) must be installed
+- This repository must be cloned
 
-      ```ini
-      [openvmp-pi-unconfigured]
-      root@<<<put your Raspberry PI Ethernet IP here>>>
-      [openvmp-nuc-unconfigured]
-      root@<<<put your 1st Intel NUC IP here>>> index=1
-      root@<<<put your 2nd Intel NUC IP here>>> index=2
-      ```
+### Target Prerequisites
 
-### Initial setup
+#### Target Roles
 
-Use the following commands to start the deployment:
+OpenVMP robots contain one or more single board computers (SBC).
 
-```sh
-cd deployment/ansible
-ansible-playbook -i inventory ./setup.yml
-ansible-playbook -i inventory ./cerebral-setup.yml
-```
+If there is more than one SBC present,
+then one of them is dedicated to perform the role called "spinal". The other ones perform the role called "cerebral".
 
-### Post-setup
+If there is only one SBC present, then it performs both "spinal" and "cerebral" roles at the same time.
 
-Once the setup is complete,
-update the Ansible inventory file by moving entries into other sections
-and replacing all IP addresses with the WiFi IP address of Raspberry Pi. You may want con configure your WiFi router to use a permanent (static) IP lease.
+#### Supported Target Hardware
 
-That's the inventory section used by all OpenVMP Ansible playbooks other than the '*setup.yml' ones.
+OpenVMP deployment scripts support the following target hardware options.
 
-```ini
-[openvmp-pi]
-root@<<<put your Raspberry PI WiFi IP here>>> robot_kind=don1
-[openvmp-nuc]
-root@<<<put your Raspberry Pi WiFi IP here>>>:8021 index=1 robot_kind=don1
-root@<<<put your Raspberry Pi WiFi IP here>>>:8022 index=2 robot_kind=don1
-```
+| SBC                    | OS                       | Spinal | Cerebral | Alias  |
+| ---------------------- | ------------------------ | ------ | -------- | ------ |
+| Rock 5 Model B         | Armbian 23.0.2           | [x]    |          | rock5b |
+| Raspberry Pi 4 Model B | Ubuntu 22.04 (64bit arm) | [x]    |          | pi4b   |
+| Intel NUC              | Ubuntu 22.04             |        | [x]      | nuc    |
 
-Please, note, `don1` is the only `robot_kind` supported by OpenVMP
-at the moment.
+The hardware design of each particular robot dictates what SBCs can be
+used for which roles.
+
+| Robot Kind | Configuration | Spinal                                      | Cerebral                                                                               |
+| ---------- | ------------- | ------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Don1       | Recommended   | Rock 5B 8GB+, eMMC 32GB+, Intel AX210/AX211 | 2x Intel NUC 12th Gen i5 32GB+, M.2 22x80 NVME SSD 512GB+, Coral AI M.2 22x30 Edge TPU |
+| Don1       | Minimum       | Raspberry Pi 4 Model B 4GB, SD card 4GB     | Intel NUC 12th Gen i3 8GB, M.2 22x80 NVME SSD 256GB                                    |
 
 ### Configuration
 
+#### Target Inventory
+
+Each target board has to be registered in
+`deployment/ansible/inventory50-sbcs.ini`.
+
+```ini
+# SBCs pending initial setup
+[sbc-unconfigured-pi4b] # Raspberry Pi 4 Model B
+<Ethernet-IP-of-pi4b>
+
+[sbc-unconfigured-rock5b] # Rock 5 Model B
+<Ethernet-IP-of-rock5b>
+
+[sbc-unconfigured-nuc] # Intel NUC
+<Ethernet-IP-of-NUC-1>
+<Ethernet-IP-of-NUC-2>
+
+
+# SBCs after the initial setup is complete
+[sbc-spinal-pi4b] # Raspberry Pi 4 Model B
+<WiFi-IP-of-pi4b>
+
+[sbc-spinal-rock5b] # Rock 5 Model B
+<WiFi-IP-of-rock5b>
+
+[sbc-cerebral-nuc] # Intel NUC
+# This example assumes that the NUCs are connected to the rock5b (see above).
+<WiFi-IP-of-rock5b>:8021 spinal_sbc=<WiFi-IP-of-rock5b> index=1
+<WiFi-IP-of-rock5b>:8022 spinal_sbc=<WiFi-IP-of-rock5b> index=2
+```
+
+Before the initial setup,
+the target entries are placed in the section
+`sbc-unconfigured-<SBC alias>`
+using dynamically assigned Ethernet IP address (use `ip addr show`).
+
+After the initial setup is completed,
+the target entries are placed in the section `sbc-<role>-<SBC alias>`
+using the WiFi IP address of the robot.
+Please, make sure that the robot is assigned a static IP address
+in the configuration of your WiFi access point (permanent IP lease)
+for ease of remote management.
+
+Please, note, if there are multiple SBCs per robot
+then the robot gets a single IP address assigned to the "spinal" SBC.
+Internally, "cerebral" SPCs are connected to the "spinal" one.
+The "spinal" SBC is forwarding management traffic (SSH) to
+the "cerebral" SBCs by forwarding ports 8021, 8022 etc...
+
+*Please, note, the inventory examples in this document are
+for illustration purposes only.
+The actual inventory file will have a shorter list of target SBCs.
+The exact list of entries depends on the specific requirements for
+the robot kind (see above).*
+
+#### Initial Setup
+
+Each SBC has to be setup separately before being installed into the robot.
+
+SBCs usually come with an OS pre-installed.
+The chances are this is not an OS images that is supporte by OpenVMP.
+Please, refer to a table above for the supported OS for each
+particular SBC.
+
+After the proper OS is installed, local user is configured and a dynamic
+IP address is assigned on a wired Ethernet network, update the inventory file
+(see above) and run the following commands:
+
+```sh
+cd deployment/ansible
+ansible-playbook -i inventory ./setup.yaml
+```
+
+#### Installation
+
+After the initial setup is completed, the target SBCs are
+mounted to the robot. Refer to the assembly instructions for the details.
+
+After the assembly, the cerebral SBCs (if any) are wired to the
+corresponding spinal SBC. They are no longer exposed on the external
+network.
+Corresponding changes need to be made to the inventory file by moving
+the entries to the section dedicated to SBCs that are already setup.
+
+#### Finilizing and updating the target configuration
+
 Use the following commands if you need to:
 
-- configure the target board for the first time
+- finish configuring the target board for the first time after the initial setup
 - link an additional development machine to an already configured target board
 - update the target board software with latest ROS updates
 - update the target board configuration on each major OpenVMP update
@@ -74,48 +139,37 @@ Use the following commands if you need to:
 
 ```sh
 cd deployment/ansible
-ansible-playbook -i inventory ./configure.yml
-ansible-playbook -i inventory ./cerebral-configure.yml
+ansible-playbook -i inventory ./configure.yaml
 ```
 
-### Building software on the target
+### Building software on targets
 
 OpenVMP does not support cross-compilation at the moment.
-Use the following commands to update the source code repository on the target
-and to build all the packages:
+Use the following commands to update the source code repository on
+the target and to build it:
 
 ```sh
 cd deployment/ansible
-ansible-playbook -i inventory ./build.yml
-ansible-playbook -i inventory ./cerebral-build.yml
+ansible-playbook -i inventory ./build.yaml
 ```
 
-### Launching the minimal set of services
+### Launching robot software
 
-Use the following commands to run OpenVMP device drivers and other basic
-software on the target boards:
+Use the following commands to run OpenVMP services on the target SBCs and
+the teleoperation UI on the workstations:
 
 ```sh
 cd deployment/ansible
-ansible-playbook -i inventory ./run-minimal.yml
+ansible-playbook -i inventory ./run.yaml
 ```
 
-### Launching the full set of services
+### Connectivity between robots and development machines
 
-Use the following commands to run the complete set of OpenVMP software
-on the target boards:
-
-```sh
-cd deployment/ansible
-ansible-playbook -i inventory ./run-full.yml
-```
-
-### Testing connectivity with development machines
-
-Once some services are running on the target boards,
-it's possible to interact with them from the development machine.
-Use the following command on the development machines to confirm
-that the target machines are visible to ROS2 on the development machine:
+Once some drivers and services are running on the target boards,
+it's possible to interact with them from the development machine
+if it's connected to the same WiFi network.
+Use the following command on the development machine to confirm
+that the robot is visible to ROS2 on the development machine:
 
 ```sh
 ros2 node list
@@ -123,30 +177,16 @@ ros2 topic list
 ros2 service list
 ```
 
-Please, note, the output contains the IDs assigned to the target robots.
 
-If there is no output, check the firewall settings on the development machine
-to confirm that they allow ROS2 network connections.
+The output of the above commands is one of the ways
+to learn the IDs assigned to the target robots.
 
-### Controlling the robot remotely
-
-Test the control pipeline by running the following command
-on the development machine:
-
-```sh
-ros2 service call /openvmp/robot_<<<robot_ID_goes_here>>>/joint_front_turn_table_joint_actuator/modbus/get_ppr modbus/srv/ConfiguredHoldingRegisterRead '{}'
-```
-
-The output should contain the current setting of 'Pulses Per Revolution' of the
-stepper motor driver of the front turn table joint
-(the one which turns the front limbs left and right relative to the main robot
-body).
-
-Use the following command to move some joints around:
-
-```sh
-ros2 service call /openvmp/robot_<<<robot_ID_goes_here>>>/joint_front_turn_table_joint_actuator/velocity/set stepper_driver/srv/VelocitySet '{"velocity":2.0}'
-```
+If there is no output produced at all then something is getting
+in the way of ROS nodes on the workstation trying to reach to ROS nodes
+on the target SBCs. The potential reasons for this include:
+  - The workstation's firewall is blocking ROS2 connections.<br/>
+    Consider disabling the firewall.
+  - The WiFi access point has "client isolation" turned on.
 
 ### Testing robot software on the development machine
 
@@ -159,5 +199,22 @@ testing and troubleshooting purposes.
 ros2 launch openvmp_robot robot.launch.py kind:=don1 id:=<<<robot_ID_goes_here>>> subsystem:=<<<robot_subsystem_name_goes_here>>>
 ```
 
-If the robot is running the minimal set of OpenVMP software then the only subsystem
-required to control the robot remotely is `teleop`.
+### Controlling the robot from the command line
+
+Test the motion control pipeline by running the following command
+on the development machine:
+
+```sh
+ros2 service call /openvmp/robot_<<<robot_ID_goes_here>>>/joint_front_turn_table_joint_actuator/modbus/get_ppr modbus/srv/ConfiguredHoldingRegisterRead '{}'
+```
+
+The output should contain the current setting of 'Pulses Per Revolution'
+of the stepper motor driver of the front turn table joint
+(the one which turns the front limbs left and right relative to
+the main robot body).
+
+Use the following command to move some joints:
+
+```sh
+ros2 service call /openvmp/robot_<<<robot_ID_goes_here>>>/joint_front_turn_table_joint_actuator/velocity/set stepper_driver/srv/VelocitySet '{"velocity":2.0}'
+```

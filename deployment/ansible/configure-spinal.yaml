@@ -1,0 +1,49 @@
+---
+- name: Configure spinal SBCs for OpenVMP
+  hosts:
+    - sbc-spinal
+  gather_facts: yes
+
+  tasks:
+    # OS configuration
+    - name: Installing and updating system packages
+      ansible.builtin.apt:
+        pkg:
+          - i2c-tools
+          - gpsd-tools
+        update_cache: true
+        state: present
+    - name: Installing and updating ROS2
+      ansible.builtin.apt:
+        pkg:
+          - ros-humble-ros2-control
+          - ros-humble-ros2-controllers
+          - ros-humble-robot-localization
+        update_cache: false
+        state: present
+
+    # Robot configuration
+    - name: Give this robot a name
+      ansible.builtin.copy:
+        dest: /root/.openvmp/id
+        content: "{{ lookup('community.general.random_string', upper=true, lower=false, numbers=false, special=false, length=1) }}{{ lookup('community.general.random_string', upper=true, lower=false, numbers=true, special=false, length=3) }}"
+        force: false
+
+    # Arduino environment
+    - name: Installing and updating Arduino packages
+      ansible.builtin.apt:
+        pkg:
+          - arduino
+          - arduino-mk
+        update_cache: true
+        state: present
+    - name: Installing arduino-cli
+      ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+      args:
+        creates: bin/arduino-cli
+      changed_when: False
+    - name: Installing libraries
+      ansible.builtin.shell: /root/bin/arduino-cli lib install Servo
+      args:
+        creates: Arduino/libraries/Servo/lib/Servo.h
+      changed_when: False

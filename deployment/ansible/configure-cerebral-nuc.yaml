@@ -1,0 +1,8 @@
+---
+- name: Configure cerebral Intel NUC SBCs for OpenVMP
+  hosts:
+    - sbc-cerebral-nuc
+  gather_facts: yes
+
+  tasks:
+    - import_tasks: configure-cerebral.yaml

@@ -1,30 +1,10 @@
 ---
-- name: Run the minimal set of OpenVMP software on the target
-  hosts: openvmp-pi
+- name: Run OpenVMP services the spinal target SBCs
+  hosts:
+    - sbc-spinal
+  gather_facts: yes
 
   tasks:
-    # Meta service
-    - name: Create the meta service
-      ansible.builtin.copy:
-        dest: /lib/systemd/system/openvmp.service
-        content: |
-          [Unit]
-          Description=Stopping this service makes all OpenVMP services stop
-          After=rsyslog.service
-          [Service]
-          ExecStart=true
-
-    # # DDS plumbing
-    # - name: Create the systemd service for the 'drivers' subsystem
-    #   ansible.builtin.copy:
-    #     src: ../shared/files/systemd/dds.service
-    #     dest: /lib/systemd/system/openvmp-dds.service
-    # - name: Launch the dds plumbing
-    #   systemd:
-    #     name: openvmp-dds
-    #     state: restarted
-    #     enabled: true
-
     # Drivers
     - name: Create the systemd service for the 'drivers' subsystem
       template:
@@ -70,12 +50,12 @@
         state: restarted
         enabled: true
 
-    # 'minimal' target
-    - name: Create the systemd target
+    # 'spinal' target
+    - name: Create the systemd target for spinal services
       ansible.builtin.copy:
-        dest: /lib/systemd/system/openvmp-minimal.target
+        dest: /lib/systemd/system/openvmp-spinal.target
         content: |
           [Unit]
-          Description=Starting this target starts the minimum set of services
+          Description=Starting this target starts spinal services
           Requires=openvmp-reflection.service
           After=openvmp-reflection.service

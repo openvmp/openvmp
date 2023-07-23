@@ -1,0 +1,9 @@
+---
+- name: Build OpenVMP on the target SBCs
+    hosts:
+      - workstation
+    gather_facts: yes
+  
+    tasks:
+      - import_playbook: build-sbc-spinal.yaml
+      - import_playbook: build-sbc-cerebral.yaml

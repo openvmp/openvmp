@@ -1,0 +1,7 @@
+---
+- name: Build cerebral services on the target cerebral SBCs
+  hosts:
+    - sbc-cerebral
+  gather_facts: yes
+
+  tasks:

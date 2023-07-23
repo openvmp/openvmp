@@ -1,0 +1,24 @@
+---
+- name: Build OpenVMP on the target SBCs
+  hosts:
+    - sbc-configured
+    - workstation
+  gather_facts: yes
+
+  tasks:
+    - name: Build the IMU Python module
+      shell: python3 setup.py build && python3 setup.py install
+      args:
+        chdir: openvmp/platform/src/third_party/RTIMULib2/Linux/python
+        creates: RTIMULib.egg-info/SOURCES.txt
+    - name: Build the main source code
+      shell: >
+        source /opt/ros/humble/setup.bash && \
+        COLCON_HOME="{{ platform_root }}" colcon build \
+        {{ extra_build_params }} \
+        --packages-skip openvmp_hardware_simulation_gazebo gazebo_ros2_control
+      args:
+        chdir: "{{ platform_root }}"
+
+- import_playbook: build-spinal.yaml
+- import_playbook: build-cerebral.yaml

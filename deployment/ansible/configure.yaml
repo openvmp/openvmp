@@ -1,6 +1,7 @@
 ---
-- name: Configure NUC for OpenVMP
-  hosts: openvmp-nuc
+- name: Configure all SBCs for OpenVMP
+  hosts:
+    - sbc-configured
   gather_facts: yes
 
   tasks:
@@ -30,17 +31,6 @@
         pkg:
           - unattended-upgrades
         state: absent
-    - name: Installing and updating system packages
-      ansible.builtin.apt:
-        pkg:
-          - net-tools
-          - curl
-          - socat
-          - git
-          - gnupg
-          - lsb-release
-        update_cache: true
-        state: present
     - name: Global sysctl configuration
       ansible.builtin.copy:
         dest: /etc/sysctl.d/999-openvmp.conf
@@ -52,14 +42,19 @@
         name: avahi-daemon
         state: stopped
         enabled: false
-
-    # Install ROS2
-    - name: Installing and updating system packages for ROS2
+    - name: Installing and updating system packages
       ansible.builtin.apt:
         pkg:
-          - software-properties-common
-        update_cache: false
+          - git
+          - gnupg
+          - lsb-release
+          - python3-pip
+          - socat
+          - net-tools
+        update_cache: true
         state: present
+
+    # Install ROS2
     - name: Add repository universe
       shell: add-apt-repository universe -y
     - name: Add ROS2 repo key
@@ -70,69 +65,13 @@
       ansible.builtin.apt_repository:
         repo: deb http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main
         state: present
-    - name: Installing and updating ROS2 packages
+    - name: Installing and updating ROS2
       ansible.builtin.apt:
-        pkg:
-          - ros-humble-desktop-full
-          - ros-humble-ros2-control
-          - ros-humble-ros2-controllers
-          - python3-colcon-common-extensions
-          - ros-humble-camera-calibration-parsers
-          - v4l2loopback-utils
-          - ros-humble-robot-localization
-        update_cache: false
-        state: present
-
-    # Install Coral AI
-    - name: Add Coral AI repo key
-      ansible.builtin.apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-    - name: Add Coral AI repo
-      ansible.builtin.apt_repository:
-        repo: deb https://packages.cloud.google.com/apt coral-edgetpu-stable main
-        state: present
-    - name: Downloading pycoral for Python 3.10
-      ansible.builtin.get_url:
-        url: https://github.com/hjonnala/snippets/raw/main/wheels/python3.10/pycoral-2.0.0-cp310-cp310-linux_x86_64.whl
-        dest: /tmp
-    - name: Downloading tflite_runtime for Python 3.10
-      ansible.builtin.get_url:
-        url: https://github.com/hjonnala/snippets/raw/main/wheels/python3.10/tflite_runtime-2.5.0.post1-cp310-cp310-linux_x86_64.whl
-        dest: /tmp
-    - name: Install the downloaded Python packages for Coral AI
-      ansible.builtin.pip:
-        name:
-          - file:///tmp/pycoral-2.0.0-cp310-cp310-linux_x86_64.whl
-          - file:///tmp/tflite_runtime-2.5.0.post1-cp310-cp310-linux_x86_64.whl
-    - name: Installing and updating Coral AI packages
-      ansible.builtin.apt:
-        pkg:
-          - libedgetpu1-std
-          - libtorch-dev
-          - python3-torch
-          - edgetpu-compiler
-          - libedgetpu-dev
-          - gasket-dkms # TODO(clarbee): add logic to set secureboot password
-        update_cache: false
-        state: present
-    - name: Add the gasket module
-      community.general.modprobe:
-        name: gasket
-        state: present
-    - name: Add the apex module
-      community.general.modprobe:
-        name: apex
-        state: present
-    - name: Make TPU drivers load on boot
-      ansible.builtin.copy:
-        dest: /etc/modules-load.d/openvmp-tpu.conf
-        content: >
-          gasket
-          apex
-        force: false
-
-    # FIXME(clairbee): remove duplication of the config to setup the source code tree
+      pkg:
+        - ros-humble-desktop-full
+        - python3-colcon-common-extensions
+      update_cache: false
+      state: present
 
     # Robot source code
     - name: Creating source code repositories on the targets
@@ -167,10 +106,15 @@
       changed_when: False
       delegate_to: localhost
     - name: Delete the temporary branch
-      shell: git checkout main && git branch -d tmp
+      shell: "git checkout main && git branch -d tmp"
       args:
         chdir: openvmp
         removes: .git/refs/heads/tmp
+    - name: Setting the origin for relative submodule paths
+      shell: "git remote add origin https://github.com/openvmp/openvmp.git && git fetch"
+      args:
+        chdir: openvmp
+        creates: .git/refs/remotes/origin
     - name: Checking out or updating the submodules if necessary
       shell: git submodule update --recursive --init
       args:
@@ -185,11 +129,6 @@
         path: /root/.openvmp
         state: directory
         mode: "0755"
-    - name: Give this robot a name
-      ansible.builtin.copy:
-        dest: /root/.openvmp/id
-        content: "{{ lookup('community.general.random_string', upper=true, lower=false, numbers=false, special=false, length=1) }}{{ lookup('community.general.random_string', upper=true, lower=false, numbers=true, special=false, length=3) }}"
-        force: false
     - name: Helper script to set the environment variables
       ansible.builtin.copy:
         dest: /root/.openvmp/env.sh
@@ -200,3 +139,7 @@
         path: /root/.bashrc
         line: source /root/.openvmp/env.sh
         create: true
+
+- import_playbook: configure-spinal-pi4b.yaml
+- import_playbook: configure-spinal-rock5b.yaml
+- import_playbook: configure-cerebral-nuc.yaml
