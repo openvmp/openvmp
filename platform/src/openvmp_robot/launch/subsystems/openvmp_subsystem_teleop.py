@@ -109,7 +109,12 @@ def launch_desc(context):
     )
 
     return [
-        start_control_interactive_cmd,
+        TimerAction(
+            period=10.0,
+            actions=[
+                start_control_interactive_cmd,
+            ],
+        ),
         TimerAction(
             period=11.0,
             actions=[

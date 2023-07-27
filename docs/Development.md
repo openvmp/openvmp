@@ -15,13 +15,13 @@ sudo apt install -y ros-humble-ros-gz
 
 ```bash
 sudo apt install -y git gnupg lsb-release
-sudo apt install -y socat xterm
+sudo apt install -y socat xterm clang-format
 sudo apt install -y ansible
 ansible-galaxy collection install community.general
 sudo apt install v4l2loopback-utils
 sudo apt install -y ros-humble-ros2-control ros-humble-ros2-controllers
 sudo apt install -y ros-humble-camera-calibration-parsers ros-humble-camera-info-manager
-sudo apt install -y ros-humble-gazebo-dev ros-humble-gazebo-ros
+sudo apt install -y ros-humble-gazebo-dev ros-humble-gazebo-ros ros-humble-gazebo-ros-pkgs
 sudo apt install -y ros-humble-topic-tools
 ```
 

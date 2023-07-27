@@ -284,7 +284,7 @@
         <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
       </xacro:cylinder_inertia>
     </link>
-    <xacro:solid_soft name="${prefix}_link" material="Gazebo/Green" />
+    <xacro:solid_hard name="${prefix}_link" material="Gazebo/Green" />
 
     <!-- Connect the wheels to the origin at the appropriate location, and
          define a continuous joint to allow the wheels to freely rotate about
@@ -322,10 +322,8 @@
         <surface>
           <friction>
             <ode>
-              <mu>10.0</mu>
-              <mu2>10.0</mu2>
-              <slip1>0.25</slip1>
-              <slip2>0.25</slip2>
+              <mu>1000.0</mu>
+              <mu2>1000.0</mu2>
             </ode>
           </friction>
         </surface>
@@ -355,7 +353,7 @@
     <gazebo reference="${prefix}_camera_${index}">
       <sensor type="camera" name="camera_${prefix}_${index}">
         <always_on>true</always_on>
-        <update_rate>30.0</update_rate>
+        <update_rate>1.0</update_rate>
         <camera name="camera_${prefix}_${index}">
           <horizontal_fov>1.2</horizontal_fov>
           <image>
@@ -374,7 +372,6 @@
         </camera>
         <plugin name="camera_${prefix}_${index}" filename="libgazebo_ros_camera.so">
           <ros>
-            <!-- <namespace>stereo</namespace> -->
             <remapping>~/image_raw:=image_raw</remapping>
             <remapping>~/camera_info:=camera_info</remapping>
           </ros>
@@ -510,6 +507,14 @@
           <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)"
             scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1000.0</mu>
+              <mu2>1000.0</mu2>
+            </ode>
+          </friction>
+        </surface>
       </collision>
       <xacro:box_inertia m="0.5" x="0.048" y="0.048" z="0.048">
         <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
@@ -644,10 +649,10 @@
     </joint>
     <link name="${prefix}_camera_optical_1" type="camera" />
     <joint name="${prefix}_camera_optical_1_joint" type="fixed">
-      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> rotate frame from x-forward to
-      z-forward camera coords <parent link="${prefix}_camera_1" />
-      <child
-        link="${prefix}_camera_optical_1" />
+      <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 ${-pi/2}" /> <!-- rotate frame from x-forward to
+      z-forward camera coords -->
+      <parent link="${prefix}_camera_1" />
+      <child link="${prefix}_camera_optical_1" />
     </joint>
 
     <xacro:cam prefix="${prefix}" index="0" dir="${dir}" armdir="${armdir}" />

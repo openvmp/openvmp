@@ -24,7 +24,7 @@ def launch_desc(context):
 
     declare_world_cmd = DeclareLaunchArgument(
         name="world",
-        default_value="horizontal",
+        default_value="mini",
         description="The name of the world to launch (see 'src/openvmp_robot/worlds')",
     )
 

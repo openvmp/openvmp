@@ -19,16 +19,21 @@ def launch_desc(context):
     ):
         return []
 
-    subprocess.run(["fastdds shm clean"], shell=True)
-    time.sleep(3)
+    if (
+        not "is_simulation" in context.launch_configurations
+        or context.launch_configurations["is_simulation"] != "true"
+    ):
+        # Simulated robots use DDS started by the world launch files
+        subprocess.run(["fastdds shm clean"], shell=True)
+        time.sleep(3)
 
-    xml_path = files.get_fastrtps_profile_server_file()
-    print(xml_path)
-    cmd_line = (
-        f"FASTRTPS_DEFAULT_PROFILES_FILE={xml_path} fastdds discovery --server-id 0"
-    )
-    print(cmd_line)
-    subprocess.Popen(cmd_line, shell=True)
+        xml_path = files.get_fastrtps_profile_server_file()
+        print(xml_path)
+        cmd_line = (
+            f"FASTRTPS_DEFAULT_PROFILES_FILE={xml_path} fastdds discovery --server-id 0"
+        )
+        print(cmd_line)
+        subprocess.Popen(cmd_line, shell=True)
 
     if "ip" in context.launch_configurations:
         robot_ip = context.launch_configurations["ip"]

@@ -17,7 +17,6 @@ def launch_desc_deploy(context):
 
 # Spawn the robot in Gazebo
 def launch_desc_spawn(context, robot_id, pos):
-
     namespace = openvmp_utils.generate_prefix(robot_id)
     robot_kind = openvmp_config.get_kind(context)
 
@@ -50,7 +49,7 @@ def launch_desc_spawn(context, robot_id, pos):
             "-P",
             "0.0",
             "-Y",
-            "0.0",
+            "3.1415926",
         ],
     )
 

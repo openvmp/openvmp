@@ -38,7 +38,7 @@ ros2 launch openvmp_robot simulation_world.launch.py \
 ```
 
 or, to simulate a single robot `don1`
-in the default world `horizontal`, run:
+in the default world `mini`, run:
 
 ```bash
 cd platform
@@ -55,9 +55,11 @@ cd platform
 ros2 launch openvmp_robot simulation_world.launch.py simulate_remote_hardware_interface:=true
 ```
 
-Please, note, the first simulation run will take a long time to download all
+Please, note, the first simulation run takes a long time to download all
 the necessary assets.
-To preload the assets, use `cd platform && gazebo src/openvmp_robot/worlds/horizontal.world`. Then exit and proceed with the commands shown above.
+To preload the assets ahead of time,
+use `cd platform && gazebo src/openvmp_robot/worlds/mini.world`.
+Then exit and proceed with the commands shown above.
 
 In case you are using a VM, make sure that graphics hardware acceleration is ON and working optimally (no `llvmpipe` and stuff).
 
@@ -71,13 +73,13 @@ First, launch the simulated world without spawning the robots automatically.
 That can be done using the following command:
 
 ```
-ros2 launch openvmp_robot simulation_world.py world:=<world-name>
+ros2 launch openvmp_robot simulation_world.launch.py world:=<world-name>
 ```
 
 or, to launch the default world (`world:=horizontal`), simply run:
 
 ```
-ros2 launch openvmp_robot simulation_world.py
+ros2 launch openvmp_robot simulation_world.launch.py
 ```
 
 Once the simulation is running, OpenVMP units can be spawn manually

@@ -119,7 +119,7 @@ def launch_desc(context):
         namespace=namespace,
         arguments=[
             "messages",
-            namespace + "/trajectory_controller/state",
+            namespace + "/trajectory_controller/controller_state",
             "1",
             # "--ros-args",
             # "--log-level",

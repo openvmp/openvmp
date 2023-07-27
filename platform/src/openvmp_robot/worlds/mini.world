@@ -34,28 +34,8 @@
       <pose>0 0 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://playground</uri>
-      <pose>-31 32 0 0 0 0</pose>
-    </include>
-    <include>
-      <uri>model://person_standing</uri>
-      <pose>-16 43 0.3 0 0 0</pose>
-    </include>
-    <include>
-      <uri>model://collapsed_industrial</uri>
-      <pose>-53 82 0 0 0 0</pose>
-    </include>
-    <include>
-      <uri>model://tower_crane</uri>
-      <pose>-44 94 -0.5 0 0 -0.7</pose>
-    </include>
-    <include>
-      <uri>model://baylands</uri>
-      <pose>72 142 -1 0 0 0</pose>
-    </include>
-    <include>
-      <uri>model://pickup</uri>
-      <pose>23 -2 -0.55 0 0 0</pose>
+      <uri>model://mud_box</uri>
+      <pose>-0 0 0 0 0 0</pose>
     </include>
   </world>
 </sdf>
