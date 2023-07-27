@@ -12,8 +12,6 @@
   "editor.rulers": [
     80
   ],
-  // "editor.renderWhitespace": "all",
-  "clang-format.executable": "",
   "clang-format.style": "Google",
   "files.exclude": {
     ".git/**": true,
@@ -34,7 +32,7 @@
   "git.scanRepositories": [
     "platform/src",
     "models",
-    "models/parts/gobilda",
+    "models/parts/gobilda"
   ],
   "C_Cpp.clang_format_path": "",
   "files.associations": {
@@ -110,4 +108,7 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  }
 }
