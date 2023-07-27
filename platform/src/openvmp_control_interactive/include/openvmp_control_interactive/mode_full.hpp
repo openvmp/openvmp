@@ -32,7 +32,6 @@ class FullMode : public TrajVelControl {
   virtual void leave(std::shared_ptr<ControlImpl> to) override;
 
  private:
-  std::mutex state_lock_;
   rclcpp::Subscription<control_msgs::msg::JointTrajectoryControllerState>::
       SharedPtr trajectory_state_subscription_;
 

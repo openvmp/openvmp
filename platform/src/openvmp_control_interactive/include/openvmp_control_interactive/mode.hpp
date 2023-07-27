@@ -47,6 +47,7 @@ class ModeImpl {
   virtual bool is_cameras() const { return false; }
 
  protected:
+  std::mutex state_lock_;
   rclcpp::Node *const node_;
   std::shared_ptr<interactive_markers::InteractiveMarkerServer> server_;
 

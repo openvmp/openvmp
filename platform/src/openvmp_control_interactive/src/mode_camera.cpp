@@ -120,10 +120,20 @@ void CamerasMode::processFeedback_(
     return;
   }
 
-  RCLCPP_DEBUG(node_->get_logger(), "CamerasMode::processFeedback_()");
+  RCLCPP_DEBUG(node_->get_logger(), "CamerasMode::processFeedback_(): %s",
+               link_name.c_str());
 
   // The lower servo produces the 'z' component.
   // The upper servo produces the 'x' component.
+  state_lock_.lock();
+  if (joints_state_.find(link_name) == joints_state_.end()) {
+    RCLCPP_ERROR(node_->get_logger(),
+                 "CamerasMode::processFeedback_(): unknown link: %s",
+                 link_name.c_str());
+    state_lock_.unlock();
+    return;
+  }
+
   joints_state_[link_name] +=
       feedback->pose.orientation.x + feedback->pose.orientation.z;
 
@@ -132,9 +142,12 @@ void CamerasMode::processFeedback_(
   for (size_t i = 0; i < joints_.size(); i++) {
     msg.data[i] = joints_state_[joints_[i]];
     RCLCPP_DEBUG(node_->get_logger(), "CamerasMode::processFeedback_(): %.02f",
-                msg.data[i]);
+                 msg.data[i]);
   }
-  position_commands_->publish(msg);
+  if (position_commands_) {
+    position_commands_->publish(msg);
+  }
+  state_lock_.unlock();
 
   // Make the marker snap back to robot
   server_->setPose(feedback->marker_name, geometry_msgs::msg::Pose());

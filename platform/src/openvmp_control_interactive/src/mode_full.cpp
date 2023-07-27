@@ -21,7 +21,7 @@ FullMode::FullMode(
   trajectory_state_subscription_ = node->create_subscription<
       control_msgs::msg::JointTrajectoryControllerState>(
       node_->get_effective_namespace() +
-          "/trajectory_controller/state_throttle",
+          "/trajectory_controller/controller_state_throttle",
       1,
       std::bind(&FullMode::trajectoryStateHandler_, this,
                 std::placeholders::_1));
@@ -127,6 +127,10 @@ void FullMode::leave(std::shared_ptr<ControlImpl> to) {
 
 void FullMode::trajectoryStateHandler_(
     const control_msgs::msg::JointTrajectoryControllerState::SharedPtr msg) {
+  if (!msg || msg->joint_names.size() != msg->actual.positions.size()) {
+    return;
+  }
+
   if (state_lock_.try_lock()) {
     int size = msg->joint_names.size();
     std::map<std::string, double> positions;
@@ -136,7 +140,15 @@ void FullMode::trajectoryStateHandler_(
 
     auto &links = get_links();
     for (auto link_it = links.begin(); link_it != links.end(); link_it++) {
-      link_it->second.last_angle = positions[link_it->second.joint];
+      auto &joint_name = link_it->second.joint;
+      if (positions.find(joint_name) != positions.end()) {
+        link_it->second.last_angle = positions[joint_name];
+      } else {
+        RCLCPP_ERROR(node_->get_logger(),
+                     "FullMode::trajectoryStateHandler_(): "
+                     "no position for joint %s",
+                     joint_name.c_str());
+      }
     }
     state_lock_.unlock();
   }
