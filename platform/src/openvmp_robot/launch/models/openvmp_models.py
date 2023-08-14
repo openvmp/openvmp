@@ -34,7 +34,10 @@ def launch_desc_spawn(context, robot_id, pos):
             "openvmp_robot_" + robot_kind + "_" + robot_id,
             "-file",
             openvmp_config_files.get_robot_description_file(
-                context, robot_id, extra_xacro_params=[" mesh_extension:=dae "]
+                context,
+                robot_id,
+                extra_xacro_params=[],
+                # extra_xacro_params=[" mesh_extension_collision:=obj "],
             ),
             "-robot_namespace",
             namespace,
@@ -43,7 +46,7 @@ def launch_desc_spawn(context, robot_id, pos):
             "-y",
             str(y),
             "-z",
-            "0.0",
+            "0.5",
             "-R",
             "0.0",
             "-P",

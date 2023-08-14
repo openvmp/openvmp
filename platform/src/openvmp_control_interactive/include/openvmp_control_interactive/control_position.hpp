@@ -35,7 +35,7 @@ class PositionControl : public ControlImpl {
   static rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr
       position_commands_;
 
-  virtual Control get_control() const override { return TRAJ_VEL; }
+  virtual Control get_control() const override { return POSITION; }
   virtual void init() override;
   virtual void fini() override;
 

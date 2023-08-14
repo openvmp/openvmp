@@ -22,7 +22,24 @@ cd platform/src/openvmp_robot/worlds
 ls *.world
 ```
 
-There recommended world to start with is `horizontal`.
+There recommended world to start with is `mini`.
+Other worlds have higher hardware demands for the simulation hots.
+
+## Select the level of robot detail
+
+With the available hardware resources (mostly CPU and RAM) in mind,
+the following options should be considered:
+
+| none | low | high |
+| --- | --- | --- |
+| `use_meshes:=none` | `use_meshes:=low` | `use_meshes:=high` |
+| default, if [models](../models/) are NOT rendered | default, if [models](../models/) are rendered | not recommended yet |
+| <img alt=none src="images/meshes/none.png" /> | <img alt=low src="images/meshes/low.png" /> | <img alt=high src="images/meshes/high.png" /> |
+
+Use the parameter `use_meshes` in the lauch commands below.
+By default, `use_meshes` is either `none` or `low`,
+depending on whether the [models](../models/) are rendered or not.
+Only `none` is available until the [models](../models/) are rendered.
 
 ## Launch the simulation
 
@@ -34,7 +51,8 @@ cd platform
 ros2 launch openvmp_robot simulation_world.launch.py \
   world:=<world-name> \
   kind:=<robot-kind> \
-  num:=<number-of-units-to-spawn>
+  num:=<number-of-units-to-spawn> \
+  use_meshes:=<level-of-detail>
 ```
 
 or, to simulate a single robot `don1`

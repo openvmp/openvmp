@@ -10,11 +10,11 @@ The easiest way to control OpenVMP robots is by using
 
 OpenVMP robots can also be controlled by using demo scripts that perform specific motion commands:
 
-```
+```sh
 ros2 run openvmp_robot motion_demo_stand.py
 ```
 
-```
+```sh
 ros2 run openvmp_robot motion_demo_walk.py
 ```
 

@@ -17,7 +17,7 @@
 
 namespace openvmp_control_interactive {
 
-enum Control { CONTROL_NONE = 0, TRAJ_VEL };
+enum Control { CONTROL_NONE = 0, TRAJ_VEL, POSITION };
 
 class ControlImpl : public ModeImpl {
  public:

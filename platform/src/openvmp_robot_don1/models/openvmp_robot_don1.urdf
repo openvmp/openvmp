@@ -20,7 +20,9 @@
     default="$(find openvmp_robot_don1)/config/ros2_controllers.yaml" />
   <xacro:arg name="has_extra_parameters_file" default="false" />
   <xacro:arg name="extra_parameters_file" default="" />
-  <xacro:arg name="mesh_extension" default="stl" />
+  <xacro:arg name="use_mesh_visual" default="false" />
+  <xacro:arg name="mesh_extension_visual" default="stl" />
+  <xacro:arg name="mesh_extension_collision" default="stl" />
 
   <xacro:arg name="is_mac" default="false" />
   <xacro:unless value="$(arg is_mac)">
@@ -38,8 +40,8 @@
 
   <xacro:property name="base_length" value="${board_length}" />
   <xacro:property name="base_width" value="${board_width}" />
-  <xacro:property name="base_height" value="0.2" />
-  <xacro:property name="base_height_gap" value="0.1" />
+  <xacro:property name="base_height" value="0.25" />
+  <xacro:property name="base_height_gap" value="0.056" />
 
   <!-- Wheels dimensions -->
   <xacro:property name="wheel_radius" value="${0.136 / 2}" />
@@ -47,28 +49,31 @@
 
   <!-- Position the front wheels -->
   <xacro:property name="turn_table_radius" value="${board_width/2}" />
-  <xacro:property name="turn_table_height" value="0.05" />
+  <xacro:property name="turn_table_height" value="0.053" />
   <xacro:property name="turn_table_zoff" value="0.001" />
+  <xacro:property name="turn_table_zoff_model" value="0.00" />
   <xacro:property name="turn_table_xoff" value="${base_length/2 - 0.03}" />
 
   <!-- Arm parameters-->
-  <xacro:property name="arm1_length" value="0.3" />
-  <xacro:property name="arm2_length" value="0.3045" />
+  <xacro:property name="arm1_length" value="0.3049" />
+  <xacro:property name="arm2_length" value="0.3175" />
   <xacro:property name="arm_height_delta" value="0" />
-  <xacro:property name="arm_height_shortage" value="0.038" />
+  <xacro:property name="arm_height_shortage" value="-0.04075" />
 
   <!-- Physics parameters -->
   <xacro:macro name="solid_hard" params="name material">
     <gazebo reference="${name}">
-      <mu1>2.0</mu1>
-      <mu2>2.0</mu2>
+      <mu1>10.0</mu1>
+      <mu2>10.0</mu2>
       <material>${material}</material>
     </gazebo>
   </xacro:macro>
   <xacro:macro name="solid_soft" params="name material">
     <gazebo reference="${name}">
-      <mu1>10.0</mu1>
-      <mu2>10.0</mu2>
+      <mu1>1000.0</mu1>
+      <mu2>1000.0</mu2>
+      <kp>300000.0</kp>
+      <kd>1.0</kd>
       <material>${material}</material>
     </gazebo>
   </xacro:macro>
@@ -113,6 +118,20 @@
     </inertial>
   </xacro:macro>
 
+  <!-- ****************** MATERIALS **************************************  -->
+  <material name="alum">
+    <color rgba= "${136.0/256.0} ${139.0/256.0} ${141.0/256.0} 1"/>
+  </material>
+  <material name="rubber">
+    <color rgba= "${40.0/256.0} ${40.0/256.0} ${40.0/256.0} 1"/>
+  </material>
+  <material name="plastic">
+    <color rgba= "${20.0/256.0} ${20.0/256.0} ${20.0/256.0} 1"/>
+  </material>
+  <xacro:property name="gazebo_alum" value="Gazebo/Grey" />
+  <xacro:property name="gazebo_rubber" value="Gazebo/DarkGrey" />
+  <xacro:property name="gazebo_plastic" value="Gazebo/Grey" />
+
   <!-- ****************** ROBOT BASE FOOTPRINT ***************************  -->
   <!-- Define the center of the main robot chassis projected on the ground -->
   <link name="base_footprint" />
@@ -121,37 +140,62 @@
   <joint name="base_joint" type="fixed">
     <parent link="base_footprint" />
     <child link="base_link" />
-    <origin xyz="0.0 0.0 1.0" rpy="0 0 0" />
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
   </joint>
   <!-- <xacro:gazebo_fixed_joint name="base_joint" /> -->
 
 
   <!-- ********************** ROBOT BASE *********************************  -->
   <link name="base_link">
-    <visual>
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-      <geometry>
-        <box size="${base_length} ${base_width} ${base_height/2}" />
-        <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
-      </geometry>
-      <material name="Red">
-        <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-      </material>
-    </visual>
+    <!-- bottom section -->
+    <xacro:if value="$(arg use_mesh_visual)">
+      <visual>
+        <!-- <origin xyz="0.0 0.0 ${base_height - base_height_gap}" rpy="0 0 0" /> -->
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://openvmp_robot_don1/meshes/base.$(arg mesh_extension_visual)" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="alum" />
+      </visual>
+    </xacro:if>
+
+    <!-- bottom section -->
+    <xacro:unless value="$(arg use_mesh_visual)">
+      <visual>
+        <origin xyz="0.0 0.0 ${1*base_height/4 - base_height + base_height_gap}" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_length} ${base_width} ${base_height/2}" />
+        </geometry>
+        <material name="alum" />
+      </visual>
+      <!-- top section -->
+      <visual>
+        <origin xyz="0.0 0.0 ${3*base_height/4 - base_height + base_height_gap}" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_length/2} ${base_width} ${base_height/2}" />
+        </geometry>
+        <material name="alum" />
+      </visual>
+    </xacro:unless>
 
     <collision>
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <origin xyz="0.0 0.0 ${1*base_height/4 - base_height + base_height_gap}" rpy="0 0 0" />
       <geometry>
         <box size="${base_length} ${base_width} ${base_height/2}" />
       </geometry>
     </collision>
+    <collision>
+      <origin xyz="0.0 0.0 ${3*base_height/4 - base_height + base_height_gap}" rpy="0 0 0" />
+      <geometry>
+        <box size="${base_length/2} ${base_width} ${base_height/2}" />
+      </geometry>
+    </collision>
 
-    <xacro:box_inertia m="4.0" x="${base_length}" y="${base_width}" z="${base_height/2}">
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    <xacro:box_inertia m="4.0" x="${base_length}" y="${base_width}" z="${base_height}">
+      <origin xyz="0.0 0.0 ${-base_height/4}" rpy="0 0 0" />
     </xacro:box_inertia>
-
   </link>
-  <xacro:solid_hard name="base_link" material="Gazebo/Red" />
+  <xacro:solid_hard name="base_link" material="${gazebo_alum}" />
   <gazebo reference="base_link">
     <gravity>true</gravity>
     <sensor name="imu_sensor" type="imu">
@@ -234,57 +278,36 @@
     </sensor>
   </gazebo>
 
-  <link name="base_link2">
-    <visual>
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-      <geometry>
-        <box size="${base_length/2} ${base_width} ${base_height/2}" />
-      </geometry>
-      <material name="Red">
-        <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-      </material>
-    </visual>
-
-    <collision>
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-      <geometry>
-        <box size="${base_length/2} ${base_width} ${base_height/2}" />
-      </geometry>
-    </collision>
-
-    <xacro:box_inertia m="2.0" x="${base_length/2}" y="${base_width}" z="${base_height/2}">
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-    </xacro:box_inertia>
-  </link>
-  <xacro:solid_hard name="base_link2" material="Gazebo/Red" />
-  <joint name="base_joint2" type="fixed">
-    <parent link="base_link" />
-    <child link="base_link2" />
-    <origin xyz="0.0 0.0 ${base_height/2}" rpy="0 0 0" />
-  </joint>
-  <!-- <xacro:gazebo_fixed_joint name="base_joint2" /> -->
-
 
   <!-- *********************** TURN TABLE WHEELS ******************************  -->
 
   <xacro:macro name="turn_table"
-    params="prefix parent limit radius width x_off y_off z_off x_angle dir:=1">
+    params="prefix parent limit radius width x_off y_off z_off x_angle dir">
     <link name="${prefix}_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
-        <geometry>
-          <cylinder radius="${radius}" length="${width}" />
-        </geometry>
-        <material name="White">
-          <color rgba="${255/255} ${255/255} ${255/255} 1.0" />
-        </material>
-      </visual>
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 ${turn_table_zoff_model}" rpy="${x_angle} 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/turn_table.$(arg mesh_extension_visual)" scale="${dir * 0.001} 0.001 0.001"/>
+          </geometry>
+          <material name="alum"/>
+        </visual>
+      </xacro:if>
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 ${z_off-width/2.0}" rpy="${x_angle} 0 0" />
+          <geometry>
+            <cylinder radius="${radius}" length="${width}" />
+          </geometry>
+          <material name="alum"/>
+        </visual>
+      </xacro:unless>
 
       <xacro:cylinder_inertia m="0.5" r="${radius}" h="${width}">
         <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
       </xacro:cylinder_inertia>
     </link>
-    <xacro:solid_hard name="${prefix}_link" material="Gazebo/Green" />
+    <xacro:solid_hard name="${prefix}_link" material="${gazebo_alum}" />
 
     <!-- Connect the wheels to the origin at the appropriate location, and
          define a continuous joint to allow the wheels to freely rotate about
@@ -294,7 +317,14 @@
       <child link="${prefix}_link" />
       <origin xyz="${x_off} ${y_off} ${z_off}" rpy="0 0 0" />
       <limit upper="${limit}" lower="${-limit}" effort="100" velocity="2.0" />
-      <axis xyz="0 0 ${dir}" />
+      <axis xyz="0 0 -1" />
+      
+      <!-- The initial friction value is a large value so that the model
+           appears stiff when spawned. The initial value will later be
+           overriden by the Gazebo plugins controlling joint physics
+           (gazebo_ros2_control or openvmp_hardware_simulation_gazebo,
+           depending on the parameter "simulate_remote_hardware_interface"). -->
+      <dynamics friction="10000000.0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_joint" />
   </xacro:macro>
@@ -302,17 +332,27 @@
   <!-- *********************** DRIVE WHEELS ******************************  -->
 
   <xacro:macro name="wheel"
-    params="prefix parent radius width x_off y_off z_off x_angle dir:=1">
+    params="prefix parent radius width x_off y_off z_off x_angle dir:=1 armdir:=1">
     <link name="${prefix}_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
-        <geometry>
-          <cylinder radius="${radius}" length="${width}" />
-        </geometry>
-        <material name="White">
-          <color rgba="${255/255} ${255/255} ${255/255} 1.0" />
-        </material>
-      </visual>
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 ${width/2} 0.0" rpy="${x_angle} 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/wheel.obj" scale="0.001 ${armdir*0.001} 0.001"/>
+          </geometry>
+          <material name="rubber" />
+        </visual>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
+          <geometry>
+            <cylinder radius="${radius}" length="${width}" />
+          </geometry>
+          <material name="rubber" />
+        </visual>
+      </xacro:unless>
 
       <collision>
         <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
@@ -333,7 +373,7 @@
         <origin xyz="0 0 0" rpy="${x_angle} 0 0" />
       </xacro:cylinder_inertia>
     </link>
-    <xacro:solid_soft name="${prefix}_link" material="Gazebo/Green" />
+    <xacro:solid_soft name="${prefix}_link" material="${gazebo_rubber}" />
 
     <!-- Connect the wheels to the origin at the appropriate location, and
          define a continuous joint to allow the wheels to freely rotate about
@@ -344,6 +384,7 @@
       <origin xyz="${x_off} ${y_off} ${z_off}" rpy="0 0 0" />
       <limit effort="100" velocity="2.0" />
       <axis xyz="0 ${dir} 0" />
+      <dynamics friction="10000000.0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_joint" />
   </xacro:macro>
@@ -387,124 +428,112 @@
   <!-- Robot leg (aka arm) -->
   <xacro:macro name="robot_arm" params="prefix parent dir armdir">
     <link name="${prefix}_lower_part">
-      <visual>
+      <xacro:box_inertia m="1.0" x="0.048" y="0.235" z="0.048">
         <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <box size="0.048 0.235 0.048" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+      </xacro:box_inertia>
+
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/lower_arm.$(arg mesh_extension_visual)" scale="0.001 ${-armdir * 0.001} 0.001"/>
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0 ${armdir*(0.12 + 0.024)} 0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.048 0.22 0.048" />
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:unless>
 
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.048 0.235 0.048" />
+          <box size="0.048 0.22 0.048" />
         </geometry>
       </collision>
 
-      <xacro:box_inertia m="1.0" x="0.048" y="0.235" z="0.048">
-        <origin xyz="0 0 0" rpy="0 0 0" />
-      </xacro:box_inertia>
     </link>
-    <xacro:solid_hard name="${prefix}_lower_part" material="Gazebo/Red" />
+    <xacro:solid_hard name="${prefix}_lower_part" material="${gazebo_alum}" />
 
     <joint name="${prefix}_joint" type="revolute">
       <parent link="${parent}" />
       <child link="${prefix}_lower_part" />
-      <origin xyz="0.0 ${armdir*(0.12 + 0.024 + 0.012)} 0.0" rpy="0 0 0" />
+      <origin xyz="${dir * 0.09} ${armdir * 0.0118} 0.0" rpy="0 0 0" />
       <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
       <axis xyz="0 ${-dir*0.1} 0" />
+      <dynamics friction="10000000.0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_joint" />
 
     <link name="${prefix}_upper_part">
-      <visual>
+      <xacro:box_inertia m="1.0" x="0.048" y="0.195" z="0.048">
         <origin xyz="0 ${armdir*(0.12 + 0.048)} -${wheel_radius-arm_height_delta}" rpy="0 0 0" />
-        <geometry>
-          <box size="0.048 0.205 0.048" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+      </xacro:box_inertia>
 
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/upper_arm.$(arg mesh_extension_visual)" scale="0.001 ${-armdir * 0.001} 0.001"/>
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <!-- the connection from knee to wheel-->
+        <visual>
+          <origin xyz="0 ${armdir*(0.12 + 0.05425)} -${wheel_radius-arm_height_delta+0.00725}" rpy="0 0 0" />
+          <geometry>
+            <box size="0.048 0.205 0.048" />
+          </geometry>
+          <material name="alum" />
+        </visual>
+        <!-- the connection from wheel to hook -->
+        <visual>
+          <origin xyz="0.0 ${armdir*(0.246 + 0.007)} ${0.019-0.192-0.004}" rpy="0 0 0" />
+          <geometry>
+            <box size="0.048 0.048 0.154" />
+          </geometry>
+          <material name="alum" />
+        </visual>
+        <!-- the hook -->
+        <visual>
+          <origin xyz="0.0 ${armdir*0.2528} -0.2912" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension_visual)"
+              scale="0.001 ${-armdir*0.001} 0.001" />
+          </geometry>
+          <material name="plastic" />
+        </visual>
+      </xacro:unless>
+
+      <!-- the connection from knee to wheel-->
       <collision>
-        <origin xyz="0 ${armdir*(0.12 + 0.048)} -${wheel_radius-arm_height_delta}" rpy="0 0 0" />
+        <origin xyz="0 ${armdir*(0.12 + 0.05425)} -${wheel_radius-arm_height_delta+0.00725}" rpy="0 0 0" />
         <geometry>
           <box size="0.048 0.195 0.048" />
         </geometry>
       </collision>
-
-      <xacro:box_inertia m="1.0" x="0.048" y="0.195" z="0.048">
-        <origin xyz="0 ${armdir*(0.12 + 0.048)} -${wheel_radius-arm_height_delta}" rpy="0 0 0" />
-      </xacro:box_inertia>
-    </link>
-    <xacro:solid_hard name="${prefix}_upper_part" material="Gazebo/Red" />
-
-    <joint name="${prefix}_inner_joint" type="revolute">
-      <parent link="${prefix}_lower_part" />
-      <child link="${prefix}_upper_part" />
-      <origin
-        xyz="0.0 ${armdir*(arm2_length - 0.12 - 0.048 + wheel_width/2)} ${wheel_radius+arm_height_delta+arm_height_shortage}"
-        rpy="0 0 0" />
-      <limit upper="${pi*0.7}" lower="${-pi*0.9}" effort="10" velocity="1.0" />
-      <axis xyz="${-armdir*0.1} 0 0" />
-    </joint>
-    <xacro:gazebo_joint name="${prefix}_inner_joint" />
-
-    <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part"
-      radius="${wheel_radius}" width="${wheel_width}"
-      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}"
-      z_off="-${wheel_radius+arm_height_delta}" x_angle="${pi/2}"
-    />
-
-
-    <!-- The hook and the arm extension it sits on -->
-    <link name="${prefix}_outer_link">
-      <visual>
-        <origin xyz="0.0 ${armdir*0.246} -0.192" rpy="0 0 0" />
-        <geometry>
-          <box size="0.048 0.048 0.192" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+      <!-- the connection from wheel to hook -->
       <collision>
-        <origin xyz="0.0 ${armdir*0.246} -0.192" rpy="0 0 0" />
+        <origin xyz="0.0 ${armdir*(0.246 + 0.007)} ${0.019-0.192-0.004}" rpy="0 0 0" />
         <geometry>
-          <box size="0.048 0.048 0.192" />
+          <box size="0.048 0.048 0.154" />
         </geometry>
       </collision>
-      <xacro:box_inertia m="0.5" x="0.048" y="0.048" z="0.192">
-        <origin xyz="0.0 ${armdir*0.246} -0.192" rpy="0 0 0" />
-      </xacro:box_inertia>
-    </link>
-    <xacro:solid_hard name="${prefix}_outer_link" material="Gazebo/Red" />
-    <joint name="${prefix}_outer_joint" type="fixed">
-      <parent link="${prefix}_upper_part" />
-      <child link="${prefix}_outer_link" />
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-    </joint>
-    <xacro:gazebo_joint name="${prefix}_outer_joint" />
-
-    <link name="${prefix}_hook_link">
-      <visual>
-        <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)"
-            scale="0.001 ${-armdir*0.001} 0.001" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+      <!-- the hook -->
       <collision>
-        <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
+        <origin xyz="0.0 ${armdir*0.2528} -0.2912" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension)"
+          <mesh filename="package://openvmp_robot_don1/meshes/part-hook.$(arg mesh_extension_collision)"
             scale="0.001 ${-armdir*0.001} 0.001" />
         </geometry>
         <surface>
@@ -516,60 +545,49 @@
           </friction>
         </surface>
       </collision>
-      <xacro:box_inertia m="0.5" x="0.048" y="0.048" z="0.048">
-        <origin xyz="0.0 ${armdir*0.246} -0.332" rpy="0 0 0" />
-      </xacro:box_inertia>
     </link>
-    <xacro:solid_hard name="${prefix}_hook_link" material="Gazebo/Green" />
-    <joint name="${prefix}_hook_joint" type="fixed">
-      <parent link="${prefix}_outer_link" />
-      <child link="${prefix}_hook_link" />
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    <xacro:solid_hard name="${prefix}_upper_part" material="${gazebo_plastic}" />
+
+    <joint name="${prefix}_inner_joint" type="revolute">
+      <parent link="${prefix}_lower_part" />
+      <child link="${prefix}_upper_part" />
+      <origin xyz="0.0 ${armdir*arm1_length} ${wheel_radius+arm_height_delta-arm_height_shortage}" rpy="0 0 0" />
+      <limit upper="${pi*0.7}" lower="${-pi*0.9}" effort="10" velocity="1.0" />
+      <axis xyz="${-armdir*0.1} 0 0" />
+      <dynamics friction="10000000.0" />
     </joint>
-    <xacro:gazebo_joint name="${prefix}_hook_joint" />
+    <xacro:gazebo_joint name="${prefix}_inner_joint" />
 
-    <!-- The cameras mount -->
-    <link name="${prefix}_camera_servo_lower_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <box size="0.048 0.048 0.024" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+    <xacro:wheel prefix="${prefix}_wheel" parent="${prefix}_upper_part"
+      radius="${wheel_radius}" width="${wheel_width}"
+      x_off="0.0" y_off="${armdir*(arm2_length - wheel_width/2)}"
+      z_off="${-wheel_radius-arm_height_delta}" x_angle="${pi/2}"
+      armdir="${armdir}"
+    />
 
-      <!-- <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <box size="0.048 0.048 0.024" />
-        </geometry>
-      </collision> -->
-
-      <xacro:box_inertia m="1.0" x="0.048" y="0.048" z="0.024">
-        <origin xyz="0 0 0" rpy="0 0 0" />
-      </xacro:box_inertia>
-    </link>
-    <xacro:solid_hard name="${prefix}_camera_servo_lower_link" material="Gazebo/Red" />
-
-    <joint name="${prefix}_camera_joint" type="fixed">
-      <parent link="${parent}" />
-      <child link="${prefix}_camera_servo_lower_link" />
-      <origin xyz="${dir*0.024} ${armdir*(0.12 + 0.044 + 0.012)} 0.048" rpy="0 0 0" />
-    </joint>
-    <xacro:gazebo_joint name="${prefix}_camera_joint" />
 
     <link name="${prefix}_camera_servo_upper_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <box size="0.048 0.048 0.024" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/camera_servo.$(arg mesh_extension_visual)" scale="${dir * 0.001} ${-armdir * 0.001} 0.001"/>
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="${dir*0.016} ${-armdir*0.016} 0.024" rpy="0 0 0" />
+          <geometry>
+            <box size="0.032 0.050 0.024" />
+          </geometry>
+          <material name="Red">
+            <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+          </material>
+        </visual>
+      </xacro:unless>
 
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -582,32 +600,45 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
       </xacro:box_inertia>
     </link>
-    <xacro:solid_hard name="${prefix}_camera_servo_upper_link" material="Gazebo/Red" />
+    <xacro:solid_hard name="${prefix}_camera_servo_upper_link" material="${gazebo_alum}" />
 
     <joint name="${prefix}_camera_servo_lower_joint" type="revolute">
-      <parent link="${prefix}_camera_servo_lower_link" />
+      <parent link="${parent}" />
       <child link="${prefix}_camera_servo_upper_link" />
-      <origin xyz="0.0 0.0 0.024" rpy="0 0 0" />
+      <origin xyz="${dir*0.1225} ${armdir*0.152} 0.086" rpy="0 0 ${pi}" />
       <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
-      <axis xyz="0 0 ${dir*0.1}" />
+      <axis xyz="0 0 1" />
+      <dynamics friction="10000000.0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_camera_servo_lower_joint" />
 
     <link name="${prefix}_camera">
-      <visual>
-        <origin xyz="0 0.048 0" rpy="0 0 0" />
-        <geometry>
-          <box size="0.096 0.024 0.048" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/camera.$(arg mesh_extension_visual)" scale="${-dir * 0.001} ${-armdir * 0.001} 0.001"/>
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0 ${armdir*0.042} 0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.096 0.012 0.048" />
+          </geometry>
+          <material name="Red">
+            <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
+          </material>
+        </visual>
+      </xacro:unless>
 
       <collision>
-        <origin xyz="0 0.048 0" rpy="0 0 0" />
+        <origin xyz="0 0.0 0" rpy="0 0 0" />
         <geometry>
-          <box size="0.144 0.024 0.048" />
+          <box size="0.096 0.024 0.048" />
         </geometry>
       </collision>
 
@@ -615,14 +646,15 @@
         <origin xyz="0 0 0" rpy="0 0 0" />
       </xacro:box_inertia>
     </link>
-    <xacro:solid_hard name="${prefix}_camera" material="Gazebo/Red" />
+    <xacro:solid_hard name="${prefix}_camera" material="${gazebo_alum}" />
 
     <joint name="${prefix}_camera_servo_upper_joint" type="revolute">
       <parent link="${prefix}_camera_servo_upper_link" />
       <child link="${prefix}_camera" />
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 ${-dir*3*pi/6.0 + dir*armdir*pi/6.0}" />
+      <origin xyz="${-dir*0.013} ${-armdir*0.004} 0.0245" rpy="0 0 0" />
       <limit upper="${pi}" lower="${-pi}" effort="10" velocity="1.0" />
-      <axis xyz="${dir*0.1} 0 0" />
+      <axis xyz="1 0 0" />
+      <dynamics friction="10000000.0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_camera_servo_upper_joint" />
 
@@ -663,100 +695,75 @@
     <xacro:turn_table prefix="${prefix}_turn_table" parent="base_link" limit="${pi/2}"
       radius="${turn_table_radius}" width="${turn_table_height}"
       x_off="${dir*turn_table_xoff}" y_off="0.0"
-      z_off="${base_height_gap + base_height/8 - turn_table_height/2}" x_angle="0"
-      dir="-1"
+      z_off="${-turn_table_zoff}" x_angle="0"
+      dir="${dir}"
     />
-    <!-- dir="${dir}" -->
 
     <link name="${prefix}_body_link">
-      <visual>
+      <xacro:box_inertia m="2.0" x="0.235" y="0.048" z="0.048">
+        <origin xyz="0 0.12 0.024" rpy="0 0 0" />
+      </xacro:box_inertia>
+
+      <xacro:if value="$(arg use_mesh_visual)">
+        <visual>
+          <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://openvmp_robot_don1/meshes/hip.$(arg mesh_extension_visual)" scale="${dir * 0.001} ${dir * 0.001} 0.001"/>
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:if>
+
+      <xacro:unless value="$(arg use_mesh_visual)">
+        <!-- central long lower block -->
+        <visual>
+          <origin xyz="${dir * 0.0905} 0 0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.240 0.048 0.048" />
+          </geometry>
+          <material name="alum" />
+        </visual>
+
+        <!-- TODO(clairbee) replace the wide front block with the two long ones
+             on each side, to make it more similar to the actual model -->
+        <!-- central wide front block -->
+        <visual>
+          <origin xyz="${dir*0.1905} 0 0.048" rpy="0 0 0" />
+          <geometry>
+            <box size="0.040 0.144 0.048" />
+          </geometry>
+          <material name="alum" />
+        </visual>
+      </xacro:unless>
+
+      <!-- do not collide with the central wheel  <collision>
         <origin xyz="0 0 0.024" rpy="0 0 0" />
         <geometry>
           <box size="0.235 0.048 0.048" />
-          <!-- <mesh filename="package://openvmp_robot/meshes/base.stl" scale="0.001 0.001 0.001"/> -->
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
-
-      <!-- <collision>
-        <origin xyz="0 0 0.024" rpy="0 0 0" />
-        <geometry>
-          <box size="0.240 0.048 0.048" />
         </geometry>
       </collision> -->
-
-      <xacro:box_inertia m="2.0" x="0.235" y="0.048" z="0.048">
-        <origin xyz="0 0 0.024" rpy="0 0 0" />
-      </xacro:box_inertia>
-    </link>
-    <xacro:solid_hard name="${prefix}_body_link" material="Gazebo/Red" />
-
-    <!-- central wide block -->
-    <link name="${prefix}_body_link2">
-      <visual>
-        <origin xyz="${dir*0.100} 0 0.048" rpy="0 0 0" />
-        <geometry>
-          <box size="0.040 0.240 0.048" />
-        </geometry>
-        <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0" />
-        </material>
-      </visual>
       <collision>
-        <origin xyz="${dir*0.100} 0 0.048" rpy="0 0 0" />
+        <origin xyz="${dir*0.1905} 0 0.048" rpy="0 0 0" />
         <geometry>
           <box size="0.040 0.240 0.048" />
         </geometry>
       </collision>
-      <xacro:box_inertia m="0.5" x="0.040" y="0.240" z="0.048">
-        <origin xyz="${dir*0.100} 0 0.048" rpy="0 0 0" />
-      </xacro:box_inertia>
     </link>
-    <xacro:solid_hard name="${prefix}_body_link2" material="Gazebo/Red" />
-    <joint name="${prefix}_body_link2_joint" type="fixed">
-      <parent link="${prefix}_body_link" />
-      <child link="${prefix}_body_link2" />
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-    </joint>
-    <xacro:gazebo_joint name="${prefix}_body_link2_joint" />
+    <xacro:solid_hard name="${prefix}_body_link" material="${gazebo_alum}" />
 
-    <!-- central wheel -->
-    <link name="${prefix}_body_link3">
-      <visual>
-        <origin xyz="0 0 0.048" rpy="${pi/2} 0 0" />
-        <geometry>
-          <cylinder radius="${wheel_radius}" length="${wheel_width}" />
-        </geometry>
-        <!-- <material name="Red">
-          <color rgba="${255/255} ${0/255} ${0/255} 1.0"/>
-        </material> -->
-      </visual>
-      <collision>
-        <origin xyz="0 0 0.048" rpy="${pi/2} 0 0" />
-        <geometry>
-          <cylinder radius="${wheel_radius}" length="${wheel_width}" />
-        </geometry>
-      </collision>
-      <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}">
-        <origin xyz="0 0 0.048" rpy="${pi/2} 0 0" />
-      </xacro:cylinder_inertia>
-    </link>
-    <xacro:solid_hard name="${prefix}_body_link3" material="Gazebo/Green" />
-    <joint name="${prefix}_body_link3_joint" type="fixed">
-      <parent link="${prefix}_body_link" />
-      <child link="${prefix}_body_link3" />
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-    </joint>
-    <!-- <xacro:gazebo_fixed_joint name="${prefix}_body_link3_joint" /> -->
+    <xacro:wheel prefix="${prefix}_body_wheel" parent="${prefix}_body_link"
+      radius="${wheel_radius}" width="${wheel_width}"
+      x_off="${dir * 0.090}" y_off="0.0"
+      z_off="0.048" x_angle="${pi/2}"
+    />
 
     <joint name="${prefix}_body_joint" type="revolute">
       <parent link="${prefix}_turn_table_link" />
       <child link="${prefix}_body_link" />
-      <origin xyz="${dir*(turn_table_radius + 0.240/2)} 0.0 0.0" rpy="0 0 0" />
+      <origin xyz="${dir*(turn_table_radius + 0.050)} 0.0 -0.03" rpy="0 0 0" />
       <limit upper="${pi*7.0/6.0}" lower="${-pi*7.0/6.0}" effort="10" velocity="1.0" />
       <axis xyz="${dir*0.1} 0 0" />
+      <dynamics friction="10000000.0" />
     </joint>
     <xacro:gazebo_joint name="${prefix}_body_joint" />
 
@@ -818,6 +825,18 @@
     </joint>
   </xacro:macro>
 
+  <xacro:macro name="r2c_joint_free" params="name">
+    <joint name="${name}">
+      <param name="prefix">/actuator/${name}</param>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+    </joint>
+  </xacro:macro>
+
   <xacro:macro name="r2c_quarter" params="prefix side">
     <xacro:r2c_joint_vel name="${prefix}_${side}_arm_joint" pmin="${-pi}" pmax="${pi}" />
     <xacro:r2c_joint_vel name="${prefix}_${side}_arm_inner_joint" pmin="${-pi*0.9}"
@@ -844,6 +863,7 @@
   <xacro:macro name="r2c_half" params="prefix">
     <xacro:r2c_joint_vel name="${prefix}_turn_table_joint" pmin="${-pi/2}" pmax="${pi/2}" />
     <xacro:r2c_joint_vel name="${prefix}_body_joint" pmin="${-pi*7.0/6.0}" pmax="${pi*7/6}" />
+    <xacro:r2c_joint_free name="${prefix}_body_wheel_joint" />
     <xacro:r2c_quarter prefix="${prefix}" side="left" />
     <xacro:r2c_quarter prefix="${prefix}" side="right" />
   </xacro:macro>

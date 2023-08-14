@@ -63,7 +63,8 @@ def get_xacro_params(context, robot_id):
         # Simulate remote_hardware_interface
         if (
             "simulate_remote_hardware_interface" in context.launch_configurations
-            and context.launch_configurations["simulate_remote_hardware_interface"] == "true"
+            and context.launch_configurations["simulate_remote_hardware_interface"]
+            == "true"
         ):
             xacro_params.append(" simulate_remote:=true ")
 
@@ -74,6 +75,20 @@ def get_xacro_params(context, robot_id):
         and context.launch_configurations["use_fake_hardware"] == "true"
     ):
         xacro_params.append(" fake_hardware:=true ")
+
+    # Meshes params
+    if (
+        "use_meshes" in context.launch_configurations
+        and context.launch_configurations["use_meshes"] == "low"
+    ):
+        xacro_params.append(" use_mesh_visual:=true ")
+        xacro_params.append(" mesh_extension_visual:=stl ")
+    if (
+        "use_meshes" in context.launch_configurations
+        and context.launch_configurations["use_meshes"] == "high"
+    ):
+        xacro_params.append(" use_mesh_visual:=true ")
+        xacro_params.append(" mesh_extension_visual:=obj ")
 
     # OS params
     if os.name == "Darwin":

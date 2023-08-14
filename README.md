@@ -2,9 +2,7 @@
 
 [![License](docs/license.svg)](./LICENSE)
 
-Version: Alpha 1
-
-![OpenVMP rendered robot model](./docs/images/front.png)
+![OpenVMP rendered robot model](https://github.com/openvmp/openvmp-models/blob/main/generated_files/robots/don1/robot.png?raw=true)
 
 ![walking robot](./docs/images/walk.png)
 ![driving robot](./docs/images/drive.png)

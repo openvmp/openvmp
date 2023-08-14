@@ -67,7 +67,7 @@ void Node::initMenu_() {
     menu_modes_.insert({item, mode.second});
   }
 
-  float scale = 1.0;
+  float scale = 1.1;
 
   visualization_msgs::msg::Marker box_marker;
   box_marker.type = visualization_msgs::msg::Marker::CYLINDER;
@@ -87,7 +87,7 @@ void Node::initMenu_() {
 
   visualization_msgs::msg::InteractiveMarker int_marker;
   int_marker.header.frame_id = "base_footprint";
-  int_marker.pose.position.z = 0.9;
+  int_marker.pose.position.z = -0.20;
   int_marker.scale = scale;
   int_marker.name = text_control;
   int_marker.controls.push_back(control);

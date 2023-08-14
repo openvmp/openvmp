@@ -37,6 +37,7 @@ def launch_desc(context):
         #     "debug",
         # ],
         # prefix=["xterm -e gdb -ex run --args"],
+        # prefix=["xterm -e valgrind --log-file=/tmp/valgrind.log"],
     )
 
     # Launch RViz

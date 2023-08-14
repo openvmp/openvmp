@@ -94,10 +94,23 @@ def generate_launch_description():
         description="Do not use Gazebo plugin for ros2_control. Use the same hardware interface as the real robots.",
     )
 
+    pkg_share = FindPackageShare(package="openvmp_robot_don1").find(
+        "openvmp_robot_don1"
+    )
+    use_meshes_default = "none"
+    if os.path.exists(pkg_share + "/meshes/hip.stl"):
+        use_meshes_default = "low"
+    declare_use_meshes_cmd = DeclareLaunchArgument(
+        name="use_meshes",
+        default_value=use_meshes_default,
+        description="Use meshes for visualization (none/low/high)",
+    )
+
     launch_desc = [
         declare_kind_cmd,
         declare_num_cmd,
         declare_simulate_remote_hardware_interface_cmd,
+        declare_use_meshes_cmd,
         OpaqueFunction(function=openvmp_subsystem_dds.launch_desc),
         OpaqueFunction(function=openvmp_worlds.launch_desc),
         OpaqueFunction(function=openvmp_models.launch_desc_deploy),

@@ -3,6 +3,7 @@ import sys
 sys.path.append("src")
 
 import os
+import os.path
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
@@ -10,7 +11,7 @@ from launch.actions import (
     SetEnvironmentVariable,
     TimerAction,
 )
-from launch.substitutions import LaunchConfiguration
+from launch_ros.substitutions import FindPackageShare
 
 from openvmp_robot.launch.config import files
 from openvmp_robot.launch.utils import openvmp_utils
@@ -70,6 +71,18 @@ def generate_launch_description_real():
         description="Launch driver stubs that are not connected to real hardware",
     )
 
+    pkg_share = FindPackageShare(package="openvmp_robot_don1").find(
+        "openvmp_robot_don1"
+    )
+    use_meshes_default = "none"
+    if os.path.exists(pkg_share + "/meshes/hip.stl"):
+        use_meshes_default = "low"
+    declare_use_meshes_cmd = DeclareLaunchArgument(
+        name="use_meshes",
+        default_value=use_meshes_default,
+        description="Use meshes for visualization (none/low/high)",
+    )
+
     # pos = LaunchConfiguration("pos")
     declare_pos_cmd = DeclareLaunchArgument(
         name="pos",
@@ -85,6 +98,7 @@ def generate_launch_description_real():
         declare_is_simulation_cmd,
         declare_simulate_remote_hardware_interface_cmd,
         declare_use_fake_hardware_cmd,
+        declare_use_meshes_cmd,
         declare_pos_cmd,
         OpaqueFunction(function=openvmp_subsystem_dds.launch_desc),
         OpaqueFunction(function=openvmp_subsystem_drivers.launch_desc),
