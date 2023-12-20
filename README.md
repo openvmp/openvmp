@@ -16,6 +16,8 @@
 ![grab and attach to objects](./docs/images/grab.png)
 ![robot swarm](./docs/images/swarm.png)
 
+[Join our Discord server!](https://discord.gg/zdEzrHQY)
+
 **Open Versatile Mobility Platform** (**OpenVMP**)
 is a community project with the goal of making it possible for anyone
 to build multi-modal mobility robots
