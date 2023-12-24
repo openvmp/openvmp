@@ -16,7 +16,7 @@
 ![grab and attach to objects](./docs/images/grab.png)
 ![robot swarm](./docs/images/swarm.png)
 
-[Join our Discord server!](https://discord.gg/zdEzrHQY)
+[Join our Discord server!](https://discord.gg/BvVe7sDcGb)
 
 **Open Versatile Mobility Platform** (**OpenVMP**)
 is a community project with the goal of making it possible for anyone
